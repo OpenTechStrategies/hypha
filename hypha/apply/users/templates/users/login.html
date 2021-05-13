@@ -69,10 +69,12 @@
       {% endif %}
     </form>
 
+    {% comment %}
     {% if wizard.steps.current == 'auth' %}
         <div class="wrapper wrapper--inner-space-large">
           <a class="link link--button link--button-long-text" href="{% url "social:begin" "google-oauth2" %}{% if next %}?next={{ next }}{% endif %}">{% blocktrans %}Log in with your {{ ORG_SHORT_NAME }} email{% endblocktrans %}</a>
         </div>
     {% endif %}
+    {% endcomment %}
   </div>
 {% endblock %}
