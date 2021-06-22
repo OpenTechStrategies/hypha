@@ -73,6 +73,7 @@ class BaseStreamForm:
                     field_from_block.disabled = True
                     field_from_block.initial = user.email
                     field_from_block.help_text = disabled_help_text
+                field_from_block.canonical_name = block.name
                 if draft and not issubclass(block.__class__, ApplicationMustIncludeFieldBlock):
                     field_from_block.required = False
                 field_from_block.help_link = struct_value.get('help_link')
@@ -114,6 +115,7 @@ class BaseStreamForm:
                 is_in_group = False
             else:
                 field_wrapper = BlockFieldWrapper(struct_child)
+                field_wrapper.canonical_name = block.name
                 field_wrapper.group_number = group_counter if is_in_group else 1
                 form_fields[struct_child.id] = field_wrapper
 
