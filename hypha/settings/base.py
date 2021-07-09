@@ -27,7 +27,8 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', [])
 # Organisation name and e-mail address, used in e-mail templates etc.
 ORG_LONG_NAME = env.str('ORG_LONG_NAME', 'Acme Corporation')
 ORG_SHORT_NAME = env.str('ORG_SHORT_NAME', 'ACME')
-ORG_EMAIL = env.str('ORG_EMAIL', 'info@example.org')
+ORG_STAFF_EMAIL = env.get('ORG_STAFF_EMAIL', 'info@example.org')
+ORG_TECH_EMAIL = env.get('ORG_TECH_EMAIL', 'info@example.org')
 ORG_GUIDE_URL = env.str('ORG_GUIDE_URL', 'https://guide.example.org/')
 
 
