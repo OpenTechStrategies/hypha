@@ -7,6 +7,7 @@ COMMUNITY_REVIEWER_GROUP_NAME = 'Community reviewer'
 APPROVER_GROUP_NAME = 'Approver'
 FINANCE_GROUP_NAME = 'Finance'
 CONTRACTING_GROUP_NAME = 'Contracting'
+DECISION_MAKER_GROUP_NAME = 'Decision maker'
 
 GROUPS = [
     {
@@ -43,6 +44,10 @@ GROUPS = [
     },
     {
         'name': CONTRACTING_GROUP_NAME,
+        'permissions': [],
+    },
+    {
+        'name': DECISION_MAKER_GROUP_NAME,
         'permissions': [],
     }
 ]
