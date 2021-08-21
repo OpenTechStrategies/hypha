@@ -844,6 +844,10 @@ class EmailAdapter(AdapterBase):
         if message_type in {MESSAGES.REVIEW_REMINDER}:
             return self.reviewers(source)
 
+        if message_type not in {MESSAGES.DETERMINATION_OUTCOME, MESSAGES.BATCH_DETERMINATION_OUTCOME}:
+            # Only send an email alert when: the grant has been determined eligible, ineligible, or needs more information
+            return []
+
         return [source.user.email]
 
     def batch_recipients(self, message_type, sources, **kwargs):
