@@ -704,6 +704,8 @@ class EmailAdapter(AdapterBase):
         MESSAGES.INVITED_TO_PROPOSAL: 'messages/email/invited_to_proposal.html',
         MESSAGES.BATCH_READY_FOR_REVIEW: 'handle_batch_ready_for_review',
         MESSAGES.READY_FOR_REVIEW: 'handle_ready_for_review',
+        MESSAGES.REVIEWERS_UPDATED: 'handle_ready_for_review',
+        MESSAGES.BATCH_REVIEWERS_UPDATED: 'handle_batch_ready_for_review',
         MESSAGES.PARTNERS_UPDATED: 'partners_updated_applicant',
         MESSAGES.PARTNERS_UPDATED_PARTNER: 'partners_updated_partner',
         MESSAGES.UPLOAD_CONTRACT: 'messages/email/contract_uploaded.html',
@@ -817,6 +819,11 @@ class EmailAdapter(AdapterBase):
         if is_ready_for_review(message_type):
             return self.reviewers(source)
 
+        if message_type == MESSAGES.REVIEWERS_UPDATED:
+            added_reviewers = [assigned_reviewer.reviewer.email for assigned_reviewer in kwargs.get('added', [])]
+            reviewers_that_can_review = self.reviewers(source)
+            return [reviewer_email for reviewer_email in added_reviewers if reviewer_email in reviewers_that_can_review]
+
         if is_transition(message_type):
             # Only notify the applicant if the new phase can be seen within the workflow
             if not source.phase.permissions.can_view(source.user):
@@ -847,14 +854,17 @@ class EmailAdapter(AdapterBase):
         return [source.user.email]
 
     def batch_recipients(self, message_type, sources, **kwargs):
-        if not is_ready_for_review(message_type):
+        if not is_ready_for_review(message_type) and message_type != MESSAGES.BATCH_REVIEWERS_UPDATED:
             return super().batch_recipients(message_type, sources, **kwargs)
+
+        added_reviewers = [reviewer.email for role, reviewer in kwargs.get('added', []) if reviewer]
 
         reviewers_to_message = defaultdict(list)
         for source in sources:
             reviewers = self.reviewers(source)
             for reviewer in reviewers:
-                reviewers_to_message[reviewer].append(source)
+                if message_type != MESSAGES.BATCH_REVIEWERS_UPDATED or reviewer in added_reviewers:
+                    reviewers_to_message[reviewer].append(source)
 
         return [
             {
