@@ -369,7 +369,7 @@ SingleStageExternalDefinition = [
             'display': _('Internal Review'),
             'public': f'{settings.ORG_SHORT_NAME} Review',
             'stage': RequestExt,
-            'permissions': default_permissions,
+            'permissions': reviewer_review_permissions,
         },
     },
     {
