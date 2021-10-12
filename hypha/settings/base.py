@@ -302,7 +302,7 @@ PASSWORD_PAGE_TIMEOUT = env.int('PASSWORD_PAGE_TIMEOUT', 120)
 
 # Language code in standard language id format: en, en-gb, en-us
 # The corrosponding locale dir is named: en, en_GB, en_US
-LANGUAGE_CODE = env.str('LANGUAGE_CODE', 'en')
+LANGUAGE_CODE = env.str('LANGUAGE_CODE', 'en-us')
 
 CURRENCY_SYMBOL = env.str('CURRENCY_SYMBOL', '$')
 
