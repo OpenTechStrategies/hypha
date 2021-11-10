@@ -502,6 +502,7 @@ if not SEND_MESSAGES:
     from django.contrib.messages import constants as message_constants
     MESSAGE_LEVEL = message_constants.DEBUG
 
+SEND_MESSAGE_TYPES = env.get('SEND_MESSAGE_TYPES', 'all').upper().split(',')
 
 SEND_READY_FOR_REVIEW = env.bool('SEND_READY_FOR_REVIEW', True)
 
