@@ -8,6 +8,7 @@ APPROVER_GROUP_NAME = 'Approver'
 FINANCE_GROUP_NAME = 'Finance'
 CONTRACTING_GROUP_NAME = 'Contracting'
 DECISION_MAKER_GROUP_NAME = 'Decision maker'
+BOARD_MEMBER_GROUP_NAME = 'Board member'
 
 GROUPS = [
     {
@@ -48,6 +49,10 @@ GROUPS = [
     },
     {
         'name': DECISION_MAKER_GROUP_NAME,
+        'permissions': [],
+    },
+    {
+        'name': BOARD_MEMBER_GROUP_NAME,
         'permissions': [],
     }
 ]

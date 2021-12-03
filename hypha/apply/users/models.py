@@ -19,6 +19,7 @@ from .groups import (
     REVIEWER_GROUP_NAME,
     STAFF_GROUP_NAME,
     TEAMADMIN_GROUP_NAME,
+    BOARD_MEMBER_GROUP_NAME,
 )
 from .utils import send_activation_email
 
@@ -58,6 +59,10 @@ class UserQuerySet(models.QuerySet):
 
     def decision_makers(self):
         return self.filter(groups__name=DECISION_MAKER_GROUP_NAME)
+
+    def board_members(self):
+        return self.filter(groups__name=BOARD_MEMBER_GROUP_NAME)
+
 
 class UserManager(BaseUserManager.from_queryset(UserQuerySet)):
     use_in_migrations = True
@@ -199,6 +204,10 @@ class User(AbstractUser):
     @cached_property
     def is_decision_maker(self):
         return self.groups.filter(name=DECISION_MAKER_GROUP_NAME).exists()
+
+    @cached_property
+    def is_board_member(self):
+        return self.groups.filter(name=BOARD_MEMBER_GROUP_NAME).exists()
 
     class Meta:
         ordering = ('full_name', 'email')
