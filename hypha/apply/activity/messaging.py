@@ -748,6 +748,7 @@ class EmailAdapter(AdapterBase):
         MESSAGES.NEW_SUBMISSION: 'funds/email/confirmation.html',
         MESSAGES.COMMENT: 'notify_comment',
         MESSAGES.EDIT: 'messages/email/edit.html',
+        MESSAGES.APPLICANT_EDIT: 'messages/email/applicant_edit.html',
         MESSAGES.TRANSITION: 'handle_transition',
         MESSAGES.BATCH_TRANSITION: 'handle_batch_transition',
         MESSAGES.DETERMINATION_OUTCOME: 'handle_determination',
@@ -939,6 +940,11 @@ class EmailAdapter(AdapterBase):
                 if related.status in {CHANGES_REQUESTED_BY_STAFF, DECLINED}:
                     return [source.user.email]
             return []
+
+        if message_type == MESSAGES.APPLICANT_EDIT:
+            print(source.__dict__)
+            return [source.lead.email]
+
         return [source.user.email]
 
     def batch_recipients(self, message_type, sources, **kwargs):
