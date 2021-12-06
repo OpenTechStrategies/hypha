@@ -13,11 +13,12 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, DetailView, UpdateView
+from django.template import Context, Template
 from wagtail.core.models import Site
 
 from hypha.apply.activity.messaging import MESSAGES, messenger
 from hypha.apply.activity.models import Activity
-from hypha.apply.funds.models import ApplicationSubmission
+from hypha.apply.funds.models import ApplicationSubmission, submissions
 from hypha.apply.funds.workflow import DETERMINATION_OUTCOMES
 from hypha.apply.projects.models import Project
 from hypha.apply.stream_forms.models import BaseStreamForm
@@ -317,9 +318,18 @@ class DeterminationCreateOrUpdateView(BaseStreamForm, CreateOrUpdateView):
         for field_id in determination_form_class.display:
             form_field_id_to_name[field_id] = determination_form_class.display[field_id].canonical_name
 
+        message_templates = determination_messages.get_for_stage(self.submission.stage.name)
+
+        context = self.submission.get_answers_dict()
+
+        message_templates = {
+            key: Template(template).render(Context(context))
+            for key, template in message_templates.items()
+        }
+
         return super().get_context_data(
             submission=self.submission,
-            message_templates=determination_messages.get_for_stage(self.submission.stage.name),
+            message_templates=message_templates,
             form_field_id_to_name=form_field_id_to_name,
             **kwargs
         )

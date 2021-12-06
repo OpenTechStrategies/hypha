@@ -313,3 +313,16 @@ class AccessFormData:
                     if answer and not answer == 'N':
                         return answer
         return None
+
+    def get_answers_dict(self):
+        result = {}
+        for field_id in self.question_text_field_ids:
+            question_field = self.serialize(field_id)
+            question_key = question_field['question'].lower().replace(' ', '_')
+            if isinstance(question_field['answer'], str):
+                answer = question_field['answer']
+            else:
+                answer = ','.join(question_field['answer'])
+            if answer and not answer == 'N':
+                 result[question_key] = answer
+        return result
