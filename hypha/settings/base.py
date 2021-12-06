@@ -452,6 +452,7 @@ LOGGING = {
 
 
 # Wagtail settings
+WAGTAIL_FRONTEND_LOGIN_URL = '/login/'
 
 WAGTAIL_SITE_NAME = 'hypha'
 
@@ -579,6 +580,10 @@ if 'TRANSITION_AFTER_REVIEWS' in env:
         TRANSITION_AFTER_REVIEWS = int(env['TRANSITION_AFTER_REVIEWS'])
     except ValueError:
         pass
+
+TRANSITION_AFTER_ASSIGNED = False
+if env.get('TRANSITION_AFTER_ASSIGNED', 'false').strip().lower() == 'true':
+    TRANSITION_AFTER_ASSIGNED = True
 
 
 # Exclude Filters/columns from submission tables.

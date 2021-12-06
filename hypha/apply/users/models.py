@@ -186,6 +186,9 @@ class User(AbstractUser):
     def is_decision_maker(self):
         return self.groups.filter(name=DECISION_MAKER_GROUP_NAME).exists()
 
+    def is_finance_level2(self):
+        return self.groups.filter(Q(name=FINANCE_GROUP_NAME) & Q(name=APPROVER_GROUP_NAME)).exists()
+
     @cached_property
     def is_contracting(self):
         return self.groups.filter(name=CONTRACTING_GROUP_NAME).exists()
