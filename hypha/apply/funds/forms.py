@@ -315,8 +315,15 @@ class UpdateReviewersForm(ApplicationSubmissionModelForm):
 
 class BatchUpdateReviewersForm(forms.Form):
     submissions = forms.CharField(widget=forms.HiddenInput(attrs={'class': 'js-submissions-id'}))
+    reviewer_reviewers = forms.ModelMultipleChoiceField(
+        queryset=User.objects.reviewers().only('pk', 'full_name'),
+        widget=Select2MultiCheckboxesWidget(attrs={'data-placeholder': 'Reviewers'}),
+        label=_('Reviewers'),
+        required=False,
+    )
 
     def __init__(self, *args, user=None, round=None, **kwargs):
+        self.user = user
         super().__init__(*args, **kwargs)
 
         self.role_fields = {}
@@ -326,6 +333,20 @@ class BatchUpdateReviewersForm(forms.Form):
             field_name = data['field_name']
             self.fields[field_name] = data['field']
             self.role_fields[field_name] = data['role']
+
+        if self.can_alter_external_reviewers(user):
+            self.prepare_field('reviewer_reviewers')
+
+            self.fields.move_to_end('reviewer_reviewers')
+        else:
+            self.fields.pop('reviewer_reviewers')
+
+    def can_alter_external_reviewers(self, user):
+        return user is not None and user.is_superuser
+
+    def prepare_field(self, field_name):
+        field = self.fields[field_name]
+        field.queryset = field.queryset
 
     def clean_submissions(self):
         value = self.cleaned_data['submissions']
@@ -347,6 +368,14 @@ class BatchUpdateReviewersForm(forms.Form):
         return cleaned_data
 
     def save(self):
+        """
+        1. Update role reviewers
+        2. Update non-role reviewers
+            2a. Remove those not on form
+            2b. Add in any new non-role reviewers selected
+        """
+
+        # 1. Update role reviewers
         submissions = self.cleaned_data['submissions']
         assigned_roles = {
             role: self.cleaned_data[field]
@@ -355,6 +384,25 @@ class BatchUpdateReviewersForm(forms.Form):
         for role, reviewer in assigned_roles.items():
             if reviewer:
                 AssignedReviewers.objects.update_role(role, reviewer, *submissions)
+
+        # 2. Update non-role reviewers
+        # 2a. Remove those not on form
+        if self.can_alter_external_reviewers(self.user):
+            reviewers = self.cleaned_data.get('reviewer_reviewers')
+
+            for instance in submissions:
+                assigned_reviewers = instance.assigned.without_roles()
+                assigned_reviewers.never_tried_to_review().exclude(
+                    reviewer__in=reviewers
+                ).delete()
+
+                remaining_reviewers = assigned_reviewers.values_list('reviewer_id', flat=True)
+
+                # 2b. Add in any new non-role reviewers selected
+                AssignedReviewers.objects.bulk_create_reviewers(
+                    [reviewer for reviewer in reviewers if reviewer.id not in remaining_reviewers],
+                    instance,
+                )
 
         return None
 
