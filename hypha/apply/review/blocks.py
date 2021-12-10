@@ -81,7 +81,9 @@ class ScoreFieldWithoutTextBlock(OptionalFormFieldBlock):
         return kwargs
 
     def render(self, value, context=None):
-        data = int(context['data'])
+        data = context['data']
+        if context['data'] != '':
+            data = int(context['data'])
         choices = dict(self.get_choices(RATE_CHOICES))
         context['data'] = choices[data]
 
