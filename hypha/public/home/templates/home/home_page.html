@@ -58,9 +58,11 @@
                         {% endif %}
                     </a>
                     <div class="header__inner header__inner--mobile-buttons">
+                        <!--
                         <button class="button js-mobile-search-toggle" aria-haspopup="true" aria-label="Toggle mobile search">
                             <svg class="header__icon header__icon--open-search icon icon--mobile-menu"><use xlink:href="#magnifying-glass"></use></svg>
                         </button>
+                        -->
                         <button class="button button--left-space js-mobile-menu-close">
                             <svg class="header__icon header__icon--cross icon icon--mobile-menu"><use xlink:href="#cross"></use></svg>
                         </button>
@@ -73,7 +75,9 @@
 
             <div class="header__button-container">
                 {% include "utils/includes/login_button.html" %}
+                <!--
                 <div class="button button--google-translate" id="google_translate_element"></div>
+                -->
             </div>
         </div>
 

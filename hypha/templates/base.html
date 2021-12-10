@@ -158,7 +158,9 @@
 
                     <div class="header__button-container">
                         {% include "utils/includes/login_button.html" %}
+                        <!--
                         <div class="button button--google-translate" id="google_translate_element"></div>
+                        -->
                     </div>
                 </div>
 
@@ -207,12 +209,14 @@
 
         {% cookie_banner %}
 
+        <!--
         <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         <script>
             function googleTranslateElementInit() {
               new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false}, 'google_translate_element');
             }
         </script>
+         -->
         <script src="{% static 'js/js.cookie.min.js' %}"></script>
         <script src="{% static 'js/main.js' %}"></script>
         <script src="{% static 'js/cookieconsent.js' %}"></script>
