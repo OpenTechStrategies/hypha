@@ -10,10 +10,10 @@
 
     Check will be mailed to: 	 	
     {{ answers.organization_name }}
-    c/o {{ answers.name }}
-    {{ answers.organizational_address.thoroughfare }}
-    {{ answers.organizational_address.premise }}
-    {{ answers.organizational_address.localityname }}, {{ answers.organizational_address.administrativearea }} {{ answers.organizational_address.postalcode }}
+    c/o {{ answers.contact_name }}
+    {{ answers.organizational_address.thoroughfare }} {% if answers.organizational_address.premise != '' %}
+    {{ answers.organizational_address.premise }} {% endif %}
+    {{ answers.organizational_address.localityname }}, {{ answers.organizational_address.administrativearea }} {{ answers.organizational_address.postalcode }} {% if answers.organizational_address.country != 'US' %} {{ answers.organizational_address.country }} {% endif %}
 
     Check will be made out to: {{ answers.organization_name }}
     EIN: {{ answers.ein }}
