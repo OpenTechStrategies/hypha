@@ -1,12 +1,19 @@
-{% extends "messages/email/base.html" %}
+{% extends "messages/email/applicant_base.html" %}
 {% load i18n %}
+{% block content %} {% with source.get_answers_dict as answers  %} {% blocktrans with title=source.title organization_name=answers.organization_name %}Thank you for submitting your grant application {{ title }} for {{ organization_name }} to {{ ORG_SHORT_NAME }}! We appreciate the time and care you have put into your application.{% endblocktrans %}
 
-{% block content %}{% blocktrans with title=source.page.specific.title %}We appreciate your {{ title }} application submission to the {{ ORG_LONG_NAME }}. We will review and reply to your submission as quickly as possible.
+{% blocktrans %}Please allow between 1-3 months for us to review your proposal. During this time, {{ ORG_SHORT_NAME }} Staff may be in touch with follow up questions or requests for revised information. If your proposal is time sensitive please contact our staff to see if it is possible to expedite your review.{% endblocktrans %}
 
-Our reply will have the next steps for your {{ title }} application. You can find more information about our support options, review process and selection criteria on our website.{% endblocktrans %}
+{% blocktrans %}At any time you can view your submitted proposal here:{% endblocktrans %} {{ request.scheme }}://{{ request.get_host }}{{ source.get_absolute_url }}
 
-{% with email_context=source.page.specific %}{{ email_context.confirmation_text_extra }}{% endwith %}
+{% blocktrans %}You can contact our staff about your proposal by emailing {{ ORG_STAFF_EMAIL }} or calling +1-858-477-9900, Monday to Friday, between 9am – 4pm Pacific Time.{% endblocktrans %} 
 
-{% trans "Project name" %}: {{ title }}
-{% trans "Contact name" %}: {{ source.user.get_full_name }}
-{% trans "Contact email" %}: {{ source.user.email }}{% endblock %}
+{% blocktrans %}Thank you,{% endblocktrans %} 
+
+{% blocktrans %}
+Chelsea Párraga
+Grants Manager
+{{ ORG_LONG_NAME }} ({{ ORG_SHORT_NAME }})
++1-858-477-9900
+{{ ORG_STAFF_EMAIL }}
+{% endblocktrans %} {% endwith %} {% endblock %}
