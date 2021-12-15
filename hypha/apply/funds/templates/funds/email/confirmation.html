@@ -1,6 +1,5 @@
 {% extends "messages/email/applicant_base.html" %}
-{% load i18n %}
-{% block content %} {% with source.get_answers_dict as answers  %} {% blocktrans with title=source.title organization_name=answers.organization_name %}Thank you for submitting your grant application {{ title }} for {{ organization_name }} to {{ ORG_SHORT_NAME }}! We appreciate the time and care you have put into your application.{% endblocktrans %}
+{% load i18n %}{% block content %}{% with source.get_answers_dict as answers  %}{% blocktrans with title=source.title organization_name=answers.organization_name %}Thank you for submitting your grant application {{ title }} for {{ organization_name }} to {{ ORG_SHORT_NAME }}! We appreciate the time and care you have put into your application.{% endblocktrans %}
 
 {% blocktrans %}Please allow between 1-3 months for us to review your proposal. During this time, {{ ORG_SHORT_NAME }} Staff may be in touch with follow up questions or requests for revised information. If your proposal is time sensitive please contact our staff to see if it is possible to expedite your review.{% endblocktrans %}
 
@@ -10,8 +9,7 @@
 
 {% blocktrans %}Thank you,{% endblocktrans %} 
 
-{% blocktrans %}
-Chelsea Párraga
+{% blocktrans %}Chelsea Párraga
 Grants Manager
 {{ ORG_LONG_NAME }} ({{ ORG_SHORT_NAME }})
 +1-858-477-9900
