@@ -869,7 +869,7 @@ class EmailAdapter(AdapterBase):
                 subject = _('Reminder: Application ready to review: {source.title}').format(source=source)
             else:
                 try:
-                    subject = source.page.specific.subject or _('Your application to {org_long_name}: {source.title}').format(org_long_name=settings.ORG_LONG_NAME, source=source)
+                    subject = source.page.specific.subject or _('Your proposal has been submitted: {source.title}').format(org_long_name=settings.ORG_LONG_NAME, source=source)
                 except AttributeError:
                     subject = _('Your {org_long_name} Project: {source.title}').format(org_long_name=settings.ORG_LONG_NAME, source=source)
             return subject
