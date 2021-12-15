@@ -1,6 +1,5 @@
-{% extends "messages/email/applicant_base.html" %}
-{% load i18n %}
-{% block content %} {% with source.get_answers_dict as answers  %} {% blocktrans with title=source.title organization_name=answers.organization_name %}We have determined that your proposal {{ title }} for {{ organization_name }} is eligible for our funding. Our Grants Advisory Committee is now reviewing your proposal.{% endblocktrans %}
+{% extends "messages/email/applicant_base.html" %}{% load i18n %}
+{% block content %}{% with source.get_answers_dict as answers  %}{% blocktrans with title=source.title organization_name=answers.organization_name %}We have determined that your proposal {{ title }} for {{ organization_name }} is eligible for our funding. Our Grants Advisory Committee is now reviewing your proposal.{% endblocktrans %}
 
 {% blocktrans %}NO ACTION IS REQUIRED FROM YOU AT THIS TIME.{% endblocktrans %}
 
