@@ -882,9 +882,9 @@ class EmailAdapter(AdapterBase):
         target_index = list(dict(PHASES).keys()).index(submission.status)
         is_forward = old_index < target_index
 
-        if is_forward:
+        if is_forward and old_phase.name == 'in_discussion':
             return self.render_message(
-                'messages/email/transition.html',
+                'messages/email/eligible.html',
                 source=submission,
                 old_phase=old_phase,
                 **kwargs
