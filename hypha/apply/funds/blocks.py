@@ -105,12 +105,12 @@ class DurationBlock(ApplicationMustIncludeFieldBlock):
     DAYS = 'days'
     WEEKS = 'weeks'
     MONTHS = 'months'
-    YEARS = 'years'
+    MONTHS_AND_YEARS = 'months_and_years'
     DURATION_TYPE_CHOICES = (
         (DAYS, 'Days'),
         (WEEKS, 'Weeks'),
         (MONTHS, 'Months'),
-        (YEARS, 'Years')
+        (MONTHS_AND_YEARS, 'Months and Years')
     )
     DURATION_DAY_OPTIONS = {
         1: "1 day",
@@ -151,16 +151,33 @@ class DurationBlock(ApplicationMustIncludeFieldBlock):
         18: "18 months",
         24: "24 months",
     }
-    DURATION_YEAR_OPTIONS = {
-        1: "2 years",
-        3: "3 years",
-        4: "4 years",
-        5: "5 years",
+    DURATION_MONTH_AND_YEAR_OPTIONS = {
+        0: "Less than 1 month",
+        1: "1 month",
+        2: "2 months",
+        3: "3 months",
+        4: "4 months",
+        5: "5 months",
+        6: "6 months",
+        7: "7 months",
+        8: "8 months",
+        9: "9 months",
+        10: "10 months",
+        11: "11 months",
+        12: "1 year",
+        18: "1 year 6 months",
+        24: "2 years",
+        30: "2 years 6 months",
+        36: "3 years",
+        42: "3 years 6 months",
+        48: "4 years",
+        54: "4 years 6 months",
+        60: "5 years",
     }
     field_class = forms.ChoiceField
     duration_type = blocks.ChoiceBlock(
         help_text=(
-            'Duration type is used to display duration choices in Days, Weeks, Months or Years in application forms. '
+            'Duration type is used to display duration choices in Days, Weeks, Months, or Months and Years in application forms. '
             'Be careful, changing the duration type in the active round can result in data inconsistency.'
         ),
         choices=DURATION_TYPE_CHOICES, default=MONTHS,
@@ -172,8 +189,8 @@ class DurationBlock(ApplicationMustIncludeFieldBlock):
             field_kwargs['choices'] = self.DURATION_DAY_OPTIONS.items()
         elif struct_value['duration_type'] == self.WEEKS:
             field_kwargs['choices'] = self.DURATION_WEEK_OPTIONS.items()
-        elif struct_value['duration_type'] == self.YEARS:
-            field_kwargs['choices'] = self.DURATION_YEAR_OPTIONS.items()
+        elif struct_value['duration_type'] == self.MONTHS_AND_YEARS:
+            field_kwargs['choices'] = self.DURATION_MONTH_AND_YEAR_OPTIONS.items()
         else:
             field_kwargs['choices'] = self.DURATION_MONTH_OPTIONS.items()
         return field_kwargs
@@ -183,8 +200,8 @@ class DurationBlock(ApplicationMustIncludeFieldBlock):
             return self.DURATION_DAY_OPTIONS[int(data)]
         if value['duration_type'] == self.WEEKS:
             return self.DURATION_WEEK_OPTIONS[int(data)]
-        if value['duration_type'] == self.YEARS:
-            return self.DURATION_YEAR_OPTIONS[int(data)]
+        if value['duration_type'] == self.MONTHS_AND_YEARS:
+            return self.DURATION_MONTH_AND_YEAR_OPTIONS[int(data)]
         return self.DURATION_MONTH_OPTIONS[int(data)]
 
     class Meta:
