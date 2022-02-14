@@ -100,3 +100,7 @@ msgstr "New applications are now eligible for your review:"
 
 msgid "Apply admin"
 msgstr "Admin"
+
+#: hypha/apply/review/options.py:45
+msgid "Private"
+msgstr "Staff Only"
