@@ -1,5 +1,7 @@
 from django.urls import re_path, reverse
 from wagtail.core import hooks
+from wagtail.core.models import Site
+from .utils import send_activation_email
 
 from hypha.apply.utils.notifications import slack_notify
 
@@ -22,6 +24,8 @@ def notify_after_create_user(request, user):
         path=reverse('wagtailusers_users:edit', args=(user.id,))
     )
 
+    site = Site.find_for_request(request)
+    send_activation_email(user, site)
 
 @hooks.register('after_edit_user')
 def notify_after_edit_user(request, user):
