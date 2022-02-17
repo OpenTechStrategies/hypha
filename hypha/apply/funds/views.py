@@ -1,5 +1,6 @@
 from copy import copy
 from datetime import timedelta
+from itertools import chain
 
 import django_tables2 as tables
 from django.conf import settings
@@ -106,6 +107,7 @@ from .workflow import (
     INITIAL_STATE,
     PHASES_MAPPING,
     STAGE_CHANGE_ACTIONS,
+    WORKFLOWS,
     active_statuses,
     review_statuses,
 )
@@ -416,6 +418,24 @@ class SubmissionOverviewView(BaseAdminSubmissionsTable):
         future_query = '?round_state=future'
         rounds_title = 'All Rounds and Labs'
 
+        # Get the names of workflows used by applications
+        worklow_names_in_use = (
+            ApplicationSubmission.objects.current()
+            .values_list("workflow_name", flat=True)
+            .distinct()
+        )
+
+        # Map the names to workflows
+        possible_statuses_per_workflow = [
+            WORKFLOWS[name].keys() for name in worklow_names_in_use
+        ]
+
+        # Get a unique set of statuses used in active workflows
+        possible_statuses = set(chain.from_iterable(possible_statuses_per_workflow))
+
+        # Are there zero possible statuses? If so, we'll show all statuses instead
+        show_all_statuses = len(possible_statuses) == 0
+
         status_counts = dict(
             ApplicationSubmission.objects.current().values('status').annotate(
                 count=Count('status'),
@@ -429,6 +449,9 @@ class SubmissionOverviewView(BaseAdminSubmissionsTable):
                 'url': reverse_lazy("funds:submissions:status", kwargs={'status': status})
             }
             for status, data in PHASES_MAPPING.items()
+            if show_all_statuses
+            # Is this status group in a workflow that is in use?
+            or len(set(data['statuses']).intersection(possible_statuses)) > 0
         }
 
         staff_flagged = self.get_staff_flagged()
