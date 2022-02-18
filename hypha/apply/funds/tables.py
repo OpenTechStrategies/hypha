@@ -80,7 +80,7 @@ class SubmissionsTable(tables.Table):
     class Meta:
         model = ApplicationSubmission
         order_by = ('-last_update',)
-        fields = ('id', 'title',  'phase', 'fund', 'round', 'submit_time', 'last_update')
+        fields = ('id', 'title', 'phase', 'fund', 'round', 'submit_time', 'last_update')
         sequence = fields + ('comments',)
         template_name = 'funds/tables/table.html'
         row_attrs = {
