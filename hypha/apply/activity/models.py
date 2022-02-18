@@ -24,9 +24,9 @@ ALL = 'all'
 VISIBILITY = {
     APPLICANT: 'Applicant(s)',
     TEAM: 'Staff',
-    REVIEWER: 'Reviewers',
-    PARTNER: 'Partners',
-    ALL: 'All',
+    REVIEWER: 'Reviewers and staff',
+    PARTNER: 'Partners and staff',
+    ALL: 'Everyone but applicants',
 }
 
 
@@ -93,7 +93,7 @@ class Activity(models.Model):
     source = GenericForeignKey('source_content_type', 'source_object_id')
 
     message = models.TextField()
-    visibility = models.CharField(choices=list(VISIBILITY.items()), default=APPLICANT, max_length=30)
+    visibility = models.CharField(choices=list(VISIBILITY.items()), default=ALL, max_length=30)
 
     # Fields for handling versioning of the comment activity models
     edited = models.DateTimeField(default=None, null=True)
@@ -129,13 +129,15 @@ class Activity(models.Model):
     @classmethod
     def visibility_for(cls, user):
         if user.is_apply_staff:
-            return [APPLICANT, TEAM, REVIEWER, PARTNER, ALL]
+            return [TEAM, REVIEWER, PARTNER, ALL]
         if user.is_reviewer:
             return [REVIEWER, ALL]
         if user.is_partner:
             return [PARTNER, ALL]
+        if user.is_applicant:
+            return []
 
-        return [APPLICANT, ALL]
+        return [ALL]
 
     @classmethod
     def visibility_choices_for(cls, user):
