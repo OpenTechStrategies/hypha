@@ -27,8 +27,8 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', [])
 # Organisation name and e-mail address, used in e-mail templates etc.
 ORG_LONG_NAME = env.str('ORG_LONG_NAME', 'Acme Corporation')
 ORG_SHORT_NAME = env.str('ORG_SHORT_NAME', 'ACME')
-ORG_STAFF_EMAIL = env.get('ORG_STAFF_EMAIL', 'info@example.org')
-ORG_TECH_EMAIL = env.get('ORG_TECH_EMAIL', 'info@example.org')
+ORG_STAFF_EMAIL = env.str('ORG_STAFF_EMAIL', 'info@example.org')
+ORG_TECH_EMAIL = env.str('ORG_TECH_EMAIL', 'info@example.org')
 ORG_GUIDE_URL = env.str('ORG_GUIDE_URL', 'https://guide.example.org/')
 
 
@@ -502,7 +502,7 @@ if not SEND_MESSAGES:
     from django.contrib.messages import constants as message_constants
     MESSAGE_LEVEL = message_constants.DEBUG
 
-SEND_MESSAGE_TYPES = env.get('SEND_MESSAGE_TYPES', 'all').upper().split(',')
+SEND_MESSAGE_TYPES = env.str('SEND_MESSAGE_TYPES', 'all').upper().split(',')
 
 SEND_READY_FOR_REVIEW = env.bool('SEND_READY_FOR_REVIEW', True)
 
