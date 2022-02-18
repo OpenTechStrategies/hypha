@@ -2,3 +2,20 @@
 .js-sidebar-toggle, .tab__item--right {
     display: none;
 }
+
+table td.id, table th.id {
+    padding-left: 20px;
+}
+
+table td.id a {
+    color: #404041;
+    font-weight: 700;
+}
+
+table td.title, table th.title {
+    padding-left: 0;
+}
+
+.heading--number {
+    color:rgba(184, 176, 176, 0.5);
+}
