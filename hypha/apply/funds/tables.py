@@ -69,10 +69,10 @@ def render_reviewer_link(record):
 
 class SubmissionsTable(tables.Table):
     """Base table for listing submissions, do not include admin data to this table"""
+    id = tables.LinkColumn('funds:submissions:detail', verbose_name=_('#'), order_by=('id',), args=[A('pk')])
     title = tables.LinkColumn('funds:submissions:detail', text=render_title, args=[A('pk')], attrs={'td': {'data-title-tooltip': lambda record: record.title, 'class': 'js-title'}})
     submit_time = tables.DateColumn(verbose_name=_('Submitted'))
     phase = tables.Column(verbose_name=_('Status'), order_by=('status',), attrs={'td': {'data-actions': render_actions, 'class': 'js-actions'}})
-    stage = tables.Column(verbose_name=_('Type'), order_by=('status',))
     fund = tables.Column(verbose_name=_('Fund'), accessor='page')
     comments = tables.Column(accessor='comment_count', verbose_name=_('Comments'))
     last_update = tables.DateColumn(accessor="last_update", verbose_name=_('Last updated'))
@@ -80,7 +80,7 @@ class SubmissionsTable(tables.Table):
     class Meta:
         model = ApplicationSubmission
         order_by = ('-last_update',)
-        fields = ('title', 'phase', 'stage', 'fund', 'round', 'submit_time', 'last_update')
+        fields = ('id', 'title',  'phase', 'fund', 'round', 'submit_time', 'last_update')
         sequence = fields + ('comments',)
         template_name = 'funds/tables/table.html'
         row_attrs = {
@@ -137,7 +137,7 @@ class BaseAdminSubmissionsTable(SubmissionsTable):
     screening_status = tables.Column(verbose_name=_('Screening'), accessor='screening_statuses')
 
     class Meta(SubmissionsTable.Meta):
-        fields = ('title', 'phase', 'stage', 'fund', 'round', 'lead', 'submit_time', 'last_update', 'screening_status', 'reviews_stats')  # type: ignore
+        fields = ('id', 'title', 'phase', 'fund', 'round', 'lead', 'submit_time', 'last_update', 'screening_status', 'reviews_stats')  # type: ignore
         sequence = fields + ('comments',)
 
     def render_lead(self, value):
