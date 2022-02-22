@@ -104,3 +104,24 @@ msgstr "Admin"
 #: hypha/apply/review/options.py:45
 msgid "Private"
 msgstr "Staff Only"
+
+msgid "Screen"
+msgstr "Review eligibility"
+
+msgid "Screen application"
+msgstr "Review eligibility"
+
+msgid "Screening status"
+msgstr "Eligibility review"
+
+msgid "Screening options<"
+msgstr "Eligibility review options<"
+
+msgid "Need screening"
+msgstr "Needs eligibility review"
+
+msgid "Need screening (revert)"
+msgstr "Needs eligibility review (revert)"
+
+msgid "Screening statuses"
+msgstr "Eligibility"
