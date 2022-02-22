@@ -118,6 +118,7 @@
                 <a class="js-actions-toggle button button--white button--full-width button--actions">{% trans "Actions to take" %}</a>
                 {% endif %}
 
+                {% if not request.user.is_applicant %}
                 <div class="js-actions-sidebar sidebar__inner sidebar__inner--light-blue sidebar__inner--actions {% if mobile %}sidebar__inner--mobile{% endif %}">
 
                     <h5>{% trans "Actions to take" %}</h5>
@@ -126,10 +127,12 @@
                     {% block admin_actions %}{% endblock %}
                     {% endif %}
 
+                    <!--
                     {% user_can_edit_project object request.user as editable %}
                     {% if editable and settings.application_projects.ProjectSettings.vendor_setup_required and not project.vendor.user_has_updated_details %}
                         <a class="button button--bottom-space button--primary button--full-width" href="{% url 'apply:projects:vendor' pk=project.pk %}">{% trans "Fill in Contracting Info" %}</a>
                     {% endif %}
+                    -->
 
                     {% user_can_upload_contract object request.user as can_upload_contract %}
                     {% if can_upload_contract %}
@@ -163,18 +166,21 @@
                     {% endif %}
 
                 </div>
+                {% endif %}
 
                 {% if object.is_in_progress %}
                 <div class="sidebar__inner">
                     <h5>{% trans "Supporting Information" %}</h5>
 
                     <p><a class="link link--bold" href="{{ object.submission.get_absolute_url }}">{% trans "Proposal" %}</a></p>
+                    <!--
                     {% if project.vendor %}
                         <p><a class="link link--bold" href="{% url 'apply:projects:vendor-detail' pk=project.pk vendor_pk=project.vendor.pk %}">{% trans "Contracting Information" %}</a></p>
                     {% endif %}
                     {% if request.user.is_apply_staff %}
                     <p><a class="link link--bold" href="{% url 'apply:projects:simplified' pk=project.pk %}">{% trans "Approval form" %}</a></p>
                     {% endif %}
+                    -->
                 </div>
                 {% endif %}
 
