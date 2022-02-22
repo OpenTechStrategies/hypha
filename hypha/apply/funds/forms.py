@@ -108,6 +108,7 @@ class ScreeningSubmissionForm(ApplicationSubmissionModelForm):
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         instance = kwargs.get('instance')
+        self.fields['screening_statuses'].label = _('Screening statuses')
         if instance and instance.has_default_screening_status_set:
             screening_status = instance.screening_statuses.get(default=True)
             self.fields['screening_statuses'].queryset = ScreeningStatus.objects.filter(
