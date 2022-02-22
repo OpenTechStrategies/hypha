@@ -54,6 +54,7 @@
 </div>
 {% endif %}
 
+<!--
 {% if object.requires_approval %}
     <a
         {% if not object.can_send_for_approval %}
@@ -74,6 +75,7 @@
         {% trans "Submit for Approval" %}
     </a>
 {% endif %}
+-->
 
 {% if object.can_make_approval %}
   {% user_can_approve_project object user as user_can_approve %}
