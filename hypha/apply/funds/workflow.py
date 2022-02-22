@@ -451,7 +451,6 @@ SingleStageExternalDefinition = [
         'ext_almost': {
             'transitions': {
                 'ext_accepted': _('Accept'),
-                'ext_rejected': _('Dismiss'),
                 'ext_withdrawn': _('Withdraw'),
                 'ext_external_review': _('Open External Review (revert)'),
             },
@@ -1066,7 +1065,7 @@ def get_dismissed_statuses():
 def get_withdrawn_statuses():
     withdrawn_statuses = set()
     for phase_name, phase in PHASES:
-        if phase.display_name == 'Dismissed':
+        if phase.display_name == 'Withdrawn':
             withdrawn_statuses.add(phase_name)
     return withdrawn_statuses
 
