@@ -137,9 +137,15 @@ class ReviewCreateOrUpdateView(BaseStreamForm, CreateOrUpdateView):
 
     def get_context_data(self, **kwargs):
         has_submitted_review = self.submission.reviewed_by(self.request.user)
+        existing_review_url = ''
+        if (has_submitted_review):
+            existing_review = self.submission.assigned.reviewed().filter(reviewer=self.request.user).first()
+            existing_review_url = existing_review.review.get_absolute_url()
+
         return super().get_context_data(
             submission=self.submission,
             has_submitted_review=has_submitted_review,
+            existing_review_url=existing_review_url,
             title=_('Update Review draft') if self.object else _('Create Review'),
             **kwargs
         )

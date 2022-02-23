@@ -43,7 +43,8 @@
         <button class="button button--submit button--top-space button--primary" type="submit" name="submit">{% trans "Submit" %}</button>
     </form>
 {% else %}
-    <p>{% trans "You have already posted a review for this submission" %}</p>
+    <p>{% trans "You have already posted a review for this submission" %}.</p>
+    <p><a href="{{ existing_review_url }}">{% trans "View your review." %}</a></p>
 {% endif %}
 </div>
 {% endblock %}
