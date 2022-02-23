@@ -319,5 +319,10 @@ class AccessFormData:
         for field_id in self.question_text_field_ids:
             question_field = self.serialize(field_id)
             question_key = question_field['question'].lower().replace(' ', '_')
-            result[question_key] = question_field['answer']
+            if isinstance(question_field['answer'], str):
+                answer = question_field['answer']
+            else:
+                answer = ','.join(question_field['answer'])
+            if answer and not answer == 'N':
+                 result[question_key] = answer
         return result
