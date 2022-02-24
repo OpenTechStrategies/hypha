@@ -46,7 +46,7 @@ CLOSING = 'closing'
 COMPLETE = 'complete'
 PROJECT_STATUS_CHOICES = [
     (COMMITTED, _('Committed')),
-    #(CONTRACTING, _('Contracting')),
+    (CONTRACTING, _('Contracting')),
     (IN_PROGRESS, _('In Progress')),
     (CLOSING, _('Closing')),
     (COMPLETE, _('Complete')),
