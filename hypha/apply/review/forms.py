@@ -70,6 +70,8 @@ class ReviewModelForm(StreamBaseForm, forms.ModelForm, metaclass=MixedMetaClass)
             self.instance.visibility = self.cleaned_data[self.instance.visibility_field.id]
         except AttributeError:
             self.instance.visibility = PRIVATE
+        except KeyError:
+            self.instance.visibility = PRIVATE
 
         self.instance.form_data = self.cleaned_data['form_data']
 
