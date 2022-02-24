@@ -319,7 +319,7 @@ class AccessFormData:
         for field_id in self.question_text_field_ids:
             question_field = self.serialize(field_id)
             question_key = question_field['question'].lower().replace(' ', '_')
-            if isinstance(question_field['answer'], str):
+            if isinstance(question_field['answer'], str) or isinstance(question_field['answer'], dict):
                 answer = question_field['answer']
             else:
                 answer = ','.join(question_field['answer'])
