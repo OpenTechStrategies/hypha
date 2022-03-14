@@ -55,3 +55,8 @@ def display_for(activity, user):
 def visibility_options(activity, user):
     choices = activity.visibility_choices_for(user)
     return json.dumps(choices)
+
+
+@register.filter
+def add_ptag_newlines(value):
+    return value.replace('<p>', '\n<p>')
