@@ -76,9 +76,9 @@ class BaseProjectsTable(tables.Table):
     )
     status = tables.Column(verbose_name=_('Status'), accessor='get_status_display', order_by=('status',))
     fund = tables.Column(verbose_name=_('Fund'), accessor='submission.page')
-    reporting = tables.Column(verbose_name=_('Reporting'), accessor='pk')
+    # reporting = tables.Column(verbose_name=_('Reporting'), accessor='pk')
     # last_payment_request = tables.DateColumn()
-    end_date = tables.DateColumn(verbose_name=_('End Date'), accessor='proposed_end')
+    # end_date = tables.DateColumn(verbose_name=_('End Date'), accessor='proposed_end')
     # fund_allocation = tables.Column(verbose_name=_('Fund Allocation ({currency})').format(currency=settings.CURRENCY_SYMBOL), accessor='value')
 
     def order_reporting(self, qs, is_descending):
@@ -113,9 +113,9 @@ class ProjectsDashboardTable(BaseProjectsTable):
             'title',
             'status',
             'fund',
-            'reporting',
+            # 'reporting',
             # 'last_payment_request',
-            'end_date',
+            # 'end_date',
             # 'fund_allocation',
         ]
         model = Project
@@ -130,9 +130,9 @@ class ProjectsListTable(BaseProjectsTable):
             'status',
             'lead',
             'fund',
-            'reporting',
+            # 'reporting',
             # 'last_payment_request',
-            'end_date',
+            # 'end_date',
             # 'fund_allocation',
         ]
         model = Project
