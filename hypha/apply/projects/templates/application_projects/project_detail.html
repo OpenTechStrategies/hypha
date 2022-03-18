@@ -80,8 +80,20 @@
             <article class="wrapper--sidebar--inner">
                 <h3>{% trans "Project Information" %}</h3>
                 <div class="grid grid--proposal-info">
+                    <!--
                     <div>
-                        <h5>{% trans "Contractor" %}</h5>
+                        <h5>{% trans "Proposed start date" %}</h5>
+                        <p>{{ object.proposed_start|date:"DATE_FORMAT"|default:"-" }}</p>
+                    </div>
+
+                    <div>
+                        <h5>{% trans "Project Proposed end date" %}</h5>
+                        <p>{{ object.proposed_end|date:"DATE_FORMAT"|default:"-" }}</p>
+                    </div>
+                    -->
+
+                    <div>
+                        <h5>{% trans "Legal name" %}</h5>
                         <p>{{ object.vendor.name |default:"-" }}</p>
                     </div>
 
@@ -95,6 +107,8 @@
                     </div>
                 </div>
 
+
+                {% if false %}
 
                 {% if object.can_request_funding %}
                 <div class="wrapper wrapper--outer-space-large">
@@ -110,6 +124,8 @@
 
                 {% if not object.is_in_progress %}
                 {% include "application_projects/includes/supporting_documents.html" %}
+                {% endif %}
+
                 {% endif %}
             </article>
 
@@ -132,7 +148,6 @@
                     {% if editable and settings.application_projects.ProjectSettings.vendor_setup_required and not project.vendor.user_has_updated_details %}
                         <a class="button button--bottom-space button--primary button--full-width" href="{% url 'apply:projects:vendor' pk=project.pk %}">{% trans "Fill in Contracting Info" %}</a>
                     {% endif %}
-                    -->
 
                     {% user_can_upload_contract object request.user as can_upload_contract %}
                     {% if can_upload_contract %}
@@ -160,6 +175,7 @@
                         {% trans "Add Invoice" %}
                     </a>
                     {% endif %}
+                    -->
 
                     {% if request.user.is_apply_staff %}
                     {% block admin_assignments %}{% endblock %}
@@ -188,6 +204,7 @@
                 {% block project_approvals %}{% endblock %}
                 {% endif %}
 
+                <!--
                 {% if contracts or contract_to_sign or contract_to_approve %}
                 <div class="sidebar__inner">
                     <h5>{% trans "Contracts" %}</h5>
@@ -224,6 +241,7 @@
                     {% endfor %}
                 </div>
                 {% endif %}
+                -->
             </aside>
         </div>
     </div>
