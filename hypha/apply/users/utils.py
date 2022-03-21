@@ -42,13 +42,13 @@ def send_activation_email(user, site=None):
         'username': user.get_username(),
         'activation_path': activation_path,
         'timeout_days': settings.PASSWORD_RESET_TIMEOUT_DAYS,
-        'org_long_name': settings.ORG_LONG_NAME,
+        'ORG_LONG_NAME': settings.ORG_LONG_NAME,
     }
 
     if site:
         context.update(site=site)
 
-    subject = 'Account details for {username} at {org_long_name}'.format(**context)
+    subject = 'Account details for {username} at {ORG_LONG_NAME}'.format(**context)
     # Force subject to a single line to avoid header-injection issues.
     subject = ''.join(subject.splitlines())
     message = render_to_string('users/activation/email.txt', context)
@@ -75,13 +75,13 @@ def send_confirmation_email(user, token, updated_email=None, site=None):
         'unverified_email': updated_email,
         'activation_path': activation_path,
         'timeout_days': settings.PASSWORD_RESET_TIMEOUT_DAYS,
-        'org_long_name': settings.ORG_LONG_NAME,
+        'ORG_LONG_NAME': settings.ORG_LONG_NAME,
     }
 
     if site:
         context.update(site=site)
 
-    subject = 'Confirmation email for {unverified_email} at {org_long_name}'.format(**context)
+    subject = 'Confirmation email for {unverified_email} at {ORG_LONG_NAME}'.format(**context)
     # Force subject to a single line to avoid header-injection issues.
     subject = ''.join(subject.splitlines())
     message = render_to_string('users/email_change/confirm_email.txt', context)
