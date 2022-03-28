@@ -125,3 +125,24 @@ msgstr "Needs eligibility review (revert)"
 
 msgid "Screening statuses"
 msgstr "Eligibility"
+
+#: hypha/apply/dashboard/templates/dashboard/includes/flagged.html:5
+#: hypha/apply/funds/templates/funds/submissions_user_flagged.html:6
+msgid "Your Flagged Submissions"
+msgstr "Your bookmarked submissions"
+
+#: hypha/apply/funds/templates/funds/submissions_overview.html:56
+msgid "Staff Flagged Submissions"
+msgstr "All-staff Bookmarked Submissions"
+
+#: hypha/apply/flags/templates/flags/flags.html:3
+msgid "Flags"
+msgstr "Bookmarks"
+
+#: hypha/apply/flags/templates/flags/flags.html:5
+msgid "Flag"
+msgstr "Personal"
+
+#: hypha/apply/flags/templates/flags/flags.html:8
+msgid "Staff flag"
+msgstr "All-staff"
