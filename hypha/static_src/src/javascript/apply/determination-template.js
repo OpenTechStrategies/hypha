@@ -42,10 +42,11 @@
         }
 
         getMatchingCopy(value) {
-            if (parseInt(value) > this.actions.length -1) {
+            const actionIndex = parseInt(value);
+            if (actionIndex > this.actions.length - 1) {
                 return '';
             }
-            const action = this.actions[value];
+            const action = this.actions[actionIndex];
             return document.querySelector('div[data-type="' + action + '"]').innerHTML;
         }
 
