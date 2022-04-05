@@ -327,6 +327,9 @@ class BatchUpdateReviewersForm(forms.Form):
         self.user = user
         super().__init__(*args, **kwargs)
 
+        # convert a python dict to orderedDict, to use move_to_end method
+        self.fields = OrderedDict(self.fields)
+
         self.role_fields = {}
         field_data = make_role_reviewer_fields()
 
