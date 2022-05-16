@@ -361,11 +361,17 @@ SingleStageExternalDefinition = [
             'permissions': applicant_edit_permissions,
         },
         'ext_screening_rejected': {
+            'transitions': {
+                INITIAL_STATE: _('Need screening (revert)'),
+            },
             'display': _('Dismissed'),
             'stage': RequestExt,
             'permissions': no_permissions,
         },
         'ext_screening_withdrawn': {
+            'transitions': {
+                INITIAL_STATE: _('Need screening (revert)'),
+            },
             'display': _('Withdrawn'),
             'stage': RequestExt,
             'permissions': staff_edit_permissions,
@@ -399,11 +405,17 @@ SingleStageExternalDefinition = [
             'permissions': applicant_edit_permissions,
         },
         'ext_review_rejected': {
+            'transitions': {
+                'ext_internal_review': _('Open Internal Review (revert)'),
+            },
             'display': _('Dismissed'),
             'stage': RequestExt,
             'permissions': no_permissions,
         },
         'ext_review_withdrawn': {
+            'transitions': {
+                'ext_internal_review': _('Open Internal Review (revert)'),
+            },
             'display': _('Withdrawn'),
             'stage': RequestExt,
             'permissions': staff_edit_permissions,
@@ -437,11 +449,17 @@ SingleStageExternalDefinition = [
             'permissions': applicant_edit_permissions,
         },
         'ext_external_review_rejected': {
+            'transitions': {
+                'ext_external_review': _('Open External Review (revert)'),
+            },
             'display': _('Dismissed'),
             'stage': RequestExt,
             'permissions': no_permissions,
         },
         'ext_external_review_withdrawn': {
+            'transitions': {
+                'ext_external_review': _('Open External Review (revert)'),
+            },
             'display': _('Withdrawn'),
             'stage': RequestExt,
             'permissions': staff_edit_permissions,
@@ -459,17 +477,26 @@ SingleStageExternalDefinition = [
             'permissions': applicant_edit_permissions,
         },
         'ext_accepted': {
+            'transitions': {
+                'ext_external_review': _('Open Internal Review (revert)'),
+            },
             'display': _('Accepted'),
             'future': _('Application Outcome'),
             'stage': RequestExt,
             'permissions': staff_edit_permissions,
         },
         'ext_rejected': {
+            'transitions': {
+                'ext_external_review': _('Open Internal Review (revert)'),
+            },
             'display': _('Dismissed'),
             'stage': RequestExt,
             'permissions': staff_edit_permissions,
         },
         'ext_withdrawn': {
+            'transitions': {
+                'ext_external_review': _('Open Internal Review (revert)'),
+            },
             'display': _('Withdrawn'),
             'stage': RequestExt,
             'permissions': staff_edit_permissions,
