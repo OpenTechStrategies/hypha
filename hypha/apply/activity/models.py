@@ -129,11 +129,11 @@ class Activity(models.Model):
     @classmethod
     def visibility_for(cls, user):
         if user.is_apply_staff:
-            return [TEAM, REVIEWER, PARTNER, ALL]
+            return [TEAM, REVIEWER, ALL]
         if user.is_reviewer:
             return [REVIEWER, ALL]
         if user.is_partner:
-            return [PARTNER, ALL]
+            return [ALL]
         if user.is_applicant:
             return []
 
