@@ -8,7 +8,7 @@ from wagtail.core.blocks import RichTextBlock
 from hypha.apply.review.fields import ScoredAnswerField
 from hypha.apply.review.options import (
     NA,
-    PRIVATE,
+    REVIEWER,
     RATE_CHOICE_NA,
     RATE_CHOICES,
     RATE_CHOICES_DICT,
@@ -151,7 +151,7 @@ class VisibilityBlock(ReviewMustIncludeFieldBlock):
     def get_field_kwargs(self, struct_value):
         kwargs = super(VisibilityBlock, self).get_field_kwargs(struct_value)
         kwargs['choices'] = VISIBILITY.items()
-        kwargs['initial'] = PRIVATE
+        kwargs['initial'] = REVIEWER
         kwargs['help_text'] = mark_safe('<br>'.join(
             [VISIBILITY[choice] + ': ' + VISIBILILTY_HELP_TEXT[choice] for choice in VISIBILITY]
         ))
