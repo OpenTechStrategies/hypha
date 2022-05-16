@@ -37,11 +37,11 @@ PRIVATE = 'private'
 REVIEWER = 'reviewers'
 
 VISIBILILTY_HELP_TEXT = {
-    PRIVATE: _('Visible only to staff.'),
     REVIEWER: _('Visible to other reviewers and staff.'),
+    PRIVATE: _('Visible only to staff.'),
 }
 
 VISIBILITY = {
-    PRIVATE: _('Private'),
     REVIEWER: _('Reviewers and Staff'),
+    PRIVATE: _('Private'),
 }
