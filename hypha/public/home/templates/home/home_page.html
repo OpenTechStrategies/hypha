@@ -6,7 +6,9 @@
     <header class="header header--homepage {% if page.header_image %}header--has-bg-image{% endif %} {% block header_modifier %}{% endblock %}" {% if page.header_image %}style="background-image:url('{{ header_image.url }}')"{% endif %}>
 
         {% block apply_button %}
-            {% include "includes/apply_button.html" %}
+            {% if SHOW_APPLY_BUTTON_ON_HOME %}
+                {% include "includes/apply_button.html" %}
+            {% endif %}
         {% endblock %}
 
         <div class="header__inner wrapper wrapper--large">
