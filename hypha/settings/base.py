@@ -43,6 +43,10 @@ EMAIL_SUBJECT_PREFIX = env.str('EMAIL_SUBJECT_PREFIX', None)
 SERVER_EMAIL = DEFAULT_FROM_EMAIL = env.str('SERVER_EMAIL', None)
 
 
+# Interface settings
+SHOW_APPLY_BUTTON_ON_HOME = env.bool('SHOW_APPLY_BUTTON_ON_HOME', True)
+
+
 # Application definition
 INSTALLED_APPS = [
     'scout_apm.django',

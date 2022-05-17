@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
@@ -170,4 +171,5 @@ class HomePage(BasePage):
         context['lab_list'] = list(self.get_related(LabPage, self.promoted_labs))
         context['fund_list'] = list(self.get_related(FundPage, self.promoted_funds))
         context['rfps_list'] = list(self.get_related(RFPPage, self.promoted_rfps))
+        context['SHOW_APPLY_BUTTON_ON_HOME'] = settings.SHOW_APPLY_BUTTON_ON_HOME
         return context
