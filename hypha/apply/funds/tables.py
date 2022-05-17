@@ -316,7 +316,13 @@ class SubmissionFilter(filters.FilterSet):
 
 
 class SubmissionFilterAndSearch(SubmissionFilter):
-    query = filters.CharFilter(field_name='search_data', lookup_expr="icontains", widget=forms.HiddenInput)
+    query = filters.CharFilter(method='search_data_and_id', widget=forms.HiddenInput)
+
+    def search_data_and_id(self, queryset, name, value):
+        possible_id = value.strip("#")
+        if value.strip().startswith("#") and possible_id.isnumeric():
+            return queryset.filter(id=possible_id)
+        return queryset.filter(Q(id=possible_id)|Q(search_data__icontains=value))
 
 
 class SubmissionDashboardFilter(filters.FilterSet):
