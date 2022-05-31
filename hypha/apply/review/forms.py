@@ -104,7 +104,7 @@ class ReviewModelForm(StreamBaseForm, forms.ModelForm, metaclass=MixedMetaClass)
             scores.append(int(score))
 
         try:
-            return sum(scores) / len(scores)
+            return sum(scores)
         except ZeroDivisionError:
             return NA
 
