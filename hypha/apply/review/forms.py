@@ -103,10 +103,7 @@ class ReviewModelForm(StreamBaseForm, forms.ModelForm, metaclass=MixedMetaClass)
                 score = 0
             scores.append(int(score))
 
-        try:
-            return sum(scores) / len(scores)
-        except ZeroDivisionError:
-            return NA
+        return sum(scores)
 
 
 class SubmitButtonWidget(forms.Widget):
