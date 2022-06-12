@@ -34,8 +34,7 @@ from .fields import MultiFileField, SingleFileField
 
 class FormFieldBlock(StructBlock):
     field_label = CharBlock(label=_('Label'))
-    help_text = TextBlock(required=False, label=_('Help text'))
-    help_link = URLBlock(required=False, label=_('Help link'))
+    help_text = RichTextBlock(required=False, label=_('Help text'))
 
     field_class = forms.CharField
     widget = None
