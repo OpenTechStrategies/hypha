@@ -20,10 +20,26 @@ MAYBE = 1
 YES = 2
 
 RECOMMENDATION_CHOICES = (
-    (NO, _('No')),
-    (MAYBE, _('Maybe')),
-    (YES, _('Yes')),
+    (0, _('Need More Info')),
+    (1, _('Reject')),
+    (2, _('Weak Reject')),
+    (3, _('Weak Accept')),
+    (4, _('Accept')),
+    (5, _('Strong Accept')),
+    (6, _('N/A - Choose not to answer')),
 )
+
+NO_RECOMMENDATIONS = [1,2]
+YES_RECOMMENDATIONS = [3,4,5]
+MAYBE_RECOMMENDATIONS = [0,6]
+
+def map_recommendation (raw_recommendation):
+    if(raw_recommendation in NO_RECOMMENDATIONS):
+        return NO
+    if(raw_recommendation in YES_RECOMMENDATIONS):
+        return YES
+    if(raw_recommendation in MAYBE_RECOMMENDATIONS):
+        return MAYBE
 
 DISAGREE = 0
 AGREE = 1
