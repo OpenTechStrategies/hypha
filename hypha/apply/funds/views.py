@@ -421,6 +421,7 @@ class SubmissionOverviewView(BaseAdminSubmissionsTable):
         future_rounds = base_query.future()[:limit]
         future_query = '?round_state=future'
         rounds_title = 'All Rounds and Labs'
+        included_sections = settings.SUBMISSIONS_VIEW_INCLUDED_SECTIONS
 
         # Get the names of workflows used by applications
         worklow_names_in_use = (
@@ -470,6 +471,7 @@ class SubmissionOverviewView(BaseAdminSubmissionsTable):
             rounds_title=rounds_title,
             status_counts=grouped_statuses,
             staff_flagged=staff_flagged,
+            included_sections=included_sections,
             **kwargs,
         )
 

@@ -34,34 +34,41 @@
 
 <div class="wrapper wrapper--large wrapper--inner-space-medium">
 
-    {% include "funds/includes/status-block.html" with type="Applications" %}
+    {% for section in included_sections %}
+        {% if section == 'status_block' %}
+            {% include "funds/includes/status-block.html" with type="Applications" %}
 
-    {% if closed_rounds or open_rounds or future_rounds %}
-        {% include "funds/includes/round-block.html" with closed_rounds=closed_rounds open_rounds=open_rounds title=rounds_title page_type='submission' %}
-    {% endif %}
-
-    {% block table %}
-        <div class="wrapper wrapper--bottom-space">
-
-            <h4 class="heading heading--normal">Recent Submissions</h4>
-
-            {% render_table table %}
-            <div class="all-submissions-table__more">
-                <a href="{% url 'apply:submissions:list' %}">{% trans "Show all" %}</a>
-            </div>
-        </div>
-
-        {% if staff_flagged.table.data %}
-        <div class="wrapper wrapper--bottom-space">
-            <h4 class="heading heading--normal">{% trans "Staff Flagged Submissions" %}</h4>
-            {% render_table staff_flagged.table %}
-            {% if staff_flagged.display_more %}
-                <div class="all-submissions-table__more">
-                    <a href="{% url 'apply:submissions:staff_flagged' %}">{% trans "Show all" %}</a>
-                </div>
+        {% elif section == 'round_block' %}
+            {% if closed_rounds or open_rounds or future_rounds %}
+                {% include "funds/includes/round-block.html" with closed_rounds=closed_rounds open_rounds=open_rounds title=rounds_title page_type='submission' %}
             {% endif %}
-        </div>
+
+        {% elif section == 'table_block' %}
+            {% block table %}
+                <div class="wrapper wrapper--bottom-space">
+
+                    <h4 class="heading heading--normal">Recent Submissions</h4>
+
+                    {% render_table table %}
+                    <div class="all-submissions-table__more">
+                        <a href="{% url 'apply:submissions:list' %}">{% trans "Show all" %}</a>
+                    </div>
+                </div>
+
+                {% if staff_flagged.table.data %}
+                <div class="wrapper wrapper--bottom-space">
+                    <h4 class="heading heading--normal">{% trans "Staff Flagged Submissions" %}</h4>
+                    {% render_table staff_flagged.table %}
+                    {% if staff_flagged.display_more %}
+                        <div class="all-submissions-table__more">
+                            <a href="{% url 'apply:submissions:staff_flagged' %}">{% trans "Show all" %}</a>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endblock %}
         {% endif %}
-    {% endblock %}
+    {% endfor %}
+
 </div>
 {% endblock %}
