@@ -3,7 +3,10 @@ import json
 from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from wagtail.core.blocks import RichTextBlock
+from wagtail.core.blocks import (
+    IntegerBlock,
+    RichTextBlock,
+)
 
 from hypha.apply.review.fields import ScoredAnswerField
 from hypha.apply.review.options import (
@@ -70,6 +73,10 @@ class ScoreFieldWithoutTextBlock(OptionalFormFieldBlock):
     required it automatically handles validation on empty string.
     """
     name = 'score without text'
+
+    min = IntegerBlock(min_value=0, max_value=9,  default=0, required=False)
+    max = IntegerBlock(min_value=1, max_value=10, default=10, required=False)
+
     field_class = forms.ChoiceField
 
     class Meta:
@@ -78,6 +85,15 @@ class ScoreFieldWithoutTextBlock(OptionalFormFieldBlock):
     def get_field_kwargs(self, struct_value):
         kwargs = super().get_field_kwargs(struct_value)
         kwargs['choices'] = self.get_choices(RATE_CHOICES)
+        if struct_value.get('min') is None:
+            struct_value['min'] = 0
+        if struct_value.get('max') is None:
+            struct_value['max'] = 10
+        if struct_value['min'] > struct_value['max']:
+            struct_value['min'] = struct_value['max']
+        kwargs['choices'] = kwargs['choices'][
+            int(struct_value['min']) + 1 : int(struct_value['max']) + 2
+        ]
         return kwargs
 
     def render(self, value, context=None):
@@ -95,7 +111,7 @@ class ScoreFieldWithoutTextBlock(OptionalFormFieldBlock):
         """
         rate_choices = list(choices)
         rate_choices.pop(-1)
-        rate_choices.append(('', 'n/a - choose not to answer'))
+        rate_choices = [('', 'n/a - choose not to answer')] + rate_choices
         return tuple(rate_choices)
 
 
