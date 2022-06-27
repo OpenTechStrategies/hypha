@@ -38,7 +38,16 @@ from hypha.apply.categories.models import MetaTerm
 from hypha.apply.determinations.models import Determination
 from hypha.apply.flags.models import Flag
 from hypha.apply.review.models import ReviewOpinion
-from hypha.apply.review.options import AGREE, DISAGREE, MAYBE
+from hypha.apply.review.options import (
+    AGREE,
+    DISAGREE,
+    MAYBE,
+    NO,
+    YES,
+    YES_RECOMMENDATIONS,
+    NO_RECOMMENDATIONS,
+    MAYBE_RECOMMENDATIONS,
+)
 from hypha.apply.stream_forms.files import StreamFieldDataEncoder
 from hypha.apply.stream_forms.models import BaseStreamForm
 
@@ -243,14 +252,50 @@ class ApplicationSubmissionQueryset(JSONOrderable):
                 ).values('count'),
                 output_field=IntegerField(),
             ),
+            review_recommendation_no_count=Subquery(
+                reviews
+                    .submitted()
+                    .values('submission')
+                    .filter(recommendation__in=NO_RECOMMENDATIONS)
+                    .annotate(
+                        count=Count('pk', distinct=True)
+                    )
+                    .values('count'),
+            ),
+            review_recommendation_maybe_count=Subquery(
+                reviews
+                    .submitted()
+                    .values('submission')
+                    .filter(recommendation__in=MAYBE_RECOMMENDATIONS)
+                    .annotate(
+                        count=Count('pk', distinct=True)
+                    )
+                    .values('count'),
+            ),
+            review_recommendation_yes_count=Subquery(
+                reviews
+                    .submitted()
+                    .values('submission')
+                    .filter(recommendation__in=YES_RECOMMENDATIONS)
+                    .annotate(
+                        count=Count('pk', distinct=True)
+                    )
+                    .values('count'),
+            ),
             review_recommendation=Case(
                 When(opinion_disagree__gt=0, then=MAYBE),
-                default=Subquery(
-                    reviews.submitted().values('submission').annotate(
-                        calc_recommendation=Sum('recommendation') / Count('recommendation'),
-                    ).values('calc_recommendation'),
-                    output_field=IntegerField(),
-                )
+                When(review_recommendation_maybe_count__gt=0, then=MAYBE),
+                When(
+                    Q(review_recommendation_no_count=None)
+                    & Q(review_recommendation_yes_count__gt=0),
+                    then=YES
+                ),
+                When(
+                    Q(review_recommendation_yes_count=None)
+                    & Q(review_recommendation_no_count__gt=0),
+                    then=NO
+                ),
+                default=MAYBE,
             ),
             role_icon=Subquery(roles_for_review[:1].values('role__icon')),
         ).prefetch_related(
