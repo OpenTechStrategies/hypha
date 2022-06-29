@@ -61,3 +61,12 @@
         background: transparent;
     }
 }
+
+#show-filters-button {
+
+    @include media-query(tablet-landscape) {
+        display: none;
+    }
+
+}
+
