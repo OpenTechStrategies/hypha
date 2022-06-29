@@ -1,1 +1,6 @@
-// stylelint-disable no-empty-source
+@media (max-width: 768px) {
+    .link--fixed-apply {
+        right: 5%;
+        display: block;
+    }
+}
