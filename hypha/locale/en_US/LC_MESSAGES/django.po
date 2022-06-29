@@ -32,25 +32,32 @@ msgstr ""
 "First try to <a href=\"%(password_reset)s\">reset your password</a>. If "
 "that fails please contact %(ORG_SHORT_NAME)s at"
 
+msgid "0. Need more info"
+msgstr "0"
+
 #: hypha/apply/review/options.py:7
 msgid "1. Poor"
-msgstr "1. Reject"
+msgstr "1"
 
 #: hypha/apply/review/options.py:8
 msgid "2. Not so good"
-msgstr "2. Weak Reject"
+msgstr "2"
 
 #: hypha/apply/review/options.py:9
 msgid "3. Is o.k."
-msgstr "3. Weak Accept"
+msgstr "3"
 
 #: hypha/apply/review/options.py:10
 msgid "4. Good"
-msgstr "4. Accept"
+msgstr "4"
 
 #: hypha/apply/review/options.py:11
 msgid "5. Excellent"
-msgstr "5. Strong Accept"
+msgstr "5"
+
+#: hypha/apply/review/options.py:12
+msgid "n/a - choose not to answer"
+msgstr "---------"
 
 msgid "Open Review"
 msgstr "Open GAC Review"
