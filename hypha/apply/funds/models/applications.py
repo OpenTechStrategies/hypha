@@ -206,7 +206,7 @@ class RoundBase(WorkflowStreamForm, SubmittableStreamForm):  # type: ignore
 
     @property
     def is_open(self):
-        return self.start_date <= date.today() <= self.end_date
+        return self.start_date <= date.today() <= self.end_date if self.end_date else True
 
     def save(self, *args, **kwargs):
         is_new = not self.id
