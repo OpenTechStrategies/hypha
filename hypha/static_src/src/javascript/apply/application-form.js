@@ -1,6 +1,10 @@
 (function ($) {
 
     'use strict';
+    $(document).ready(function () {
+        var ein = document.getElementById('customEin');
+        $(ein).inputmask('99-9999999');
+    });
 
     $('.application-form').each(function () {
         var $application_form = $(this);

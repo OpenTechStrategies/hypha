@@ -46,6 +46,18 @@ class ValueBlock(ApplicationSingleIncludeFieldBlock):
     def prepare_data(self, value, data, serialize):
         return settings.CURRENCY_SYMBOL + str(data)
 
+class EinBlock(ApplicationSingleIncludeFieldBlock):
+    name = 'Ein'
+    description = '9 digits Ein'
+    widget = forms.TextInput(attrs={'id':'customEin'})
+
+    class Meta:
+        label = _('Ein')
+
+    def prepare_data(self, value, data, serialize):
+        data = data.replace('-','')
+        return str(data)
+
 
 class EmailBlock(ApplicationMustIncludeFieldBlock):
     name = 'email'
