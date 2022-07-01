@@ -1,6 +1,18 @@
 (function ($) {
 
     'use strict';
+    $(document).ready(function () {
+        var amount = document.getElementById('requested-amount');
+        $(amount).inputmask(
+            {
+                prefix: '$ ',
+                groupSeparator: ',',
+                alias: 'numeric',
+                rightAlign: false,
+                allowMinus: false
+            }
+        );
+    });
 
     $('.application-form').each(function () {
         var $application_form = $(this);
