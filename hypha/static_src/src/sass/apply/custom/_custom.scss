@@ -13,7 +13,10 @@ table td.id a {
 }
 
 table td.title, table th.title {
-    padding-left: 0;
+    padding-left: 20px;
+    @include media-query($table-breakpoint){
+        padding-left: 0;
+    }
 }
 
 .heading--number {
