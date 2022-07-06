@@ -212,9 +212,12 @@
                 }
             }
 
+            > span.label-width{
+                width: 90px;
+            }
+
             > span.mobile-label { // stylelint-disable-line force-element-nesting
                 display: inline-block;
-                width: 90px;
 
                 &.phase,
                 &.title {
