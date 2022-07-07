@@ -2,8 +2,7 @@
 
     'use strict';
     $(document).ready(function () {
-        var amount = document.getElementById('requested-amount');
-        $(amount).inputmask(
+        Inputmask(
             {
                 prefix: '$ ',
                 groupSeparator: ',',
@@ -11,7 +10,7 @@
                 rightAlign: false,
                 allowMinus: false
             }
-        );
+        ).mask($('#requested-amount'));
     });
 
     $('.application-form').each(function () {
