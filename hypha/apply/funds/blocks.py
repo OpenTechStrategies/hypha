@@ -49,10 +49,10 @@ class ValueBlock(ApplicationSingleIncludeFieldBlock):
 class EinBlock(ApplicationSingleIncludeFieldBlock):
     name = 'Ein'
     description = '9 digits Ein'
-    widget = forms.TextInput(attrs={'id':'customEin'})
+    widget = forms.TextInput(attrs={'id':'ein'})
 
     class Meta:
-        label = _('Ein')
+        label = _('EIN')
 
     def prepare_data(self, value, data, serialize):
         data = data.replace('-','')
