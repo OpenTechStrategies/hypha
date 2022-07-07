@@ -2,7 +2,7 @@
 
     'use strict';
     $(document).ready(function () {
-        $('#ein').inputmask('99-9999999');
+        Inputmask('99-9999999').mask($('#ein'))
     });
 
     $('.application-form').each(function () {
