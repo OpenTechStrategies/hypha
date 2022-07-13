@@ -4,7 +4,10 @@
 }
 
 table td.id, table th.id {
-    padding-left: 20px;
+    text-align: left;
+    @include media-query($table-breakpoint){
+        text-align: center;
+    }
 }
 
 table td.id a {
