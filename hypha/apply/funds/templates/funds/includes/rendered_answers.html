@@ -1,6 +1,6 @@
 {% load i18n wagtailusers_tags workflow_tags %}
 <h3>{% trans "Proposal Information" %}</h3>
-<div class="grid grid--proposal-info">
+    <div class="grid grid--proposal-info">
     {% if object.get_value_display != "-" %}
     <div>
         <h5>{% trans "Requested Funding" %}</h5>
@@ -30,6 +30,12 @@
         {{ object.get_address_display }}
     </div>
     {% endif %}
+    {% if object.get_Ein_display != "-" %}
+    <div>
+        <h5>{% trans "EIN" %}</h5>
+        {{ object.get_Ein_display }}
+    </div>
+    {%endif%}
 </div>
 
 <div class="rich-text rich-text--answers">
