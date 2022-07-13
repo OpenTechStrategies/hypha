@@ -8,7 +8,9 @@
     a {
         color: inherit;
     }
-
+    a:hover{
+        text-decoration: underline;
+    }
     &__inner {
         padding: 20px;
 
@@ -38,6 +40,7 @@
         a {
             display: flex;
             align-items: center;
+            text-decoration: underline;
         }
 
         h4 {
