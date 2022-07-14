@@ -136,9 +136,10 @@ class BaseAdminSubmissionsTable(SubmissionsTable):
     lead = tables.Column(order_by=('lead.full_name',))
     reviews_stats = tables.TemplateColumn(template_name='funds/tables/column_reviews.html', verbose_name=mark_safe("Reviews<div>Comp. <span class=\"counts-separator\">/</span>\tAssgn.</div>"), orderable=False)
     screening_status = tables.Column(verbose_name=_('Screening'), accessor='screening_statuses')
+    organization_name = tables.Column()
 
     class Meta(SubmissionsTable.Meta):
-        fields = ('id', 'title', 'phase', 'fund', 'round', 'lead', 'submit_time', 'last_update', 'screening_status', 'reviews_stats')  # type: ignore
+        fields = ('id', 'title', 'phase', 'fund', 'round', 'lead', 'submit_time', 'last_update', 'screening_status', 'reviews_stats','organization_name')  # type: ignore
         sequence = fields + ('comments',)
 
     def render_lead(self, value):
