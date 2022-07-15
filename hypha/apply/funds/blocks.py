@@ -46,6 +46,14 @@ class ValueBlock(ApplicationSingleIncludeFieldBlock):
     def prepare_data(self, value, data, serialize):
         return settings.CURRENCY_SYMBOL + str(data)
 
+class OrganizationNameBlock(ApplicationSingleIncludeFieldBlock):
+    name = 'organization_name'
+    description = 'The name of the organization'
+    widget = forms.TextInput()
+
+    class Meta:
+        label = _('Organization Name')
+
 
 class EmailBlock(ApplicationMustIncludeFieldBlock):
     name = 'email'
