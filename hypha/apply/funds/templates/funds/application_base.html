@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load wagtailcore_tags static i18n util_tags %}
+{% load render_bundle from webpack_tags %}
 {# Dont include fixed apply button on this page #}
 {% block apply_button %}{% endblock %}
 {% block header_modifier %}header--light-bg{% endblock %}
@@ -81,4 +82,7 @@
     <script src="{% static 'js/apply/form-group-toggle.js' %}"></script>
     {% endif %}
     <script src="{% static 'js/apply/multi-input-fields.js' %}"></script>
+
+    {% render_bundle 'inputmask' %}
+
 {% endblock %}

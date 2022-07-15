@@ -24,6 +24,7 @@
         "del": "^6.0.0",
         "detect-node": "^2.1.0",
         "humps": "^2.0.1",
+        "inputmask": "^5.0.7",
         "invariant": "^2.2.4",
         "js-cookie": "^2.2.1",
         "lodash.isequal": "^4.5.0",

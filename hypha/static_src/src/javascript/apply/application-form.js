@@ -1,6 +1,9 @@
 (function ($) {
 
     'use strict';
+    $(document).ready(function () {
+        Inputmask('99-9999999').mask($('#ein'))
+    });
 
     $('.application-form').each(function () {
         var $application_form = $(this);
