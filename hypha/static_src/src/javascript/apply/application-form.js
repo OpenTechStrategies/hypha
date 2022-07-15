@@ -11,6 +11,8 @@
                 allowMinus: false
             }
         ).mask($('#requested-amount'));
+
+        Inputmask('99-9999999').mask($('#ein'))
     });
 
     $('.application-form').each(function () {
