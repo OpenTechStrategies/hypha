@@ -2,6 +2,16 @@
 
     'use strict';
     $(document).ready(function () {
+        Inputmask(
+            {
+                prefix: '$ ',
+                groupSeparator: ',',
+                alias: 'numeric',
+                rightAlign: false,
+                allowMinus: false
+            }
+        ).mask($('#requested-amount'));
+
         Inputmask('99-9999999').mask($('#ein'))
     });
 

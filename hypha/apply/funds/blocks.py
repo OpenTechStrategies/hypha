@@ -38,13 +38,13 @@ class TitleBlock(ApplicationMustIncludeFieldBlock):
 class ValueBlock(ApplicationSingleIncludeFieldBlock):
     name = 'value'
     description = 'The value of the project'
-    widget = forms.NumberInput(attrs={'min': 0})
+    widget = forms.TextInput(attrs={'id':'requested-amount'})
 
     class Meta:
         label = _('Requested amount')
 
     def prepare_data(self, value, data, serialize):
-        return settings.CURRENCY_SYMBOL + str(data)
+        return str(data)
 
 
 class EinBlock(ApplicationSingleIncludeFieldBlock):
