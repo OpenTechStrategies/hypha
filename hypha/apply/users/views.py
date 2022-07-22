@@ -30,6 +30,7 @@ from hypha.apply.home.models import ApplyHomePage
 
 from .decorators import require_oauth_whitelist
 from .forms import (
+    CustomUserCreationForm,
     BecomeUserForm,
     CustomAuthenticationForm,
     EmailChangePasswordForm,
@@ -40,6 +41,16 @@ from .utils import send_confirmation_email
 
 User = get_user_model()
 
+class RegisterView(FormView):
+    form_class = CustomUserCreationForm
+    template_name = 'users/register.html'
+    success_url= '/login/'
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 class LoginView(TwoFactorLoginView):
     form_list = (

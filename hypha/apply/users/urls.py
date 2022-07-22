@@ -9,6 +9,7 @@ from .views import (
     EmailChangeDoneView,
     EmailChangePasswordView,
     LoginView,
+    RegisterView,
     TWOFABackupTokensPasswordView,
     TWOFADisableView,
     TWOFARequiredMessageView,
@@ -32,6 +33,7 @@ public_urlpatterns = [
 
     # Log out
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    path('register/', RegisterView.as_view() , name='register'),
 ]
 
 
