@@ -17,7 +17,7 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView,View
 from django.views.generic.edit import FormView
 from hijack.views import AcquireUserView
 from two_factor.forms import AuthenticationTokenForm, BackupTokenForm
@@ -41,17 +41,29 @@ from .utils import send_confirmation_email
 
 User = get_user_model()
 
-class RegisterView(TwoFactorLoginView,FormView):
-    form_class = CustomUserCreationForm
-    template_name = 'users/register.html'
-    success_url= '/login/'
+class RegisterView(View):
+    form = CustomUserCreationForm()
 
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
-    def form_invalid(self, form):
-        return super().form_invalid(form)
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('dashboard:dashboard')
+        return render(request,'users/register.html',{'form':self.form})
 
+    def post(self,request):
+        form=CustomUserCreationForm(request.POST)
+        context={}
+        if form.is_valid():
+            context['email']=form.cleaned_data['email']
+            context['full_name']=form.cleaned_data['full_name']
+            context['password']=form.cleaned_data['password']
+            print(form.cleaned_data)
+            site=Site.find_for_request(self.request)
+            user,created = User.objects.get_or_create_and_notify(defaults=dict(),site=site,**context)
+            if created:
+                messages.success('Please check your email to activate the account.')
+        else:
+            return render(request,'users/register.html',{'form':form})
+        return render(request,'users/register.html',{'form':self.form})
 class LoginView(TwoFactorLoginView):
     form_list = (
         ('auth', CustomAuthenticationForm),
@@ -241,7 +253,7 @@ class ActivationView(TemplateView):
         if self.valid(user, kwargs.get('token')):
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, user)
-            return redirect('users:activate_password')
+            return redirect('users:account')
 
         return render(request, 'users/activation/invalid.html')
 
@@ -267,27 +279,6 @@ class ActivationView(TemplateView):
             return user
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             return None
-
-
-def create_password(request):
-    """
-    A custom view for the admin password change form used for account activation.
-    """
-
-    if request.method == 'POST':
-        form = AdminPasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('users:account')
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        form = AdminPasswordChangeForm(request.user)
-    return render(request, 'users/change_password.html', {
-        'form': form
-    })
 
 
 @method_decorator(login_required, name='dispatch')

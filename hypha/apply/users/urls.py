@@ -14,7 +14,6 @@ from .views import (
     TWOFADisableView,
     TWOFARequiredMessageView,
     become,
-    create_password,
     oauth,
 )
 
@@ -33,7 +32,7 @@ public_urlpatterns = [
 
     # Log out
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
-    path('register/', RegisterView.as_view(redirect_authenticated_user=True) , name='register'),
+    path('register/', RegisterView.as_view() , name='register'),
 ]
 
 
@@ -92,7 +91,6 @@ urlpatterns = [
         path('two_factor/disable/', TWOFADisableView.as_view(), name='disable'),
         path('confirmation/done/', EmailChangeDoneView.as_view(), name="confirm_link_sent"),
         path('confirmation/<uidb64>/<token>/', EmailChangeConfirmationView.as_view(), name="confirm_email"),
-        path('activate/', create_password, name="activate_password"),
         path('oauth', oauth, name='oauth'),
     ])),
 ]
