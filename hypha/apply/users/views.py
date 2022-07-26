@@ -56,7 +56,6 @@ class RegisterView(View):
             context['email']=form.cleaned_data['email']
             context['full_name']=form.cleaned_data['full_name']
             context['password']=form.cleaned_data['password']
-            print(form.cleaned_data)
             site=Site.find_for_request(self.request)
             user,created = User.objects.get_or_create_and_notify(defaults=dict(),site=site,**context)
             if created:
@@ -251,9 +250,8 @@ class ActivationView(TemplateView):
         user = self.get_user(kwargs.get('uidb64'))
 
         if self.valid(user, kwargs.get('token')):
-            user.backend = 'django.contrib.auth.backends.ModelBackend'
-            login(request, user)
-            return redirect('users:account')
+            messages.success(request,'Your account has been activated.Please login to continue')
+            return redirect(reverse('users_public:login'))
 
         return render(request, 'users/activation/invalid.html')
 
