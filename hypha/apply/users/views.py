@@ -3,9 +3,8 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import get_user_model, login, update_session_auth_hash
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.exceptions import PermissionDenied
 from django.core.signing import BadSignature, Signer, TimestampSigner, dumps, loads
@@ -44,6 +43,9 @@ User = get_user_model()
 class RegisterView(View):
     form = CustomUserCreationForm()
 
+    # def check_passwords(self,form):
+    #     return True if form.cleaned_data['password'] == form.cleaned_data['confirm_password'] else False
+
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('dashboard:dashboard')
@@ -63,6 +65,7 @@ class RegisterView(View):
         else:
             return render(request,'users/register.html',{'form':form})
         return render(request,'users/register.html',{'form':self.form})
+
 class LoginView(TwoFactorLoginView):
     form_list = (
         ('auth', CustomAuthenticationForm),
@@ -250,7 +253,7 @@ class ActivationView(TemplateView):
         user = self.get_user(kwargs.get('uidb64'))
 
         if self.valid(user, kwargs.get('token')):
-            messages.success(request,'Your account has been activated.Please login to continue')
+            messages.success(request,'Your account has been activated. Please login to continue')
             return redirect(reverse('users_public:login'))
 
         return render(request, 'users/activation/invalid.html')
