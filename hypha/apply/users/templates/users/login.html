@@ -13,7 +13,7 @@
     {% endif %}
 
     {% if wizard.steps.current == 'auth' %}
-        <p>{% blocktrans %}Enter your credentials.{% endblocktrans %}</p>
+        <p>{% blocktrans %}Login or {% endblocktrans %}<a class="link link--small" href="{% url 'users_public:register' %}">{% blocktrans %}register for an account</a> to apply or manage applications.</p>{% endblocktrans %}</p>
     {% elif wizard.steps.current == 'token' %}
         {% if device.method == 'call' %}
             <p>{% blocktrans trimmed %}We are calling your phone right now, please enter the

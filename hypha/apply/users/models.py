@@ -96,9 +96,7 @@ class UserManager(BaseUserManager.from_queryset(UserQuerySet)):
         return self._create_user(email, password, **extra_fields)
 
     def get_or_create_and_notify(self, defaults=dict(), site=None, **kwargs):
-        # Set a temp password so users can access the password reset function if needed.
-        temp_pass = BaseUserManager().make_random_password(length=32)
-        temp_pass_hash = make_password(temp_pass)
+        temp_pass_hash = make_password(kwargs.pop('password'))
         defaults.update(password=temp_pass_hash)
         user, created = self.get_or_create(defaults=defaults, **kwargs)
         if created:
