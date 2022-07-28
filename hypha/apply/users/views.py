@@ -40,31 +40,22 @@ from .utils import send_confirmation_email
 
 User = get_user_model()
 
-class RegisterView(View):
-    form = CustomUserCreationForm()
+class RegisterView(FormView):
+    form_class = CustomUserCreationForm
+    template_name = 'users/register.html'
+    success_url = '/register/'
 
-    # def check_passwords(self,form):
-    #     return True if form.cleaned_data['password'] == form.cleaned_data['confirm_password'] else False
-
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect('dashboard:dashboard')
-        return render(request,'users/register.html',{'form':self.form})
-
-    def post(self,request):
-        form=CustomUserCreationForm(request.POST)
-        context={}
-        if form.is_valid():
-            context['email']=form.cleaned_data['email']
-            context['full_name']=form.cleaned_data['full_name']
-            context['password']=form.cleaned_data['password']
-            site=Site.find_for_request(self.request)
-            user,created = User.objects.get_or_create_and_notify(defaults=dict(),site=site,**context)
-            if created:
-                messages.success(request,'Please check your email to activate the account.')
-        else:
-            return render(request,'users/register.html',{'form':form})
-        return render(request,'users/register.html',{'form':self.form})
+    def form_valid(self,form):
+        context={
+            'email':form.cleaned_data['email'],
+            'full_name':form.cleaned_data['full_name'],
+            'password':form.cleaned_data['password1']
+        }
+        site=Site.find_for_request(self.request)
+        user,created = User.objects.get_or_create_and_notify(defaults=dict(),site=site,**context)
+        if created:
+            messages.success(self.request,'Please check your email to activate the account.')
+        return super().form_valid(form)
 
 class LoginView(TwoFactorLoginView):
     form_list = (

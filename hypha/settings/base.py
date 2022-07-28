@@ -25,8 +25,8 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', [])
 
 
 # Organisation name and e-mail address, used in e-mail templates etc.
-ORG_LONG_NAME = env.str('ORG_LONG_NAME', 'Acme Corporation')
-ORG_SHORT_NAME = env.str('ORG_SHORT_NAME', 'ACME')
+ORG_LONG_NAME = env.str('ORG_LONG_NAME', 'Amateur Radio Digital Communications')
+ORG_SHORT_NAME = env.str('ORG_SHORT_NAME', 'ARDC')
 ORG_STAFF_EMAIL = env.str('ORG_STAFF_EMAIL', 'info@example.org')
 ORG_TECH_EMAIL = env.str('ORG_TECH_EMAIL', 'info@example.org')
 ORG_GUIDE_URL = env.str('ORG_GUIDE_URL', 'https://guide.example.org/')
@@ -363,9 +363,9 @@ AUTH_USER_MODEL = 'users.User'
 WAGTAIL_USER_EDIT_FORM = 'hypha.apply.users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'hypha.apply.users.forms.CustomUserCreationForm'
 WAGTAIL_USER_CUSTOM_FIELDS = ['full_name']
-WAGTAIL_PASSWORD_MANAGEMENT_ENABLED = False
-WAGTAILUSERS_PASSWORD_ENABLED = False
-WAGTAILUSERS_PASSWORD_REQUIRED = False
+WAGTAIL_PASSWORD_MANAGEMENT_ENABLED = True
+WAGTAILUSERS_PASSWORD_ENABLED = True
+WAGTAILUSERS_PASSWORD_REQUIRED = True
 
 # Enforce Two factor setting
 ENFORCE_TWO_FACTOR = env.bool('ENFORCE_TWO_FACTOR', False)
