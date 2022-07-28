@@ -26,7 +26,7 @@
             </div>
         {% endif %}
         <div>{{ reviewer.review.get_recommendation_display }}</div>
-        <div>{{ reviewer.review.get_score_display }}</div>
+        <div>{{ reviewer.review.get_score_display|floatformat:-1 }}</div>
     {% endif %}
 </li>
 
