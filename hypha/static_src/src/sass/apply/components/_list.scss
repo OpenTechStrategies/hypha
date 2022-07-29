@@ -37,17 +37,15 @@
 
     &__item {
         &--reviewer {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 40% 40% 20%;
+            column-gap: 5px;
         }
 
         &--reviewer-name {
-            max-width: 190px;
             overflow: hidden;
             font-weight: $weight--bold;
             text-overflow: ellipsis;
-            display: flex;
-            align-items: center;
 
             > img {
                 margin-left: 10px;
@@ -60,11 +58,20 @@
 
         &--reviewer-outcome {
             color: $color--tomato;
-            position: relative;
 
             &.agree {
                 color: $color--green;
             }
+        }
+        &--avg{
+            display: grid;
+            grid-template-columns: 30% 70%;
+            column-gap: 10px;
+        }
+        &--avg-score{
+            grid-column-start: 2;
+            grid-column-end: 4;
+            font-weight: $weight--bold;
         }
     }
 }

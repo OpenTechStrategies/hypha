@@ -67,14 +67,12 @@
                                         {% endif %}
                                     {% endfor %}
                                 {% endfor %}
-                                <li class="list__item list__item--reviewer">
-                                    <span class="list__item--reviewer-name list__item--average_score">
-                                        Avg. score
+                                <li class="list__item list__item--avg">
+                                    <span>
                                     </span>
-                                    <span class="list__item">
-                                        &nbsp;
+                                    <span class="list__item--avg-score">
+                                        Average Total Score: {{ submission.review_score_avg|floatformat:"1" }}
                                     </span>
-                                    <span class="list__item list__item--review-score list__item--average_score">{{ submission.review_score_avg|floatformat:"1" }}</span>
                                 </li>
                                 {% for reviewer in submission.hasnt_reviewed %}
                                     <li class="list__item list__item--reviewer">
