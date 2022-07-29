@@ -74,14 +74,13 @@ class SubmissionsTable(tables.Table):
     title = tables.LinkColumn('funds:submissions:detail', text=render_title, args=[A('pk')], attrs={'td': {'data-title-tooltip': lambda record: record.title, 'class': 'js-title'}})
     submit_time = tables.DateColumn(verbose_name=_('Submitted'))
     phase = tables.Column(verbose_name=_('Status'), order_by=('status',), attrs={'td': {'data-actions': render_actions, 'class': 'js-actions'}})
-    fund = tables.Column(verbose_name=_('Fund'), accessor='page')
     comments = tables.Column(accessor='comment_count', verbose_name=_('Comments'))
     last_update = tables.DateColumn(accessor="last_update", verbose_name=_('Last updated'))
 
     class Meta:
         model = ApplicationSubmission
         order_by = ('-last_update',)
-        fields = ('id', 'title', 'phase', 'fund', 'round', 'submit_time', 'last_update')
+        fields = ('id', 'title', 'phase', 'submit_time', 'last_update')
         sequence = fields + ('comments',)
         template_name = 'funds/tables/table.html'
         row_attrs = {
@@ -133,13 +132,12 @@ class LabeledCheckboxColumn(tables.CheckBoxColumn):
 
 
 class BaseAdminSubmissionsTable(SubmissionsTable):
-    lead = tables.Column(order_by=('lead.full_name',))
     reviews_stats = tables.TemplateColumn(template_name='funds/tables/column_reviews.html', verbose_name=mark_safe("Reviews<div>Comp. <span class=\"counts-separator\">/</span>\tAssgn.</div>"), orderable=False)
     screening_status = tables.Column(verbose_name=_('Screening'), accessor='screening_statuses')
     organization_name = tables.Column()
 
     class Meta(SubmissionsTable.Meta):
-        fields = ('id', 'title', 'phase', 'fund', 'round', 'lead', 'submit_time', 'last_update', 'screening_status', 'reviews_stats','organization_name')  # type: ignore
+        fields = ('id', 'title', 'organization_name', 'submit_time', 'screening_status', 'phase', 'last_update', 'reviews_stats')  # type: ignore
         sequence = fields + ('comments',)
 
     def render_lead(self, value):
@@ -257,9 +255,6 @@ class StatusMultipleChoiceFilter(Select2MultipleChoiceFilter):
 
 
 class SubmissionFilter(filters.FilterSet):
-    round = Select2ModelMultipleChoiceFilter(queryset=get_used_rounds, label=_('Rounds'))
-    fund = Select2ModelMultipleChoiceFilter(field_name='page', queryset=get_used_funds, label=_('Funds'))
-    lead = Select2ModelMultipleChoiceFilter(queryset=get_round_leads, label=_('Leads'))
     reviewers = Select2ModelMultipleChoiceFilter(queryset=get_reviewers, label=_('Reviewers'))
     screening_statuses = Select2ModelMultipleChoiceFilter(queryset=get_screening_statuses, label=_('Screening'), null_label=_('No Status'))
     category_options = Select2MultipleChoiceFilter(
@@ -270,7 +265,7 @@ class SubmissionFilter(filters.FilterSet):
 
     class Meta:
         model = ApplicationSubmission
-        fields = ('status', 'fund', 'round', 'lead', 'screening_statuses', 'reviewers', 'category_options', 'meta_terms')
+        fields = ('status', 'screening_statuses', 'reviewers', 'category_options', 'meta_terms')
 
     def __init__(self, *args, exclude=list(), limit_statuses=None, **kwargs):
         super().__init__(*args, **kwargs)
