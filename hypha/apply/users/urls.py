@@ -16,7 +16,6 @@ from .views import (
     create_password,
     oauth,
 )
-from .admin_views import export
 
 app_name = 'users'
 
@@ -94,8 +93,6 @@ urlpatterns = [
         path('activate/', create_password, name="activate_password"),
         path('oauth', oauth, name='oauth'),
     ])),
-    path('admin/users/export/', export, name='export'),
-
 ]
 
 if settings.HIJACK_ENABLE:
