@@ -67,6 +67,12 @@
             display: grid;
             grid-template-columns: 30% 70%;
             column-gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+
+            a{
+                text-decoration: underline;
+            }
         }
         &--avg-score{
             grid-column-start: 2;

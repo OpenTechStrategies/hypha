@@ -76,6 +76,9 @@
                                 {% if submission.has_reviewed %}
                                 <li class="list__item list__item--avg">
                                     <span>
+                                        {% if request.user.is_apply_staff and submission.reviews.exists %}
+                                            <a href="{% url 'apply:submissions:reviews:list' submission_pk=submission.id %}" >{% trans "Reviews" %}</a>
+                                        {% endif %}
                                     </span>
                                     <span class="list__item--avg-score">
                                         Average Total Score: {{ submission.review_score_avg|floatformat:"1" }}
