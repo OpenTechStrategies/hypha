@@ -116,11 +116,11 @@
 }
 
 .accept-text{
-    color: green;
+    color: $color--dark-green;
 }
 .weak-accept-text{
-    color: orange;
+    color: $color--orange;
 }
 .reject-text{
-    color: red;
+    color: $color--red;
 }
