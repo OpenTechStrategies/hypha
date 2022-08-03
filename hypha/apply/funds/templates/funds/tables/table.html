@@ -77,6 +77,16 @@
                                         {% endif %}
                                     {% endfor %}
                                 {% endfor %}
+                                {% for reviewer in submission.hasnt_reviewed %}
+                                    <li class="list__item list__item--reviewer">
+                                        <span class="list__item--reviewer-name">
+                                            {{ reviewer }}
+                                            {% if reviewer.role %}{% image reviewer.role.icon max-12x12 %}{% endif %}
+                                        </span>
+                                        <span class="list__item list__item--reviewer-outcome">&mdash;</span>
+                                        <span class="list__item list__item--reviewer-outcome">&mdash;</span>
+                                    </li>
+                                {% endfor %}
                                 {% if submission.has_reviewed %}
                                 <li class="list__item list__item--reviewer list__item--margin">
                                     <span>
@@ -92,15 +102,6 @@
                                     </span>
                                 </li>
                                 {% endif %}
-                                {% for reviewer in submission.hasnt_reviewed %}
-                                    <li class="list__item list__item--reviewer">
-                                        <span class="list__item--reviewer-name">
-                                            {{ reviewer }}
-                                            {% if reviewer.role %}{% image reviewer.role.icon max-12x12 %}{% endif %}
-                                        </span>
-                                        <span class="list__item list__item--reviewer-outcome">&mdash;</span>
-                                    </li>
-                                {% endfor %}
                             </ul>
                         </td>
                     </tr>
