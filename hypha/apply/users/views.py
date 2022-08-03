@@ -54,6 +54,8 @@ class RegisterView(FormView):
         site=Site.find_for_request(self.request)
         user,created = User.objects.get_or_create_and_notify(defaults=dict(),site=site,**context)
         if created:
+            user.email_preference = form.cleaned_data['email_preference']
+            user.save()
             messages.success(self.request,'Please check your email to activate the account.')
         return super().form_valid(form)
 
