@@ -110,7 +110,7 @@ class UserManager(BaseUserManager.from_queryset(UserQuerySet)):
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     full_name = models.CharField(verbose_name=_('Full name'), max_length=255, blank=True)
-    email_preference = models.BooleanField(verbose_name=_("Yes, I'd like to receive occasional emails from ARDC about their mission and programs."),default=True)
+    email_preference = models.BooleanField(verbose_name=_("Yes, I'd like to receive occasional emails from ARDC about their mission and programs."), default=True)
     slack = models.CharField(
         verbose_name=_('Slack name'),
         blank=True,
