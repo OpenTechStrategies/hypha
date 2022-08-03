@@ -51,7 +51,7 @@ class CustomUserCreationForm(CustomUserAdminFormBase, UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['full_name', 'email', 'slack']
+        fields = ['full_name', 'email', 'slack','email_preference']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
