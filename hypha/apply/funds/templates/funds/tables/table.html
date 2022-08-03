@@ -73,6 +73,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 {% endfor %}
+                                {% if submission.has_reviewed %}
                                 <li class="list__item list__item--avg">
                                     <span>
                                     </span>
@@ -80,6 +81,7 @@
                                         Average Total Score: {{ submission.review_score_avg|floatformat:"1" }}
                                     </span>
                                 </li>
+                                {% endif %}
                                 {% for reviewer in submission.hasnt_reviewed %}
                                     <li class="list__item list__item--reviewer">
                                         <span class="list__item--reviewer-name">
