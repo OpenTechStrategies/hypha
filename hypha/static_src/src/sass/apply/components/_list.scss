@@ -63,5 +63,15 @@
                 color: $color--green;
             }
         }
+        &--avg{
+            display: grid;
+            grid-template-columns: 30% 70%;
+            column-gap: 10px;
+        }
+        &--avg-score{
+            grid-column-start: 2;
+            grid-column-end: 4;
+            font-weight: $weight--bold;
+        }
     }
 }
