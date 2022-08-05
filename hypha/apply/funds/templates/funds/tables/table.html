@@ -17,6 +17,10 @@
         <tr class="all-submissions-table__child" data-parent-id="{{ submission.id }}">
             <td colspan="{{ table.columns|length }}">
                 <table class="submission-meta">
+                    <colgroup>
+                        <col><col><col>
+                        <col style="width:32%">
+                    </colgroup>
                     <tr class="submission-meta__row">
                         <th><h6 class="heading heading--normal heading--no-margin">{% trans "Applicant" %}</h6></th>
                         <th><h6 class="heading heading--normal heading--no-margin">{% trans "Last updated" %}</h6></th>
@@ -74,14 +78,17 @@
                                     {% endfor %}
                                 {% endfor %}
                                 {% if submission.has_reviewed %}
-                                <li class="list__item list__item--avg">
+                                <li class="list__item list__item--reviewer list__item--margin">
                                     <span>
                                         {% if request.user.is_apply_staff and submission.reviews.exists %}
                                             <a href="{% url 'apply:submissions:reviews:list' submission_pk=submission.id %}" >{% trans "Reviews" %}</a>
                                         {% endif %}
                                     </span>
                                     <span class="list__item--avg-score">
-                                        Average Total Score: {{ submission.review_score_avg|floatformat:"1" }}
+                                        Average Total Score:
+                                    </span>
+                                    <span class="list__item--avg-score">
+                                        {{ submission.review_score_avg|floatformat:"1" }}
                                     </span>
                                 </li>
                                 {% endif %}
