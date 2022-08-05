@@ -114,3 +114,13 @@
         grid-column-end: 3;
     }
 }
+
+.accept-text{
+    color: $color--dark-green;
+}
+.weak-accept-text{
+    color: $color--orange;
+}
+.reject-text{
+    color: $color--red;
+}
