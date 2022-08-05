@@ -31,6 +31,7 @@
             {% endif %}
         {% endfor %}
     {% endfor %}
+    {% if assigned_reviewers %}
     <hr>
     <div class="reviews-sidebar__item">
         <div class="reviews-sidebar__extend-column">
@@ -40,4 +41,5 @@
             {{assigned_reviewers|average_review_score|floatformat:'1'}}
         </div>
     </div>
+    {%endif%}
 </ul>
