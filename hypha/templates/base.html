@@ -86,10 +86,6 @@
             {% endif %}
             <header class="header header--standard {% if page.header_image %}header--has-bg-image{% endif %} {% block header_modifier %}{% endblock %}" {% if header_image %}style="background-image:url('{{ header_image.url }}')"{% endif %}>
 
-                {% block apply_button %}
-                    {% include "includes/apply_button.html" %}
-                {% endblock %}
-
                 <div class="header__inner wrapper wrapper--large">
                     <a href="{% site_logo_link current_site %}" aria-label="Home link">
                     {% if settings.utils.SystemMessagesSettings.site_logo_default %}
