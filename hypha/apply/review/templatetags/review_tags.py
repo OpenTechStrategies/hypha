@@ -40,3 +40,8 @@ def can_review(user, submission):
 @register.filter
 def has_draft(user, submission):
     return submission.can_review(user) and submission.assigned.draft_reviewed().filter(reviewer=user).exists()
+
+@register.filter_function
+def order_by(reviewers):
+    reviewers.sort(key=lambda reviewer:reviewer.review.recommendation,reverse=True)
+    return reviewers
