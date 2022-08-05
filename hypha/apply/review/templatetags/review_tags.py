@@ -45,3 +45,9 @@ def has_draft(user, submission):
 def order_by(reviewers):
     reviewers.sort(key=lambda reviewer:reviewer.review.recommendation,reverse=True)
     return reviewers
+
+@register.filter
+def average_review_score(reviewers):
+    sum,count = 0,0
+    [(sum := sum + reviewer.review.score, count := count + 1)  for reviewer in reviewers if not reviewer.has_review if not reviewer.review.is_draft ]
+    return sum/count
