@@ -23,6 +23,8 @@ from django.template.response import TemplateResponse
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from modelcluster.fields import ParentalManyToManyField
 from wagtail.admin.edit_handlers import (
     FieldPanel,
@@ -99,6 +101,7 @@ class ApplicationBase(EmailForm, WorkflowStreamForm):  # type: ignore
             # There isn't an open round
             return None
 
+    @method_decorator(login_required)
     def serve(self, request):
         if hasattr(request, 'is_preview') or not self.open_round:
             return super().serve(request)
@@ -441,6 +444,7 @@ class LabBase(EmailForm, WorkflowStreamForm, SubmittableStreamForm):  # type: ig
 
         return form_class(*args, **form_params)
 
+    @method_decorator(login_required)
     def serve(self, request, *args, **kwargs):
         if request.method == 'POST':
             form = self.get_form(request.POST, request.FILES, page=self, user=request.user)
