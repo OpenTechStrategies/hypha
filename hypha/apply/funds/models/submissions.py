@@ -589,29 +589,6 @@ class ApplicationSubmission(
     def active(self):
         return self.status in active_statuses
 
-    def ensure_user_has_account(self):
-        # We don't want to sub in the current user
-        # if self.user and self.user.is_authenticated:
-        #    self.form_data['email'] = self.user.email
-        #    self.form_data['full_name'] = self.user.get_full_name()
-        # else:
-        # Rely on the form having the following must include fields (see blocks.py)
-        email = self.form_data.get('email')
-        full_name = self.form_data.get('full_name')
-
-        User = get_user_model()
-        if 'skip_account_creation_notification' in self.form_data:
-            self.form_data.pop('skip_account_creation_notification', None)
-            self.user, _ = User.objects.get_or_create(
-                email=email,
-                defaults={'full_name': full_name}
-            )
-        else:
-            self.user, _ = User.objects.get_or_create_and_notify(
-                email=email,
-                site=self.page.get_site(),
-                defaults={'full_name': full_name}
-            )
 
     def get_from_parent(self, attribute):
         try:
@@ -698,7 +675,6 @@ class ApplicationSubmission(
 
     def clean_submission(self):
         self.process_form_data()
-        self.ensure_user_has_account()
         self.process_file_data(self.form_data)
 
     def process_form_data(self):
