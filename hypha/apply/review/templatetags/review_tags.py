@@ -48,9 +48,15 @@ def order_by(reviewers):
 
 @register.filter
 def average_review_score(reviewers):
-    sum,count = 0,0
     if reviewers:
-        [(sum := sum + reviewer.review.score, count := count + 1)  for reviewer in reviewers if not reviewer.has_review if not reviewer.review.is_draft ]
-        return sum/count
+        scores = [
+            reviewer.review.score
+            for reviewer in reviewers
+            if not reviewer.has_review and not reviewer.review.is_draft
+        ]
+        if len(scores) > 0:
+            return sum(scores) / len(scores)
+        else:
+            return None
     else:
         return reviewers
