@@ -316,7 +316,7 @@ class SubmissionFilterAndSearch(SubmissionFilter):
     query = filters.CharFilter(method='search_data_and_id', widget=forms.HiddenInput)
 
     def search_data_and_id(self, queryset, name, value):
-        possible_ids = map(int, re.findall('\d+', value))
+        possible_ids = [int(x) for x in re.findall('\d+',value)]
         if value.strip().startswith("#") and len(possible_ids) > 0:
             return queryset.filter(id__in=possible_ids)
         return queryset.filter(Q(id__in=possible_ids)|Q(search_data__icontains=value))
