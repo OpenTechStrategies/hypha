@@ -246,14 +246,20 @@ class MultiFileFieldBlockFactory(UploadableMediaFactory):
 
 
 class StreamFieldUUIDFactory(wagtail_factories.StreamFieldFactory):
+    def struct_to_json(self,value):
+        value_json ={}
+        for v in value.items():
+            value_json[v[0]]=v[1]
+        return value_json
+
     def generate(self, step, params):
         params = self.build_form(params)
         blocks = super().generate(step, params)
         ret_val = list()
         # Convert to JSON so we can add id before create
         for block_name, value in blocks:
-            block = self.factories[block_name]._meta.model()
-            value = block.get_prep_value(value)
+            # block = self.factories[block_name]._meta.model()
+            value = self.struct_to_json(value)
             ret_val.append({'type': block_name, 'value': value, 'id': str(uuid.uuid4())})
         return json.dumps(ret_val, cls=DjangoJSONEncoder)
 
