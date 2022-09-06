@@ -10,9 +10,11 @@ from .views import (
     EmailChangePasswordView,
     LoginView,
     RegisterView,
+    TWOFAAdminDisableView,
     TWOFABackupTokensPasswordView,
     TWOFADisableView,
     TWOFARequiredMessageView,
+    TWOFASetupView,
     become,
     oauth,
 )
@@ -87,8 +89,10 @@ urlpatterns = [
         ),
         # Two factor redirect
         path('two_factor/required/', TWOFARequiredMessageView.as_view(), name='two_factor_required'),
+        path('two_factor/setup/', TWOFASetupView.as_view(), name='setup'),
         path('two_factor/backup_tokens/password/', TWOFABackupTokensPasswordView.as_view(), name='backup_tokens_password'),
         path('two_factor/disable/', TWOFADisableView.as_view(), name='disable'),
+        path('two_factor/admin/disable/<str:user_id>/', TWOFAAdminDisableView.as_view(), name='admin_disable'),
         path('confirmation/done/', EmailChangeDoneView.as_view(), name="confirm_link_sent"),
         path('confirmation/<uidb64>/<token>/', EmailChangeConfirmationView.as_view(), name="confirm_email"),
         path('oauth', oauth, name='oauth'),

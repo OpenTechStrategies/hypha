@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from hypha.apply.activity.models import Activity
 from hypha.apply.categories.blocks import CategoryQuestionBlock
@@ -45,7 +45,7 @@ class SubmissionsFilter(filters.FilterSet):
     )
     id = filters.ModelMultipleChoiceFilter(
         field_name='id',
-        queryset=ApplicationSubmission.objects.current().with_latest_update(),
+        queryset=ApplicationSubmission.objects.exclude_draft().current().with_latest_update(),
         method='filter_id'
     )
 

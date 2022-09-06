@@ -44,7 +44,9 @@ class ScoreFieldWithoutTextBlockFactory(FormFieldBlockFactory):
 
     @classmethod
     def make_answer(cls, params=dict()):
-        return random.randint(1, 5)
+        defaults = {'score':0}
+        defaults.update(params)
+        return defaults
 
 
 class ScoreFieldBlockFactory(FormFieldBlockFactory):

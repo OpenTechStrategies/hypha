@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
-from wagtail.tests.utils import WagtailTestUtils
+from wagtail.test.utils import WagtailTestUtils
 
 from hypha.apply.funds.models.forms import ApplicationForm
 from hypha.apply.home.factories import ApplyHomePageFactory
@@ -35,7 +35,7 @@ class TestFundCreationView(TestCase):
         cls.user = SuperUserFactory()
         cls.home = ApplyHomePageFactory()
 
-    def create_page(self, appl_forms=1, review_forms=1, determination_forms=1, stages=1, same_forms=False, form_stage_info=[1]):
+    def create_page(self, appl_forms=1, review_forms=1, determination_forms=1, external_review_form=0, stages=1, same_forms=False, form_stage_info=[1]):
         self.client.force_login(self.user)
         url = reverse('wagtailadmin_pages:add', args=('funds', 'fundtype', self.home.id))
 
@@ -43,6 +43,7 @@ class TestFundCreationView(TestCase):
             appl_forms,
             review_forms,
             determination_forms,
+            external_review_form,
             same_forms=same_forms,
             stages=stages,
             form_stage_info=form_stage_info,
@@ -67,6 +68,13 @@ class TestFundCreationView(TestCase):
         self.assertEqual(fund.forms.count(), 1)
         self.assertEqual(fund.review_forms.count(), 1)
         self.assertEqual(fund.determination_forms.count(), 1)
+
+    def test_can_create_fund_with_external_review_form(self):
+        fund = self.create_page(1, 1, 1, external_review_form=1, stages=1)
+        self.assertEqual(fund.forms.count(), 1)
+        self.assertEqual(fund.review_forms.count(), 1)
+        self.assertEqual(fund.determination_forms.count(), 1)
+        self.assertEqual(fund.external_review_forms.count(), 1)
 
     def test_can_create_multi_phase_fund(self):
         fund = self.create_page(2, 2, 2, stages=2, form_stage_info=[1, 2])
@@ -129,8 +137,8 @@ class TestCreateApplicationFormView(TestCase):
     def setUpTestData(cls):
         cls.user = SuperUserFactory()
         cls.label_help_text_data = {
-            'field_label': factory.Faker('sentence').evaluate(None, None, {'locale': None}),
-            'help_text': factory.Faker('sentence').evaluate(None, None, {'locale': None})
+            'field_label': 'label',
+            'help_text': 'help_text'
         }
         cls.name = factory.Faker('name').evaluate(None, None, {'locale': None})
 
@@ -190,6 +198,7 @@ class TestCreateApplicationFormView(TestCase):
         self.assertEqual(ApplicationForm.objects.count(), 0)
 
     def test_full_name_block_required(self):
+
         data = {'name': [self.name]}
         form_field_data = create_form_fields_data(
             {

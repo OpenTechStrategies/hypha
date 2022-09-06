@@ -179,21 +179,17 @@ class TestReviewScore(BaseViewTestCase):
 
     def test_score_calculated(self):
         review = self.submit_review_scores((5,), (5,))
+        self.assertEqual(review.score, 10)
+
+    def test_no_score_is_zero(self):
+        review = self.submit_review_scores()
+        self.assertEqual(review.score, 0)
+
+    def test_na_included_in_review_score(self):
+        review = self.submit_review_scores((NA, 5))
         self.assertEqual(review.score, 5)
 
-    def test_average_score_calculated(self):
-        review = self.submit_review_scores((1, 5), (1, 5))
-        self.assertEqual(review.score, (1 + 5) / 2)
-
-    def test_no_score_is_NA(self):
-        review = self.submit_review_scores()
-        self.assertEqual(review.score, NA)
-
-    def test_na_included_in_review_average(self):
-        review = self.submit_review_scores((NA, 5))
-        self.assertEqual(review.score, 2.5)
-
-    def test_na_included_reviews_average(self):
+    def test_na_included_reviews_score(self):
         self.submit_review_scores((NA,))
         self.assertIsNotNone(Review.objects.score())
 
@@ -419,6 +415,8 @@ class ReviewWorkFlowActionTestCase(BaseViewTestCase):
         )
 
     def test_ext_external_review_to_ready_for_discussion(self):
+        import pdb
+        pdb.set_trace()
         submission = ApplicationSubmissionFactory(status='ext_external_review', with_external_review=True)
         reviewers = ReviewerFactory.create_batch(2)
         AssignedReviewersFactory(submission=submission, reviewer=reviewers[0])

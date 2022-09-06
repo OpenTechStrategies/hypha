@@ -1,7 +1,12 @@
 (function ($) {
     'use strict';
+    const field_blocks_ids = JSON.parse(document.getElementById('block-ids').textContent);
 
     let DeterminationCopy = class {
+        static selector() {
+            return ('#id_' + field_blocks_ids['determination']);
+        }
+
         constructor(node) {
             this.node = node[0];
             this.bindEventListeners();
@@ -55,20 +60,7 @@
         }
     };
 
-    /*
-     * The template that renders the determination form
-     * spits out several hidden inputs that map between
-     * a (to us) random field id and a more canonical name.
-     * We use that mapping to grab the drop-down box of the
-     * required determination field.
-     */
-    const determination_id = $("#id_determination").val();
-    $("#id_" + determination_id).each((index, el) => {
-        /*
-         * Now that we have hold of that dropdown, we add some
-         * event handlers that execute every time its value changes.
-         * (see above)
-         */
+    $(DeterminationCopy.selector()).each((index, el) => {
         new DeterminationCopy($(el));
     });
 

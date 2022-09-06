@@ -13,21 +13,18 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, DetailView, UpdateView
-from wagtail.core.models import Site
+from wagtail.models import Site
 
 from hypha.apply.activity.messaging import MESSAGES, messenger
 from hypha.apply.activity.models import Activity
-from hypha.apply.funds.models import ApplicationSubmission, submissions
+from hypha.apply.funds.models import ApplicationSubmission
 from hypha.apply.funds.workflow import DETERMINATION_OUTCOMES
 from hypha.apply.projects.models import Project
 from hypha.apply.stream_forms.models import BaseStreamForm
 from hypha.apply.users.decorators import staff_required
 from hypha.apply.utils.views import CreateOrUpdateView, ViewDispatcher
 
-import jinja2.sandbox
-from jinja2 import Undefined
-
-from .blocks import DeterminationBlock
+from .blocks import DeterminationBlock, DeterminationMessageBlock
 from .forms import (
     BatchConceptDeterminationForm,
     BatchDeterminationForm,
@@ -270,9 +267,6 @@ class BatchDeterminationCreateView(BaseStreamForm, CreateView):
         except KeyError:
             return reverse_lazy('apply:submissions:list')
 
-class SilentUndefined(Undefined):
-    def _fail_with_undefined_error(self, *args, **kwargs):
-        return ''
 
 @method_decorator(staff_required, name='dispatch')
 class DeterminationCreateOrUpdateView(BaseStreamForm, CreateOrUpdateView):
@@ -315,29 +309,18 @@ class DeterminationCreateOrUpdateView(BaseStreamForm, CreateOrUpdateView):
         site = Site.find_for_request(self.request)
         determination_messages = DeterminationMessageSettings.for_site(site)
 
-        # Create a dict that maps between opaque field ids
-        # and canonical names for use in the template.
-        # TODO: Put this functionality higher in the class hierarchy.
-        determination_form_class = self.get_form_class()
-        form_field_id_to_name={}
-        for field_id in determination_form_class.display:
-            form_field_id_to_name[field_id] = determination_form_class.display[field_id].canonical_name
-
-        message_templates = determination_messages.get_for_stage(self.submission.stage.name)
-
-        context = self.submission.get_answers_dict()
-
-        jinja = jinja2.sandbox.SandboxedEnvironment(undefined=SilentUndefined)
-
-        message_templates = {
-            key: str(jinja.from_string(template).render(context))
-            for key, template in message_templates.items()
-        }
+        # Pass blocks ids to identify block types(determination & message) in determination message template js.
+        field_blocks_ids = {}
+        if self.submission.is_determination_form_attached:
+            for field_block in self.get_defined_fields():
+                if isinstance(field_block.block, DeterminationBlock) or \
+                        isinstance(field_block.block, DeterminationMessageBlock):
+                    field_blocks_ids[field_block.block_type] = field_block.id
 
         return super().get_context_data(
             submission=self.submission,
-            message_templates=message_templates,
-            form_field_id_to_name=form_field_id_to_name,
+            message_templates=determination_messages.get_for_stage(self.submission.stage.name),
+            field_blocks_ids=field_blocks_ids,
             **kwargs
         )
 

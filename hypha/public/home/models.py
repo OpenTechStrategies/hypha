@@ -4,14 +4,13 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import (
+from wagtail.admin.panels import (
     FieldPanel,
     InlinePanel,
     MultiFieldPanel,
     PageChooserPanel,
-    StreamFieldPanel,
 )
-from wagtail.core.fields import StreamField
+from wagtail.fields import StreamField
 from wagtail.search import index
 
 from hypha.public.funds.models import FundPage, LabPage, RFPPage
@@ -79,7 +78,7 @@ class HomePage(BasePage):
     our_work_title = models.CharField(max_length=255)
     our_work = StreamField([
         ('work', OurWorkBlock()),
-    ])
+    ], use_json_field=True)
     our_work_link = models.ForeignKey('wagtailcore.Page', related_name='+', on_delete=models.PROTECT)
     our_work_link_text = models.CharField(max_length=255)
 
@@ -113,7 +112,7 @@ class HomePage(BasePage):
         ], heading=_('News')),
         MultiFieldPanel([
             FieldPanel('our_work_title'),
-            StreamFieldPanel('our_work'),
+            FieldPanel('our_work'),
             PageChooserPanel('our_work_link'),
             FieldPanel('our_work_link_text'),
         ], heading=_('Our Work')),

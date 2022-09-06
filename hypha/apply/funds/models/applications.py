@@ -26,7 +26,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from modelcluster.fields import ParentalManyToManyField
-from wagtail.admin.edit_handlers import (
+from wagtail.admin.panels import (
     FieldPanel,
     FieldRowPanel,
     MultiFieldPanel,
@@ -34,8 +34,9 @@ from wagtail.admin.edit_handlers import (
     TabbedInterface,
 )
 from wagtail.contrib.settings.models import BaseSetting, register_setting
-from wagtail.core.fields import RichTextField
-from wagtail.core.models import Page, PageManager, PageQuerySet
+from wagtail.fields import RichTextField
+from wagtail.models import Page, PageManager
+from wagtail.query import PageQuerySet
 
 from ..admin_forms import RoundBasePageAdminForm, WorkflowFormAdminForm
 from ..edit_handlers import ReadOnlyInlinePanel, ReadOnlyPanel
@@ -71,6 +72,14 @@ class ApplicationBase(EmailForm, WorkflowStreamForm):  # type: ignore
         related_name='%(class)s_reviewers',
         limit_choices_to=LIMIT_TO_REVIEWERS,
         blank=True,
+    )
+
+    approval_form = models.ForeignKey(
+        'application_projects.ProjectApprovalForm',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='funds',
     )
 
     guide_link = models.URLField(blank=True, max_length=255, help_text=_('Link to the apply guide.'))
@@ -111,6 +120,7 @@ class ApplicationBase(EmailForm, WorkflowStreamForm):  # type: ignore
         return self.open_round.serve(request)
 
     content_panels = WorkflowStreamForm.content_panels + [
+        FieldPanel('approval_form'),
         FieldPanel('reviewers', widget=forms.SelectMultiple(attrs={'size': '16'})),
         FieldPanel('guide_link'),
         FieldPanel('slack_channel'),
@@ -181,8 +191,21 @@ class RoundBase(WorkflowStreamForm, SubmittableStreamForm):  # type: ignore
         FieldPanel('reviewers', widget=forms.SelectMultiple(attrs={'size': '16'})),
         ReadOnlyPanel('get_workflow_name_display', heading=_('Workflow'), help_text=_('Copied from the fund.')),
         # Forms comes from parental key in models/forms.py
-        ReadOnlyInlinePanel('forms', help_text=_('Copied from the fund.')),
-        ReadOnlyInlinePanel('review_forms', help_text=_('Copied from the fund.')),
+        ReadOnlyInlinePanel(
+            'forms',
+            help_text=_('Copied from the fund.'),
+            heading=_('Application forms')
+        ),
+        ReadOnlyInlinePanel(
+            'review_forms',
+            help_text=_('Copied from the fund.'),
+            heading=_('Internal Review Form')
+        ),
+        ReadOnlyInlinePanel(
+            'external_review_forms',
+            help_text=_('Copied from the fund.'),
+            heading=_('External Review Form')
+        ),
         ReadOnlyInlinePanel('determination_forms', help_text=_('Copied from the fund.')),
     ]
 
@@ -224,6 +247,7 @@ class RoundBase(WorkflowStreamForm, SubmittableStreamForm):  # type: ignore
             # Would be nice to do this using model clusters as part of the __init__
             self._copy_forms('forms')
             self._copy_forms('review_forms')
+            self._copy_forms('external_review_forms')
             self._copy_forms('determination_forms')
 
     def _copy_forms(self, field):
@@ -402,6 +426,14 @@ class LabBase(EmailForm, WorkflowStreamForm, SubmittableStreamForm):  # type: ig
         blank=True,
     )
 
+    approval_form = models.ForeignKey(
+        'application_projects.ProjectApprovalForm',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='labs',
+    )
+
     guide_link = models.URLField(blank=True, max_length=255, help_text=_('Link to the apply guide.'))
 
     slack_channel = models.CharField(blank=True, max_length=128, help_text=_('The slack #channel for notifications.'))
@@ -410,6 +442,7 @@ class LabBase(EmailForm, WorkflowStreamForm, SubmittableStreamForm):  # type: ig
     subpage_types = []  # type: ignore
 
     content_panels = WorkflowStreamForm.content_panels + [
+        FieldPanel('approval_form'),
         FieldPanel('lead'),
         FieldPanel('reviewers', widget=forms.SelectMultiple(attrs={'size': '16'})),
         FieldPanel('guide_link'),
