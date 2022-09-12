@@ -20,8 +20,8 @@ def create_form_fields_data(blocks):
     form_fields_dict[f'{parent_field}-count'] = [str(len(blocks))]
     for index, block_name in enumerate(blocks):
         form_fields_dict[f'{parent_field}-{index}-deleted'] = ['']
-        form_fields_dict[f'{parent_field}-{index}-order'] = [str(index)]
         form_fields_dict[f'{parent_field}-{index}-type'] = [str(block_name)]
+        form_fields_dict[f'{parent_field}-{index}-order'] = [str(index)]
 
         for field_name, field_value in blocks[block_name].items():
             form_fields_dict[f'{parent_field}-{index}-value-{field_name}'] = field_value
@@ -137,8 +137,8 @@ class TestCreateApplicationFormView(TestCase):
     def setUpTestData(cls):
         cls.user = SuperUserFactory()
         cls.label_help_text_data = {
-            'field_label': 'label',
-            'help_text': 'help_text'
+            'field_label': factory.Faker('sentence').evaluate(None, None, {'locale': None}),
+            'field_help_text': factory.Faker('sentence').evaluate(None, None, {'locale': None}),
         }
         cls.name = factory.Faker('name').evaluate(None, None, {'locale': None})
 

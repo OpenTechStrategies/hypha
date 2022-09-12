@@ -640,7 +640,7 @@ class TestForTableQueryset(TestCase):
         self.assertEqual(submission.opinion_disagree, None)
         self.assertEqual(submission.review_count, 1)
         self.assertEqual(submission.review_submitted_count, 1)
-        self.assertEqual(submission.review_recommendation, MAYBE)
+        self.assertEqual(submission.review_recommendation, NO)
 
     def test_disagree_review_is_maybe(self):
         staff = StaffFactory()
@@ -711,7 +711,7 @@ class TestForTableQueryset(TestCase):
         self.assertEqual(submission.opinion_disagree, None)
         self.assertEqual(submission.review_count, 1)
         self.assertEqual(submission.review_submitted_count, 1)
-        self.assertEqual(submission.review_recommendation, MAYBE)
+        self.assertEqual(submission.review_recommendation, NO)
 
 
 class TestReminderModel(TestCase):
