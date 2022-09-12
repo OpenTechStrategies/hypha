@@ -29,6 +29,7 @@ ORG_LONG_NAME = env.str('ORG_LONG_NAME', 'Amateur Radio Digital Communications')
 ORG_SHORT_NAME = env.str('ORG_SHORT_NAME', 'ARDC')
 ORG_STAFF_EMAIL = env.str('ORG_STAFF_EMAIL', 'info@example.org')
 ORG_TECH_EMAIL = env.str('ORG_TECH_EMAIL', 'info@example.org')
+ORG_URL = env.str('ORG_URL', 'https://www.example.org/')
 ORG_GUIDE_URL = env.str('ORG_GUIDE_URL', 'https://guide.example.org/')
 
 
@@ -95,7 +96,7 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail.core',
+    'wagtail',
 
     'anymail',
     'modelcluster',
@@ -109,6 +110,7 @@ INSTALLED_APPS = [
     'django_bleach',
     'django_fsm',
     'django_pwned_passwords',
+    'django_slack',
     'django_otp',
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
@@ -182,6 +184,7 @@ TEMPLATES = [
                 'social_django.context_processors.login_redirect',
                 'hypha.apply.projects.context_processors.projects_enabled',
                 'hypha.cookieconsent.context_processors.cookies_accepted',
+                'hypha.apply.activity.context_processors.notification_context',
             ],
         },
     },
@@ -301,6 +304,10 @@ PASSWORD_RESET_TIMEOUT = env.int('PASSWORD_RESET_TIMEOUT', 259200)
 # Seconds to enter password on password page while email change/2FA change (default 120).
 PASSWORD_PAGE_TIMEOUT = env.int('PASSWORD_PAGE_TIMEOUT', 120)
 
+# Use Pillow to create QR codes so they are PNG and not SVG.
+# Apples Safari on iOS and macOS can then recognise them automatically.
+TWO_FACTOR_QR_FACTORY = 'qrcode.image.pil.PilImage'
+
 # Internationalization
 # https://docs.djangoproject.com/en/stable/topics/i18n/
 
@@ -369,6 +376,11 @@ WAGTAILUSERS_PASSWORD_REQUIRED = True
 
 # Enforce Two factor setting
 ENFORCE_TWO_FACTOR = env.bool('ENFORCE_TWO_FACTOR', False)
+
+# Give staff lead permissions.
+# Only effects setting external reviewers for now.
+GIVE_STAFF_LEAD_PERMS = env.bool('GIVE_STAFF_LEAD_PERMS', False)
+
 
 LOGIN_URL = 'users_public:login'
 LOGIN_REDIRECT_URL = 'dashboard:dashboard'
@@ -520,7 +532,13 @@ SEND_MESSAGE_TYPES = env.str('SEND_MESSAGE_TYPES', 'all').upper().split(',')
 
 SEND_READY_FOR_REVIEW = env.bool('SEND_READY_FOR_REVIEW', True)
 
-SLACK_DESTINATION_URL = env.str('SLACK_DESTINATION_URL', None)
+# Django Slack settings
+SLACK_TOKEN = env.str('SLACK_TOKEN', None)
+SLACK_USERNAME = env.str('SLACK_USERNAME', 'Hypha')
+SLACK_BACKEND = 'django_slack.backends.CeleryBackend'  # UrllibBackend can be used for sync
+SLACK_ENDPOINT_URL = env.str('SLACK_ENDPOINT_URL', 'https://slack.com/api/chat.postMessage')
+
+# Slack settings
 SLACK_DESTINATION_ROOM = env.str('SLACK_DESTINATION_ROOM', None)
 SLACK_DESTINATION_ROOM_COMMENTS = env.str('SLACK_DESTINATION_ROOM_COMMENTS', None)
 SLACK_TYPE_COMMENTS = env.list('SLACK_TYPE_COMMENTS', [])
@@ -585,10 +603,9 @@ if env.bool('BASIC_AUTH_ENABLED', False):
     BASIC_AUTH_WHITELISTED_IP_NETWORKS = env.list('BASIC_AUTH_WHITELISTED_IP_NETWORKS', [])
 
 
-if env.str('PRIMARY_HOST', None):
-    # This is used by Wagtail's email notifications for constructing absolute
-    # URLs.
-    BASE_URL = 'https://{}'.format(env.str('PRIMARY_HOST'))
+# This is used by Wagtail's email notifications for constructing absolute URLs.
+PRIMARY_HOST = env.str('PRIMARY_HOST', None)
+WAGTAILADMIN_BASE_URL = env.str("WAGTAILADMIN_BASE_URL", None) or f'https://{PRIMARY_HOST}' if PRIMARY_HOST else None
 
 
 # Security configuration

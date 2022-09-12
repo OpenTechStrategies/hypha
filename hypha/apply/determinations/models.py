@@ -4,17 +4,17 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from wagtail.admin.edit_handlers import (
+from wagtail.admin.panels import (
     FieldPanel,
     MultiFieldPanel,
     ObjectList,
-    StreamFieldPanel,
     TabbedInterface,
 )
 from wagtail.contrib.settings.models import BaseSetting, register_setting
-from wagtail.core.fields import RichTextField, StreamField
+from wagtail.fields import RichTextField, StreamField
 
 from hypha.apply.funds.models.mixins import AccessFormData
+from hypha.apply.funds.workflow import Concept, Proposal, Request
 
 from .blocks import (
     DeterminationBlock,
@@ -46,7 +46,11 @@ class DeterminationFormFieldsMixin(models.Model):
     class Meta:
         abstract = True
 
-    form_fields = StreamField(DeterminationCustomFormFieldsBlock(), default=[])
+    form_fields = StreamField(
+        DeterminationCustomFormFieldsBlock(),
+        default=[],
+        use_json_field=True,
+    )
 
     @property
     def determination_field(self):
@@ -80,7 +84,7 @@ class DeterminationForm(DeterminationFormFieldsMixin, models.Model):
 
     panels = [
         FieldPanel('name'),
-        StreamFieldPanel('form_fields'),
+        FieldPanel('form_fields'),
     ]
 
     def __str__(self):
@@ -184,21 +188,25 @@ class DeterminationMessageSettings(BaseSetting):
     class Meta:
         verbose_name = 'determination messages'
 
-    request_accepted = RichTextField("Approved")
-    request_rejected = RichTextField("Dismissed")
-    request_more_info = RichTextField("Needs more info")
+    request_accepted = RichTextField("Approved", blank=True)
+    request_rejected = RichTextField("Dismissed", blank=True)
+    request_more_info = RichTextField("Needs more info", blank=True)
 
-    concept_accepted = RichTextField("Approved")
-    concept_rejected = RichTextField("Dismissed")
-    concept_more_info = RichTextField("Needs more info")
+    concept_accepted = RichTextField("Approved", blank=True)
+    concept_rejected = RichTextField("Dismissed", blank=True)
+    concept_more_info = RichTextField("Needs more info", blank=True)
 
-    proposal_accepted = RichTextField("Approved")
-    proposal_rejected = RichTextField("Dismissed")
-    proposal_more_info = RichTextField("Needs more info")
+    proposal_accepted = RichTextField("Approved", blank=True)
+    proposal_rejected = RichTextField("Dismissed", blank=True)
+    proposal_more_info = RichTextField("Needs more info", blank=True)
 
     def get_for_stage(self, stage_name):
         message_templates = {}
-        prefix = f"{stage_name.lower()}_"
+        if stage_name in [Request.name, Concept.name, Proposal.name]:
+            prefix = f"{stage_name.lower()}_"
+        else:
+            # Use Request's message templates for remaining workflows
+            prefix = "request_"
 
         # requests and external requests use the same messages.
         prefix = prefix.replace("ext", "")

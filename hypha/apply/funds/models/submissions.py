@@ -28,11 +28,13 @@ from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Cast, Coalesce
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 from django_fsm import RETURN_VALUE, FSMField, can_proceed, transition
 from django_fsm.signals import post_transition
 from wagtail.contrib.forms.models import AbstractFormSubmission
-from wagtail.core.fields import StreamField
+from wagtail.fields import StreamField
 
 from hypha.apply.activity.messaging import MESSAGES, messenger
 from hypha.apply.categories.models import MetaTerm
@@ -302,7 +304,7 @@ class ApplicationSubmissionQueryset(JSONOrderable):
                     & Q(review_recommendation_no_count__gt=0),
                     then=NO
                 ),
-                default=MAYBE,
+                default=None,
             ),
             role_icon=Subquery(roles_for_review[:1].values('role__icon')),
         ).prefetch_related(
@@ -480,7 +482,7 @@ class ApplicationSubmission(
         metaclass=ApplicationSubmissionMetaclass,
 ):
     form_data = models.JSONField(encoder=StreamFieldDataEncoder)
-    form_fields = StreamField(ApplicationCustomFormFieldsBlock())
+    form_fields = StreamField(ApplicationCustomFormFieldsBlock(), use_json_field=True)
     summary = models.TextField(default='', null=True, blank=True)
     page = models.ForeignKey('wagtailcore.Page', on_delete=models.PROTECT)
     round = models.ForeignKey('wagtailcore.Page', on_delete=models.PROTECT, related_name='submissions', null=True)
@@ -532,7 +534,9 @@ class ApplicationSubmission(
         blank=True
     )
 
-    is_draft = False
+    submit_time = models.DateTimeField(verbose_name=_('submit time'), auto_now_add=False)
+
+    _is_draft = False
 
     live_revision = models.OneToOneField(
         'ApplicationRevision',
@@ -553,6 +557,10 @@ class ApplicationSubmission(
     drupal_id = models.IntegerField(null=True, blank=True, editable=False)
 
     objects = ApplicationSubmissionQueryset.as_manager()
+
+    @property
+    def is_draft(self):
+        return self.status == DRAFT_STATE
 
     def not_progressed(self):
         return not self.next
@@ -639,12 +647,12 @@ class ApplicationSubmission(
         submission_in_db.save()
 
     def new_data(self, data):
-        self.is_draft = False
+        self._is_draft = False
         self.form_data = data
         return self
 
     def from_draft(self):
-        self.is_draft = True
+        self._is_draft = True
         self.form_data = self.deserialised_data(self, self.draft_revision.form_data, self.form_fields)
         return self
 
@@ -690,12 +698,13 @@ class ApplicationSubmission(
         elif skip_custom:
             return super().save(*args, **kwargs)
 
-        if self.is_draft:
+        if self._is_draft:
             raise ValueError('Cannot save with draft data')
 
         creating = not self.id
 
         if creating:
+            self.submit_time = timezone.now()
             # We are creating the object default to first stage
             self.workflow_name = self.get_from_parent('workflow_name')
             # Copy extra relevant information to the child

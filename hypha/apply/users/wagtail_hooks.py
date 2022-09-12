@@ -1,6 +1,6 @@
 from django.urls import re_path, reverse
-from wagtail.core import hooks
-from wagtail.core.models import Site
+from wagtail import hooks
+from wagtail.models import Site
 from .utils import send_activation_email
 
 from hypha.apply.utils.notifications import slack_notify
@@ -12,6 +12,7 @@ from .admin_views import index
 def register_admin_urls():
     return [
         re_path(r'^users/$', index, name='index'),
+        re_path(r'^groups/(\d+)/users/$', index, name='index'),
     ]
 
 
