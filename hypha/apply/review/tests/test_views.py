@@ -415,23 +415,6 @@ class ReviewWorkFlowActionTestCase(BaseViewTestCase):
             submission_stepped_phases[3][0].name
         )
 
-    def test_ext_external_review_to_ready_for_discussion(self):
-        submission = ApplicationSubmissionFactory(status='ext_external_review', with_external_review=True)
-        reviewers = ReviewerFactory.create_batch(2)
-        AssignedReviewersFactory(submission=submission, reviewer=reviewers[0])
-        AssignedReviewersFactory(submission=submission, reviewer=reviewers[1])
-        ReviewFactory(submission=submission, author__reviewer=reviewers[0], visibility_private=True)
-
-        self.client.force_login(reviewers[1])
-        fields = get_fields_for_stage(submission)
-        data = ReviewFormFieldsFactory.form_response(fields)
-
-        self.post_page(submission, data, 'form')
-        submission = ApplicationSubmission.objects.get(id=submission.id)
-        self.assertEqual(
-            submission.status,
-            'ext_post_external_review_discussion'
-        )
 
     def test_com_external_review_to_ready_for_discussion(self):
         submission = ApplicationSubmissionFactory(status='com_external_review', workflow_name='single_com')
