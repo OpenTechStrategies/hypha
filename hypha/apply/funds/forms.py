@@ -191,10 +191,11 @@ class BatchDeleteSubmissionForm(forms.Form):
 
 
 class UpdateReviewersForm(ApplicationSubmissionModelForm):
+    #External Reviewers
     reviewer_reviewers = forms.ModelMultipleChoiceField(
         queryset=User.objects.reviewers().only('pk', 'full_name'),
         widget=Select2MultiCheckboxesWidget(attrs={'data-placeholder': 'Reviewers'}),
-        label=_('External Reviewers'),
+        label=_('Reviewers'),
         required=False,
     )
 
