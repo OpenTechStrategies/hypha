@@ -257,11 +257,7 @@ class StatusMultipleChoiceFilter(Select2MultipleChoiceFilter):
 class SubmissionFilter(filters.FilterSet):
     reviewers = Select2ModelMultipleChoiceFilter(queryset=get_reviewers, label=_('Reviewers'))
     screening_statuses = Select2ModelMultipleChoiceFilter(queryset=get_screening_statuses, label=_('Screening'), null_label=_('No Status'))
-    reviewers = Select2ModelMultipleChoiceFilter(queryset=get_reviewers, label=_('Reviewers'))
-    category_options = Select2MultipleChoiceFilter(
-        choices=[], label=_('Category'),
-        method='filter_category_options'
-    )
+    category_options = Select2MultipleChoiceFilter(choices=[], label=_('Category'), method='filter_category_options')
     meta_terms = Select2ModelMultipleChoiceFilter(queryset=get_meta_terms, label=_('Terms'))
 
     class Meta:

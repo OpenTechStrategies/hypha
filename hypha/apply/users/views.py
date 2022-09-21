@@ -308,6 +308,31 @@ class TWOFASetupView(TwoFactorSetupView):
         return context
 
 
+@method_decorator(never_cache, name='dispatch')
+@method_decorator(login_required, name='dispatch')
+class TWOFASetupView(TwoFactorSetupView):
+    def get_issuer(self):
+        return get_current_site(self.request).name
+
+    def get_context_data(self, form, **kwargs):
+        context = super().get_context_data(form, **kwargs)
+        if self.steps.current == 'generator':
+            try:
+                username = self.request.user.get_username()
+            except AttributeError:
+                username = self.request.user.username
+
+            otpauth_url = get_otpauth_url(accountname=username,
+                                          issuer=self.get_issuer(),
+                                          secret=context['secret_key'],
+                                          digits=totp_digits())
+            context.update({
+                'otpauth_url': otpauth_url,
+            })
+
+        return context
+
+
 @method_decorator(login_required, name='dispatch')
 class TWOFABackupTokensPasswordView(TwoFactorBackupTokensView):
     """

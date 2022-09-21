@@ -10,53 +10,30 @@
         constructor(node) {
             this.node = node[0];
             this.bindEventListeners();
-            this.actions = ['rejected', 'more_info', 'accepted'];
         }
 
         bindEventListeners() {
-
-            const that = this;
-            $(window).on('load', function () {
-                const action = that.getActionFromLocation(window.location);
-                const actionIndex = that.actions.indexOf(action);
-                if (actionIndex > -1) {
-                    that.node.value = actionIndex;
-                }
-
-                const newContent = that.getMatchingCopy(that.node.value);
-                that.updateTextArea(newContent);
-            });
-
             this.node.addEventListener('change', (e) => {
-                /*
-                 * Every time there is a change to the value
-                 * in the dropdown, update the message's code
-                 * with the template message.
-                 */
-                const newContent = this.getMatchingCopy(e.target.value);
-                this.updateTextArea(newContent);
+                this.getMatchingCopy(e.target.value);
             }, false);
         }
 
-        getActionFromLocation(location) {
-            const searchParams = new URLSearchParams(location.search);
-            if (searchParams.has('action')) {
-                return searchParams.get('action');
-            }
-            return null;
-        }
-
         getMatchingCopy(value) {
-            const actionIndex = parseInt(value);
-            if (actionIndex > this.actions.length - 1) {
-                return '';
+            if (value === '0') {
+                this.text = document.querySelector('div[data-type="rejected"]').textContent;
             }
-            const action = this.actions[actionIndex];
-            return document.querySelector('div[data-type="' + action + '"]').innerHTML;
+            else if (value === '1') {
+                this.text = document.querySelector('div[data-type="more_info"]').textContent;
+            }
+            else {
+                this.text = document.querySelector('div[data-type="accepted"]').textContent;
+            }
+            this.updateTextArea(this.text);
         }
 
         updateTextArea(text) {
-            window.tinyMCE.activeEditor.setContent(text, {format: 'html'});
+            this.message_box = document.querySelector('#id_' + field_blocks_ids['message'] + '_ifr');
+            this.message_box.contentDocument.getElementsByTagName('body')[0].innerHTML = text;
         }
     };
 

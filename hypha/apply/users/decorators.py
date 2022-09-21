@@ -31,20 +31,23 @@ def is_apply_staff_or_finance(user):
     return True
 
 
+def is_apply_staff_or_finance_or_contracting(user):
+    if not (user.is_apply_staff or user.is_finance or user.is_contracting):
+        raise PermissionDenied
+    return True
+
+
 def is_approver(user):
     if not user.is_approver:
         raise PermissionDenied
     return True
 
-def is_decision_maker(user):
-    if not user.is_decision_maker:
+
+def is_contracting_approver(user):
+    if not user.is_approver or not user.is_contracting:
         raise PermissionDenied
     return True
 
-def is_board_member(user):
-    if not user.is_board_member:
-        raise PermissionDenied
-    return True
 
 staff_required = [login_required, user_passes_test(is_apply_staff)]
 
@@ -54,9 +57,10 @@ staff_or_finance_required = [login_required, user_passes_test(is_apply_staff_or_
 
 approver_required = [login_required, user_passes_test(is_approver)]
 
-decision_maker_required = [login_required, user_passes_test(is_decision_maker)]
+staff_or_finance_or_contracting_required = [login_required, user_passes_test(is_apply_staff_or_finance_or_contracting)]
 
-board_member_required = [login_required, user_passes_test(is_board_member)]
+contracting_approver_required = [login_required, user_passes_test(is_contracting_approver)]
+
 
 def superuser_decorator(fn):
     check = user_passes_test(lambda user: user.is_superuser)

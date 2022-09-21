@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
     'hypha.cookieconsent',
     'hypha.images',
+    'hypha.core',
 
     'hypha.apply.activity',
     'hypha.apply.categories',
@@ -561,6 +562,9 @@ SUBMISSIONS_TABLE_EXCLUDED_FIELDS = env.list('SUBMISSIONS_TABLE_EXCLUDED_FIELDS'
 # Include sections in submission view.
 # Possible values are: status_block, round_block, table_block
 SUBMISSIONS_VIEW_INCLUDED_SECTIONS = env.list('SUBMISSIONS_VIEW_INCLUDED_SECTIONS', ['status_block', 'round_block', 'table_block'])
+
+# Draft submissions access.
+SUBMISSIONS_DRAFT_ACCESS_STAFF = env.bool('SUBMISSIONS_DRAFT_ACCESS_STAFF', True)
 
 # Celery config
 if env.str('REDIS_URL', None):

@@ -414,6 +414,7 @@ class BatchUpdateReviewersForm(forms.Form):
 
         # 1. Update role reviewers
         submissions = self.cleaned_data['submissions']
+        external_reviewers = self.cleaned_data['external_reviewers']
         assigned_roles = {
             role: self.cleaned_data[field]
             for field, role in self.role_fields.items()
