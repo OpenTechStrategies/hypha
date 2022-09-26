@@ -14,12 +14,15 @@
 
     <form class="form form--with-p-tags form--user-login" method="post">
       {% csrf_token %}
-        {% for field in form %}
-          {%if field.id_for_label != 'id_is_superuser' and field.label != 'Groups' %}
-            {% include "forms/includes/field.html" %}
-          {%endif%}
-        {% endfor %}
-        <button class="link link--button-secondary" type="submit">{% trans "Register" %}</button>
+      {% include "forms/includes/field.html" with field=form.first_name %}
+      {% include "forms/includes/field.html" with field=form.last_name %}
+
+      {% include "forms/includes/field.html" with field=form.email %}
+      {% include "forms/includes/field.html" with field=form.full_name %}
+      {% include "forms/includes/field.html" with field=form.password1 %}
+      {% include "forms/includes/field.html" with field=form.password2 %}
+      {% include "forms/includes/field.html" with field=form.email_preference %}
+      <button class="link link--button-secondary" type="submit">{% trans "Register" %}</button>
     </form>
   </div>
 {% endblock %}
