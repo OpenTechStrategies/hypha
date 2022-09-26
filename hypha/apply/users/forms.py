@@ -39,14 +39,7 @@ class CustomUserEditForm(CustomUserAdminFormBase, UserEditForm):
 
 
 class CustomUserCreationForm(CustomUserAdminFormBase, UserCreationForm):
-    error_messages = {
-        'duplicate_username': _("A user with that email already exists."),
-        'password_mismatch': _("The two password fields didn't match."),
-    }
-    email_preference = forms.BooleanField(label="Yes, I'd like to receive occasional emails from ARDC about their mission and programs.", required=False, initial=True)
-    class Meta:
-        model=User
-        fields=['full_name']
+    pass
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
