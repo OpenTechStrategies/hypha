@@ -27,7 +27,7 @@ from hypha.apply.utils.views import CreateOrUpdateView, ViewDispatcher
 import jinja2.sandbox
 from jinja2 import Undefined
 
-from .blocks import DeterminationBlock
+from .blocks import DeterminationBlock,DeterminationMessageBlock
 from .forms import (
     BatchConceptDeterminationForm,
     BatchDeterminationForm,
@@ -318,10 +318,12 @@ class DeterminationCreateOrUpdateView(BaseStreamForm, CreateOrUpdateView):
         # Create a dict that maps between opaque field ids
         # and canonical names for use in the template.
         # TODO: Put this functionality higher in the class hierarchy.
-        determination_form_class = self.get_form_class()
         form_field_id_to_name={}
-        for field_id in determination_form_class.display:
-            form_field_id_to_name[field_id] = determination_form_class.display[field_id].canonical_name
+        if self.submission.is_determination_form_attached:
+            for field_block in self.get_defined_fields():
+                if isinstance(field_block.block, DeterminationBlock) or \
+                        isinstance(field_block.block, DeterminationMessageBlock):
+                    form_field_id_to_name[field_block.block_type] = field_block.id
 
         message_templates = determination_messages.get_for_stage(self.submission.stage.name)
 
