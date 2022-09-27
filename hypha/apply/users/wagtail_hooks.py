@@ -12,6 +12,7 @@ from .admin_views import index
 def register_admin_urls():
     return [
         re_path(r'^users/$', index, name='index'),
+        re_path(r'^groups/(\d+)/users/$', index, name='index'),
     ]
 
 

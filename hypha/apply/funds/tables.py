@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django_tables2.utils import A
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from hypha.apply.categories.blocks import CategoryQuestionBlock
 from hypha.apply.categories.models import MetaTerm, Option
@@ -257,6 +257,7 @@ class StatusMultipleChoiceFilter(Select2MultipleChoiceFilter):
 class SubmissionFilter(filters.FilterSet):
     reviewers = Select2ModelMultipleChoiceFilter(queryset=get_reviewers, label=_('Reviewers'))
     screening_statuses = Select2ModelMultipleChoiceFilter(queryset=get_screening_statuses, label=_('Screening'), null_label=_('No Status'))
+    reviewers = Select2ModelMultipleChoiceFilter(queryset=get_reviewers, label=_('Reviewers'))
     category_options = Select2MultipleChoiceFilter(
         choices=[], label=_('Category'),
         method='filter_category_options'
