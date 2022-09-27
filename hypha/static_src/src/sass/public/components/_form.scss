@@ -533,3 +533,38 @@
         display: none;
     }
 }
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltiptext {
+    visibility: visible !important;
+    width: 200px !important;
+    background-color: #555 !important;
+    color: #fff !important;
+    text-align: center !important;
+    border-radius: 6px !important;
+    padding: 5px 0 !important;
+    position: absolute !important;
+    z-index: 1 !important;
+    bottom: 125% !important;
+    left: 50% !important;
+    top: 0 !important;
+    margin-left: -60px !important;
+    opacity: 1 !important;
+    transition: opacity 0.3s !important;
+    height: 30px !important;
+}
+
+.tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}

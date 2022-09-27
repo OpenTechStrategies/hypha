@@ -12,9 +12,45 @@
             }
         ).mask($('#requested-amount'));
 
-        Inputmask('99-9999999').mask($('#ein'))
+        Inputmask('99-9999999').mask($('#ein'));
     });
 
+    $('.application-form').on('submit', (e) => {
+        e.preventDefault();
+        const form = e.target;
+        let rte = form.querySelector('.tiny_mce'); // rich_text_editor
+        if (rte) {
+            let req = rte.querySelector('.form__required'); // check if required
+            if (req != null && req.attributes.length === 1) {
+                let iframe = rte.parentElement.children[1].querySelector('iframe');
+                let header = rte.parentElement.children[1].querySelector('.tox-editor-header');
+                let text_tag = iframe.contentDocument.querySelector('p');
+                let text = iframe.contentDocument.querySelector('p').innerText;
+                // remove tooltip
+                $(text_tag).on('DOMSubtreeModified', function() {
+                    let tooltip = rte.parentElement.children[1].querySelector('.tooltiptext');
+                    if (tooltip) {
+                        $(tooltip).remove();
+                    }
+                });
+                // show tooltip or submit form
+                if (text.length > 0 && text !== '\n') {
+                    form.submit();
+                }
+                else {
+                    $(header).addClass('tooltip');
+                    $(header).append("<div class='tooltiptext'>This is required field.</div>");
+                    header.scrollIntoView();
+                }
+            }
+            else {
+                form.submit();
+            }
+        }
+        else {
+            form.submit();
+        }
+    });
     $('.application-form').each(function () {
         var $application_form = $(this);
         var $application_form_button = $application_form.find('button[type="submit"]');
