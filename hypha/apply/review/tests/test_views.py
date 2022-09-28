@@ -11,7 +11,7 @@ from hypha.apply.users.tests.factories import ReviewerFactory, StaffFactory, Use
 from hypha.apply.utils.testing.tests import BaseViewTestCase
 
 from ..models import Review, ReviewOpinion
-from ..options import AGREE, DISAGREE, NA
+from ..options import AGREE, DISAGREE, NA, RECOMMENDATION_CHOICES
 from ..views import get_fields_for_stage
 from .factories import (
     ReviewFactory,
@@ -168,7 +168,6 @@ class TestReviewScore(BaseViewTestCase):
         # Make a new person for every review
         self.client.force_login(self.user_factory())
         response = self.post_page(self.submission, data, 'form')
-        # import ipdb; ipdb.set_trace()
         self.assertIn(
             'funds/applicationsubmission_admin_detail.html',
             response.template_name,
@@ -179,21 +178,17 @@ class TestReviewScore(BaseViewTestCase):
 
     def test_score_calculated(self):
         review = self.submit_review_scores((5,), (5,))
+        self.assertEqual(review.score, 10)
+
+    def test_no_score_is_zero(self):
+        review = self.submit_review_scores()
+        self.assertEqual(review.score, 0)
+
+    def test_na_included_in_review_score(self):
+        review = self.submit_review_scores((NA, 5))
         self.assertEqual(review.score, 5)
 
-    def test_average_score_calculated(self):
-        review = self.submit_review_scores((1, 5), (1, 5))
-        self.assertEqual(review.score, (1 + 5) / 2)
-
-    def test_no_score_is_NA(self):
-        review = self.submit_review_scores()
-        self.assertEqual(review.score, NA)
-
-    def test_na_included_in_review_average(self):
-        review = self.submit_review_scores((NA, 5))
-        self.assertEqual(review.score, 2.5)
-
-    def test_na_included_reviews_average(self):
+    def test_na_included_reviews_score(self):
         self.submit_review_scores((NA,))
         self.assertIsNotNone(Review.objects.score())
 
@@ -232,7 +227,9 @@ class ReviewDetailTestCase(BaseViewTestCase):
         review = ReviewFactory(submission=submission, author__reviewer=self.user, recommendation_yes=True)
         response = self.get_page(review)
         self.assertContains(response, submission.title)
-        self.assertContains(response, "<p>Yes</p>")
+        recommendation=RECOMMENDATION_CHOICES[review.recommendation]
+        recommendation_text=recommendation[1]
+        self.assertContains(response, recommendation_text)
 
     def test_review_detail_opinion(self):
         staff = StaffFactory()

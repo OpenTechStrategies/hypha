@@ -20,8 +20,8 @@ def create_form_fields_data(blocks):
     form_fields_dict[f'{parent_field}-count'] = [str(len(blocks))]
     for index, block_name in enumerate(blocks):
         form_fields_dict[f'{parent_field}-{index}-deleted'] = ['']
-        form_fields_dict[f'{parent_field}-{index}-order'] = [str(index)]
         form_fields_dict[f'{parent_field}-{index}-type'] = [str(block_name)]
+        form_fields_dict[f'{parent_field}-{index}-order'] = [str(index)]
 
         for field_name, field_value in blocks[block_name].items():
             form_fields_dict[f'{parent_field}-{index}-value-{field_name}'] = field_value
@@ -35,7 +35,7 @@ class TestFundCreationView(TestCase):
         cls.user = SuperUserFactory()
         cls.home = ApplyHomePageFactory()
 
-    def create_page(self, appl_forms=1, review_forms=1, determination_forms=1, external_review_form=0, project_approval_form=1, stages=1, same_forms=False, form_stage_info=[1]):
+    def create_page(self, appl_forms=1, review_forms=1, determination_forms=1, external_review_form=0, project_approval_form=0, stages=1, same_forms=False, form_stage_info=[1]):
         self.client.force_login(self.user)
         url = reverse('wagtailadmin_pages:add', args=('funds', 'fundtype', self.home.id))
 
@@ -139,7 +139,7 @@ class TestCreateApplicationFormView(TestCase):
         cls.user = SuperUserFactory()
         cls.label_help_text_data = {
             'field_label': factory.Faker('sentence').evaluate(None, None, {'locale': None}),
-            'help_text': factory.Faker('sentence').evaluate(None, None, {'locale': None})
+            'field_help_text': factory.Faker('sentence').evaluate(None, None, {'locale': None}),
         }
         cls.name = factory.Faker('name').evaluate(None, None, {'locale': None})
 
