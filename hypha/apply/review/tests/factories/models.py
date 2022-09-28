@@ -1,3 +1,4 @@
+import random
 import factory
 
 from hypha.apply.funds.tests.factories import (
@@ -7,7 +8,7 @@ from hypha.apply.funds.tests.factories import (
 from hypha.apply.stream_forms.testing.factories import FormDataFactory
 
 from ...models import Review, ReviewForm, ReviewOpinion
-from ...options import AGREE, DISAGREE, MAYBE, NO, PRIVATE, REVIEWER, YES
+from ...options import AGREE, DISAGREE, PRIVATE, REVIEWER,NO_RECOMMENDATIONS, YES_RECOMMENDATIONS, MAYBE_RECOMMENDATIONS
 from . import blocks
 
 __all__ = ['ReviewFactory', 'ReviewFormFactory', 'ReviewOpinionFactory']
@@ -22,8 +23,8 @@ class ReviewFactory(factory.django.DjangoModelFactory):
         model = Review
 
     class Params:
-        recommendation_yes = factory.Trait(recommendation=YES)
-        recommendation_maybe = factory.Trait(recommendation=MAYBE)
+        recommendation_yes = factory.Trait(recommendation=random.choice(YES_RECOMMENDATIONS))
+        recommendation_maybe = factory.Trait(recommendation=random.choice(MAYBE_RECOMMENDATIONS))
         draft = factory.Trait(is_draft=True)
         visibility_private = factory.Trait(visibility=PRIVATE)
         visibility_reviewer = factory.Trait(visibility=REVIEWER)
@@ -37,7 +38,7 @@ class ReviewFactory(factory.django.DjangoModelFactory):
         form_fields=factory.SelfAttribute('..form_fields'),
     )
     is_draft = False
-    recommendation = NO
+    recommendation = random.choice(NO_RECOMMENDATIONS)
     score = 0
 
 
