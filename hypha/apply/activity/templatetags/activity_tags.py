@@ -58,5 +58,12 @@ def visibility_options(activity, user):
 
 
 @register.filter
+def source_type(value):
+    if value and "submission" in value:
+        return "Submission"
+    return str(value).capitalize()
+
+
+@register.filter
 def add_ptag_newlines(value):
     return value.replace('<p>', '\n<p>')

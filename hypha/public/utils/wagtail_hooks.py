@@ -5,11 +5,11 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdminGroup,
     modeladmin_register,
 )
-from wagtail.core import hooks
 from wagtailcache.cache import clear_cache
 
 from hypha.public.news.models import NewsType
 from hypha.public.people.models import PersonType
+from wagtail import hooks
 
 
 class NewsTypeModelAdmin(ModelAdmin):

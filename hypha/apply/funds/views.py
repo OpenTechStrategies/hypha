@@ -38,7 +38,7 @@ from django_file_form.models import PlaceholderUploadedFile
 from django_filters.views import FilterView
 from django_tables2.paginators import LazyPaginator
 from django_tables2.views import SingleTableMixin
-from wagtail.core.models import Page
+from wagtail.models import Page
 
 from hypha.apply.activity.messaging import MESSAGES, messenger
 from hypha.apply.activity.views import (
@@ -55,7 +55,7 @@ from hypha.apply.projects.models import Project
 from hypha.apply.review.models import Review
 from hypha.apply.review.views import ReviewContextMixin
 from hypha.apply.stream_forms.blocks import GroupToggleBlock
-from hypha.apply.users.decorators import staff_required
+from hypha.apply.users.decorators import staff_or_finance_required, staff_required
 from hypha.apply.utils.models import PDFPageSettings
 from hypha.apply.utils.pdfs import draw_submission_content, make_pdf
 from hypha.apply.utils.storage import PrivateMediaView
@@ -121,7 +121,7 @@ User = get_user_model()
 
 class SubmissionStatsMixin:
     def get_context_data(self, **kwargs):
-        submissions = ApplicationSubmission.objects.all()
+        submissions = ApplicationSubmission.objects.exclude_draft()
         submission_undetermined_count = submissions.undetermined().count()
         review_my_count = submissions.reviewed_by(self.request.user).count()
 
@@ -134,7 +134,7 @@ class SubmissionStatsMixin:
         submission_accepted_sum = intcomma(submission_accepted_value.get('value__sum'))
         submission_accepted_count = submission_accepted.count()
 
-        reviews = Review.objects.all()
+        reviews = Review.objects.submitted()
         review_count = reviews.count()
         review_my_score = reviews.by_user(self.request.user).score()
 
@@ -203,7 +203,11 @@ class BaseAdminSubmissionsTable(SingleTableMixin, FilterView):
         return new_kwargs
 
     def get_queryset(self):
-        return self.filterset_class._meta.model.objects.exclude_draft().current().for_table(self.request.user)
+        submissions = self.filterset_class._meta.model.objects.current().for_table(self.request.user)
+        if settings.SUBMISSIONS_DRAFT_ACCESS_STAFF:
+            return submissions
+        else:
+            return submissions.exclude_draft()
 
     def get_context_data(self, **kwargs):
         search_term = self.request.GET.get('query')
@@ -798,7 +802,7 @@ class AdminSubmissionDetailView(ReviewContextMixin, ActivityContextMixin, Delega
 
     def dispatch(self, request, *args, **kwargs):
         submission = self.get_object()
-        if submission.status == DRAFT_STATE and not request.user == submission.user:
+        if submission.status == DRAFT_STATE and not request.user == submission.user and not settings.SUBMISSIONS_DRAFT_ACCESS_STAFF:
             raise Http404
         redirect = SubmissionSealedView.should_redirect(request, submission)
         return redirect or super().dispatch(request, *args, **kwargs)
@@ -1031,7 +1035,7 @@ class AdminSubmissionEditView(BaseSubmissionEditView):
             revision = self.object.create_revision(by=self.request.user)
             if revision:
                 messenger(
-                    MESSAGES.EDIT,
+                    MESSAGES.EDIT_SUBMISSION,
                     request=self.request,
                     user=self.request.user,
                     source=self.object,
@@ -1062,6 +1066,11 @@ class ApplicantSubmissionEditView(BaseSubmissionEditView):
 
     def form_valid(self, form):
         self.object.new_data(form.cleaned_data)
+
+        # Update submit_time only when application is getting submitted from the Draft State for the first time.
+        if self.object.status == DRAFT_STATE and 'submit' in self.request.POST:
+            self.object.submit_time = timezone.now()
+            self.object.save(update_fields=['submit_time'])
 
         if 'save' in self.request.POST:
             self.object.create_revision(draft=True, by=self.request.user)
@@ -1265,7 +1274,7 @@ class SubmissionPrivateMediaView(UserPassesTestMixin, PrivateMediaView):
         return is_user_has_access_to_view_submission(self.request.user, self.submission)
 
 
-@method_decorator(staff_required, name='dispatch')
+@method_decorator(staff_or_finance_required, name='dispatch')
 class SubmissionDetailSimplifiedView(DetailView):
     model = ApplicationSubmission
     template_name_suffix = '_simplified_detail'
@@ -1279,7 +1288,7 @@ class SubmissionDetailSimplifiedView(DetailView):
         return obj
 
 
-@method_decorator(staff_required, name='dispatch')
+@method_decorator(staff_or_finance_required, name='dispatch')
 class SubmissionDetailPDFView(SingleObjectMixin, View):
     model = ApplicationSubmission
 
@@ -1342,7 +1351,7 @@ class SubmissionResultView(SubmissionStatsMixin, FilterView):
         return new_kwargs
 
     def get_queryset(self):
-        return self.filterset_class._meta.model.objects.current()
+        return self.filterset_class._meta.model.objects.current().exclude_draft()
 
     def get_context_data(self, **kwargs):
         search_term = self.request.GET.get('query')
