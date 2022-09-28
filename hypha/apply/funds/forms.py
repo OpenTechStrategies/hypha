@@ -370,7 +370,7 @@ class BatchUpdateReviewersForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        external_reviewers = self.cleaned_data['external_reviewers']
+        external_reviewers = self.cleaned_data.get('external_reviewers')
         submissions = self.cleaned_data['submissions']
         if external_reviewers:
             # User needs to be superuser or lead of all selected submissions.
@@ -418,7 +418,6 @@ class BatchUpdateReviewersForm(forms.Form):
 
         # 1. Update role reviewers
         submissions = self.cleaned_data['submissions']
-        external_reviewers = self.cleaned_data['external_reviewers']
         assigned_roles = {
             role: self.cleaned_data[field]
             for field, role in self.role_fields.items()

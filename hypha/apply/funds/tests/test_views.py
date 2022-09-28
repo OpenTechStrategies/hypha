@@ -665,7 +665,6 @@ class TestReviewerSubmissionView(BaseSubmissionViewTestCase):
             self.assertEqual(len(buttons), 1)
 
         submission = ApplicationSubmissionFactory(with_external_review=True, status='ext_external_review', user=self.applicant, reviewers=[self.user])
-        import pdb; pdb.set_trace()
         # Phase: external_review, no review
         # "Add a review" should be displayed
         assert_create_review_displayed(submission, 'Add a review')
