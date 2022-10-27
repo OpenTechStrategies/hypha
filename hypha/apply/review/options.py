@@ -31,12 +31,13 @@ RECOMMENDATION_CHOICES = (
     (3, _('Weak Accept')),
     (4, _('Accept')),
     (5, _('Strong Accept')),
-    (6, _('N/A - Choose not to answer')),
+    (6, _('N/A - Abstain')),
+    (7, _('N/A - Recused')),
 )
 
 NO_RECOMMENDATIONS = [1,2]
 YES_RECOMMENDATIONS = [3,4,5]
-MAYBE_RECOMMENDATIONS = [0,6]
+MAYBE_RECOMMENDATIONS = [0,6,7]
 
 def map_recommendation (raw_recommendation):
     if(raw_recommendation in NO_RECOMMENDATIONS):
