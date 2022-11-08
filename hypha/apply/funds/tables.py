@@ -321,6 +321,10 @@ class SubmissionFilterAndSearch(SubmissionFilter):
         if value.strip().startswith("#") and len(possible_ids) > 0:
             return queryset.filter(id__in=possible_ids)
         return queryset.filter(Q(id__in=possible_ids)|Q(search_data__icontains=value))
+    
+    def __init__(self, *args, **kwargs):
+        limit_statuses ={'draft', 'in_discussion', 'more_info', 'internal_review', 'accepted', 'rejected', 'ext_withdrawn', 'ext_external_review'}
+        super().__init__(limit_statuses=limit_statuses, **kwargs)
 
 
 class SubmissionDashboardFilter(filters.FilterSet):
