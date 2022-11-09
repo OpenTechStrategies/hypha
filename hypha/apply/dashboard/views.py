@@ -260,7 +260,7 @@ class ReviewerDashboardView(MyFlaggedMixin, MySubmissionContextMixin, TemplateVi
                 data=self.request.GET or None, request=self.request, queryset=submissions),
             'table': ReviewerSubmissionsTable(submissions[:limit], prefix='my-review-'),
             'display_more': submissions.count() > limit,
-            'url': reverse('funds:submissions:list'),
+            'url': reverse('funds:submissions:my_reviewed'),
         }
 
 

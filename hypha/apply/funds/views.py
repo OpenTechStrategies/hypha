@@ -365,23 +365,20 @@ class BatchProgressSubmissionView(DelegatedViewMixin, FormView):
 
 class BaseReviewerSubmissionsTable(BaseAdminSubmissionsTable):
     table_class = ReviewerSubmissionsTable
-    filterset_class = SubmissionFilterAndSearch
+    filterset_class = SubmissionReviewerFilterAndSearch
 
     def get_queryset(self):
-        if self.request.GET.get('reviewers'):
-            '''
-            If use_settings variable is set for ReviewerSettings use settings
-            parameters to filter submissions or return only reviewed_by as it
-            was by default.
-            '''
-            reviewer_settings = ReviewerSettings.for_request(self.request)
-            if reviewer_settings.use_settings:
-                return super().get_queryset().for_reviewer_settings(
-                    self.request.user, reviewer_settings
-                ).order_by('-submit_time')
-            return super().get_queryset().reviewed_by(self.request.user)
-        else:
-            return super().get_queryset().order_by(F('last_update').desc(nulls_last=True))
+        reviewer_settings = ReviewerSettings.for_request(self.request)
+        if reviewer_settings.use_settings:
+            return super().get_queryset().for_reviewer_settings(
+                self.request.user, reviewer_settings
+            ).order_by('-submit_time')
+        return super().get_queryset().reviewed_by(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            page_heading='My Reviewed',
+            **kwargs)
 
 class AwaitingReviewSubmissionsListView(SingleTableMixin, ListView):
     model = ApplicationSubmission
@@ -510,13 +507,13 @@ class GroupingApplicationsListView(TemplateView):
     template_name = 'funds/grouped_application_list.html'
 
 
-class SubmissionReviewerListView(BaseReviewerSubmissionsTable):
+class MyReviewedSubmissionListView(BaseReviewerSubmissionsTable):
     template_name = 'funds/submissions.html'
 
 
 class SubmissionListView(ViewDispatcher):
     admin_view = SubmissionAdminListView
-    reviewer_view = SubmissionReviewerListView
+    reviewer_view = SubmissionAdminListView
 
 
 @method_decorator(staff_required, name='dispatch')

@@ -8,7 +8,10 @@
     <div class="admin-bar__inner wrapper--search">
         {% block page_header %}
             <div>
-                <h1 class="gamma heading heading--no-margin heading--bold">{% trans "All Submissions" %}<span class="submissions-count"> ({{ table.rows|length }})</span></h1>
+                <h1 class="gamma heading heading--no-margin heading--bold">
+                    {% if page_heading %} {{ page_heading }} {% else %} {% trans "All Submissions" %} {% endif %}
+                    <span class="submissions-count"> ({{ table.rows|length }})</span>
+                </h1>
             </div>
             <div id="submissions-all-react-app-switcher"></div>
         {% endblock %}
