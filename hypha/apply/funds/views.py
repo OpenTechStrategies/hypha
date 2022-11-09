@@ -365,21 +365,23 @@ class BatchProgressSubmissionView(DelegatedViewMixin, FormView):
 
 class BaseReviewerSubmissionsTable(BaseAdminSubmissionsTable):
     table_class = ReviewerSubmissionsTable
-    filterset_class = SubmissionReviewerFilterAndSearch
+    filterset_class = SubmissionFilterAndSearch
 
     def get_queryset(self):
-        '''
-        If use_settings variable is set for ReviewerSettings use settings
-        parameters to filter submissions or return only reviewed_by as it
-        was by default.
-        '''
-        reviewer_settings = ReviewerSettings.for_request(self.request)
-        if reviewer_settings.use_settings:
-            return super().get_queryset().for_reviewer_settings(
-                self.request.user, reviewer_settings
-            ).order_by('-submit_time')
-        return super().get_queryset().reviewed_by(self.request.user)
-
+        if self.request.GET.get('reviewers'):
+            '''
+            If use_settings variable is set for ReviewerSettings use settings
+            parameters to filter submissions or return only reviewed_by as it
+            was by default.
+            '''
+            reviewer_settings = ReviewerSettings.for_request(self.request)
+            if reviewer_settings.use_settings:
+                return super().get_queryset().for_reviewer_settings(
+                    self.request.user, reviewer_settings
+                ).order_by('-submit_time')
+            return super().get_queryset().reviewed_by(self.request.user)
+        else:
+            return super().get_queryset().order_by(F('last_update').desc(nulls_last=True))
 
 class AwaitingReviewSubmissionsListView(SingleTableMixin, ListView):
     model = ApplicationSubmission
