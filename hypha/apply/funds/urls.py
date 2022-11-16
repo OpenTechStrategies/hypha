@@ -28,6 +28,7 @@ from .views import (
     SubmissionSealedView,
     SubmissionStaffFlaggedView,
     SubmissionUserFlaggedView,
+    ExportSubmissionsByRound
 )
 
 revision_urls = ([
@@ -86,6 +87,7 @@ submission_urls = ([
 rounds_urls = ([
     path('', RoundListView.as_view(), name="list"),
     path('<int:pk>/', SubmissionsByRound.as_view(), name="detail"),
+    path('export/<int:pk>/', ExportSubmissionsByRound.as_view(), name="export"),
 ], 'rounds')
 
 

@@ -1,6 +1,8 @@
 from copy import copy
 from datetime import timedelta
 from itertools import chain
+from io import StringIO
+import csv
 
 import django_tables2 as tables
 from django.conf import settings
@@ -11,7 +13,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, F, Q
-from django.http import FileResponse, Http404, HttpResponseRedirect
+from django.http import FileResponse, Http404, HttpResponseRedirect, HttpResponse
+from django.core.management import call_command
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -534,6 +537,56 @@ class SubmissionUserFlaggedView(UserPassesTestMixin, BaseAdminSubmissionsTable):
     def test_func(self):
         return self.request.user.is_apply_staff or self.request.user.is_reviewer
 
+@method_decorator(staff_required, name='dispatch')
+class ExportSubmissionsByRound(BaseAdminSubmissionsTable):
+
+    def export_submissions(self, round_id):
+        csv_stream = StringIO()
+        writer = csv.writer(csv_stream)
+        header_row,values = [],[]
+        index = 0
+        check = False
+
+        for submission in ApplicationSubmission.objects.filter(round=round_id):
+            for field_id in submission.question_text_field_ids:
+                question_field = submission.serialize(field_id)
+                field_name = question_field['question']
+                field_value = question_field['answer']
+                if field_id not in submission.named_blocks:
+                    header_row.append(field_name) if not check else header_row
+                    values.append(field_value)
+                else:
+                    header_row.insert(index,field_name) if not check else header_row
+                    values.insert(index,field_value)
+                    index = index + 1
+
+            if not check:
+                writer.writerow(header_row)
+                check = True
+
+            writer.writerow(values)
+            values.clear()
+            index = 0
+
+        csv_stream.seek(0)
+        return csv_stream
+
+    def get_queryset(self):
+        try:
+            self.obj = Page.objects.get(pk=self.kwargs.get('pk')).specific
+        except Page.DoesNotExist:
+            raise Http404(_("No Round or Lab found matching the query"))
+
+        if not isinstance(self.obj, (LabBase, RoundBase)):
+            raise Http404(_("No Round or Lab found matching the query"))
+        return super().get_queryset().filter(Q(round=self.obj) | Q(page=self.obj))
+
+    def get(self, request, pk):
+        self.get_queryset()
+        csv_data = self.export_submissions(pk)
+        response = HttpResponse(csv_data.readlines(), content_type="text/csv")
+        response['Content-Disposition'] = 'inline; filename=' + str(self.obj) + '.csv'
+        return response
 
 @method_decorator(staff_required, name='dispatch')
 class SubmissionsByRound(BaseAdminSubmissionsTable, DelegateableListView):
