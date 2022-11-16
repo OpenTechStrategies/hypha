@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 from django_tables2.views import MultiTableMixin
+from django.db.models import F
 
 from hypha.apply.funds.models import (
     ApplicationSubmission,
@@ -221,9 +222,21 @@ class ReviewerDashboardView(MyFlaggedMixin, MySubmissionContextMixin, TemplateVi
             'awaiting_reviews': self.awaiting_reviews(submissions),
             'my_reviewed': self.my_reviewed(submissions),
             'my_flagged': self.my_flagged(submissions),
+            'all_submissions': self.all_submissions(submissions),
         })
 
         return context
+
+    def all_submissions(self,submissions):
+        limit = 5
+        submissions = submissions.order_by(F('last_update').desc(nulls_last=True))
+
+        return {
+            'table': ReviewerSubmissionsTable(submissions[:limit], prefix='my-review-'),
+            'display_more': submissions.count() > limit,
+            'url': reverse('funds:submissions:list'),
+        }
+
 
     def awaiting_reviews(self, submissions):
         submissions = submissions.in_review_for(self.request.user).order_by('-submit_time')
@@ -247,7 +260,7 @@ class ReviewerDashboardView(MyFlaggedMixin, MySubmissionContextMixin, TemplateVi
                 data=self.request.GET or None, request=self.request, queryset=submissions),
             'table': ReviewerSubmissionsTable(submissions[:limit], prefix='my-review-'),
             'display_more': submissions.count() > limit,
-            'url': reverse('funds:submissions:list'),
+            'url': reverse('funds:submissions:my_reviewed'),
         }
 
 
