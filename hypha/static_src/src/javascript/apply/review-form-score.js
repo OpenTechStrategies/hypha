@@ -10,7 +10,7 @@
     if (selectors.length > 1) {
         document.querySelector('.form--score-box').style.display = 'block';
         // remove recommendation select box from array
-        filtered_selectors = selectors.filter(selector => selector[0].text !== 'Need more info');
+        filtered_selectors = selectors.filter(selector => selector[0].text !== 'Need More Info');
         filtered_selectors.forEach(function (selector) {
             selector.onchange = calculate_score;
         });
