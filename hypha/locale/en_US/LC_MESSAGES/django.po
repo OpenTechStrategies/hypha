@@ -76,13 +76,13 @@ msgid "Open Internal Review (revert)"
 msgstr "Open GAC Review (revert)"
 
 msgid "External Review"
-msgstr "Board Review"
+msgstr "Review"
 
 msgid "Open External Review (revert)"
 msgstr "Open Board Review (revert)"
 
 msgid "External Reviewers"
-msgstr "Board Reviewers"
+msgstr "Reviewers"
 
 msgid "Request with external review"
 msgstr "Request with board review"
