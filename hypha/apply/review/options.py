@@ -1,5 +1,5 @@
 from django.utils.translation import gettext as _
-
+from django.conf import settings
 NA = 99
 
 RATE_CHOICES = (
@@ -31,13 +31,12 @@ RECOMMENDATION_CHOICES = (
     (3, _('Weak Accept')),
     (4, _('Accept')),
     (5, _('Strong Accept')),
-    (6, _('N/A - Abstain')),
-    (7, _('N/A - Recused')),
-)
+    (6, _('N/A - Choose not to answer')),
+) + settings.RECOMMENDATION_CHOICES
 
 NO_RECOMMENDATIONS = [1,2]
 YES_RECOMMENDATIONS = [3,4,5]
-MAYBE_RECOMMENDATIONS = [0,6,7]
+MAYBE_RECOMMENDATIONS = [0,6] + settings.MAYBE_RECOMMENDATIONS
 
 def map_recommendation (raw_recommendation):
     if(raw_recommendation in NO_RECOMMENDATIONS):

@@ -59,6 +59,10 @@ msgstr "5"
 msgid "n/a - choose not to answer"
 msgstr "---------"
 
+#: hypha/application/review/options.py:34
+msgid "N/A - Choose not to answer"
+msgstr "N/A - Abstain"
+
 msgid "Open Review"
 msgstr "Open GAC Review"
 
