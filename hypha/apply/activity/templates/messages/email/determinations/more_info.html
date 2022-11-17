@@ -1,13 +1,2 @@
-{% load activity_tags %}{% load bleach_tags i18n %}{{ determination.message|add_ptag_newlines|bleach|striptags }}
-
-You may update your proposal here:  {{ request.scheme }}://{{ request.get_host }}{{ determination.get_absolute_url }}
-
-If you would like to discuss these requested changes, please call me at +1-858-477-9900.
-
-Warmly,
-Chelsea
-
-Chelsea Párraga
-Grants Manager
-+1-858-477-9900
-{{ ORG_STAFF_EMAIL }}
+{% load activity_tags bleach_tags %}
+{{ determination.message|add_ptag_newlines|bleach|striptags }}
