@@ -425,7 +425,6 @@ SingleStageExternalDefinition = [
         'ext_external_review': {
             'transitions': {
                'ext_external_review_more_info': _('Request More Information'),
-                'ext_almost': _('Accept but additional info required'),
                 'ext_accepted': _('Accept'),
                 'ext_external_review_rejected': _('Dismiss'),
                 'ext_external_review_withdrawn': _('Withdraw'),
@@ -466,22 +465,11 @@ SingleStageExternalDefinition = [
         },
     },
     {
-        'ext_almost': {
-            'transitions': {
-                'ext_accepted': _('Accept'),
-                'ext_withdrawn': _('Withdraw'),
-                'ext_external_review': _('Open External Review (revert)'),
-            },
-            'display': _('Accepted but additional info required'),
-            'stage': RequestExt,
-            'permissions': applicant_edit_permissions,
-        },
         'ext_accepted': {
             'transitions': {
                 'ext_external_review': _('Open Internal Review (revert)'),
             },
             'display': _('Accepted'),
-            'future': _('Application Outcome'),
             'stage': RequestExt,
             'permissions': staff_edit_permissions,
         },
