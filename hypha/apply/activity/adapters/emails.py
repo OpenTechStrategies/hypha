@@ -48,7 +48,7 @@ class EmailAdapter(AdapterBase):
     def get_subject(self, message_type, source):
         if source:
             if is_ready_for_review(message_type) or is_reviewer_update(message_type):
-                subject = _('Application ready to review: {source.title}').format(
+                subject = _('Application ready to review: Submission#{source.id}:{source.title}').format(
                     source=source
                 )
                 if message_type in {
@@ -58,7 +58,7 @@ class EmailAdapter(AdapterBase):
                     subject = _('Multiple applications are now ready for your review')
             elif message_type in {MESSAGES.REVIEW_REMINDER}:
                 subject = _(
-                    'Reminder: Application ready to review: {source.title}'
+                    'Reminder: Application ready to review: Submission#{source.id}:{source.title}'
                 ).format(source=source)
             else:
                 try:
