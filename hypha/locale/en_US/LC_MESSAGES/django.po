@@ -132,3 +132,45 @@ msgstr "Needs eligibility review (revert)"
 
 msgid "Screening statuses"
 msgstr "Eligibility"
+
+#: hypha/apply/categories/models.py:57
+msgid "Archived terms can be viewed but not set on content."
+msgstr "Archived tags can be viewed but not set on content."
+
+#: hypha/apply/categories/models.py:115
+msgid "Cannot delete root term."
+msgstr "'Cannot delete root tag."
+
+#: hypha/apply/categories/models.py:131
+msgid "Meta Term"
+msgstr "Tag"
+
+#: hypha/apply/funds/templates/funds/includes/admin_primary_actions.html:57
+#: hypha/apply/funds/templates/funds/includes/meta_terms_block.html:3
+#: hypha/apply/categories/models.py:132
+msgid "Meta Terms"
+msgstr "Tags"
+
+#: hypha/apply/categories/models.py:155
+msgid "N/A - Root Term"
+msgstr "N/A - Root Tag"
+
+#: hypha/apply/categories/models.py:158
+msgid " (Root - First term can be named root)"
+msgstr " (Root - First tag can be named root)"
+
+#: hypha/apply/funds/forms.py:539
+msgid "Meta terms"
+msgstr "Tags"
+
+#: hypha/apply/funds/forms.py:542
+msgid "Meta terms are hierarchical in nature."
+msgstr "Tags are hierarchical in nature."
+
+#: hypha/apply/funds/templates/funds/includes/meta_terms_block.html:9
+msgid "None. Meta terms can be added to a submission using Meta terms button at top."
+msgstr "None. Tags can be added to a submission using Tags button at top."
+
+#: hypha/apply/funds/templates/funds/includes/update_meta_terms_form.html:3
+msgid "Update Meta Terms"
+msgstr "Update Tags"

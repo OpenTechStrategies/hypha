@@ -112,7 +112,7 @@ class MetaTerm(index.Indexed, MP_Node):
 
     def delete(self):
         if self.is_root():
-            raise PermissionDenied('Cannot delete root term.')
+            raise PermissionDenied(_('Cannot delete root term.'))
         else:
             super().delete()
 
@@ -128,8 +128,8 @@ class MetaTerm(index.Indexed, MP_Node):
         return self.name
 
     class Meta:
-        verbose_name = 'Meta Term'
-        verbose_name_plural = 'Meta Terms'
+        verbose_name = _('Meta Term')
+        verbose_name_plural = _('Meta Terms')
 
 
 class MetaTermChoiceField(forms.ModelChoiceField):
@@ -152,10 +152,10 @@ class MetaTermForm(WagtailAdminModelForm):
         if instance.is_root() or MetaTerm.objects.count() == 0:
             self.fields['parent'].disabled = True
             self.fields['parent'].required = False
-            self.fields['parent'].empty_label = 'N/A - Root Term'
+            self.fields['parent'].empty_label = _('N/A - Root Term')
             self.fields['parent'].widget = forms.HiddenInput()
 
-            self.fields['name'].label += ' (Root - First term can be named root)'
+            self.fields['name'].label += _(' (Root - First term can be named root)')
         elif instance.id:
             self.fields['parent'].initial = instance.get_parent()
 

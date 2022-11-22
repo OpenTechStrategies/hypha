@@ -7,14 +7,14 @@ const SubmissionMetaTerms = (props) => {
 
     if (!props.metaTerms.length) {
         return (
-            <SidebarBlock title="Meta Terms">
-                <p>No Meta Terms available.</p>
+            <SidebarBlock title="Tags">
+                <p>No Tags available.</p>
             </SidebarBlock>
         );
     }
 
     return (
-        <SidebarBlock title="Meta Terms">
+        <SidebarBlock title="Tags">
             <div className="submission-metaterms">
                 {props.metaTerms.map(metaTerm => {
                     return (
