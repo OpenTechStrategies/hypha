@@ -27,5 +27,9 @@
             $(reviewer).toggleClass('is-hidden');
         });
     }
+    $('.sidebar__inner--heading > .arrow').click(function (e) {
+        $(this).parent().parent().toggleClass('is-expanded');
+        $('.reviews-sidebar').toggleClass('is-hidden');
+    });
 
 })(jQuery);
