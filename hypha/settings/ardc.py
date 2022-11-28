@@ -1,5 +1,8 @@
-RECOMMENDATION_CHOICES = (
-    (7, ('N/A - Recused')),
-)
-
-MAYBE_RECOMMENDATIONS = [7]
+RECOMMENDATION_CHOICES = {
+    'CHOICES': (
+        (7, ('N/A - Recused')),
+        ),
+    'YES': [],
+    'NO': [],
+    'MAYBE': [7]
+}
