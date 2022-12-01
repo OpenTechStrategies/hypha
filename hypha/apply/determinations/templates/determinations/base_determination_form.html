@@ -15,10 +15,10 @@
 {% block form %}
 {% include "forms/includes/form_errors.html" with form=form %}
 
-<div class="wrapper wrapper--medium wrapper--inner-space-medium">
+<div class="wrapper wrapper--sidebar wrapper--inner-space-medium">
     {% block determination_information %}
     {% endblock %}
-
+    <div class="wrapper--sidebar--inner">
     <form class="form form--with-p-tags" action="" method="post">
         {{ form.media }}
         {% csrf_token %}
@@ -64,6 +64,31 @@
             {{ message|bleach }}
         </div>
     {% endfor %}
+    </div>
+
+    <div class="determination-sidebar">
+        <div class="sidebar__inner">
+            <h3>{% trans "Proposal Information" %}</h3>
+            <h5>{% trans "Requested Funding" %}</h5>
+            {{ submission.get_value_display }}
+            <h5>{% trans "Project Duration" %}</h5>
+            {{ submission.get_duration_display }}
+            <h5>{% trans "Legal Name" %}</h5>
+            {{ submission.get_full_name_display }}
+            <h5>{% trans "E-mail" %}</h5>
+            {{ submission.get_email_display }}
+            <h5>{% trans "Address" %}</h5>
+            {{ submission.get_address_display }}
+            <h5>{% trans "EIN" %}</h5>
+            {{ submission.get_Ein_display }}
+            <h5>{% trans "Organization Name" %}</h5>
+            {{ submission.get_organization_name_display }}
+            <div class="rich-text rich-text--answers">
+                {{ submission.output_answers }}
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
 {% endblock %}
