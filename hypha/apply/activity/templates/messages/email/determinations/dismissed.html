@@ -1,4 +1,0 @@
-{% load activity_tags bleach_tags %}
-Your grant proposal to ARDC for the {{ determination.submission.title|default:'Application' }} project has been declined. We regret to let you know that your project was not a fit for our funding at this time because:
-{{ determination.message|add_ptag_newlines|bleach|striptags }}
-Thank you for the time you invested in your application. We are happy to work with you in the future on a proposal that better fits our goals.

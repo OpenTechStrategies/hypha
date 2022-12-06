@@ -3,11 +3,12 @@
 
 {% block content %}{% endblock %}
 
-Sincerely,
-Chelsea KF0FVJ
-Grants Manager
-C: 520-471-6903
-
 {% block more_info %}{% endblock %}
 
-{% blocktrans %}{% endblocktrans %}
+{% blocktrans %}Kind Regards,
+The {{ ORG_SHORT_NAME }} Team{% endblocktrans %}
+
+--
+{{ ORG_LONG_NAME }}
+{{ PUBLIC_SITE.root_url }}
+{% block post_signature_content %}{% endblock %}
