@@ -85,3 +85,10 @@
         }
     }
 }
+
+.determination-sidebar {
+
+    @include media-query(tablet-landscape) {
+        flex:1;
+    }
+}
