@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -81,11 +82,11 @@ class LoginView(TwoFactorLoginView):
             context_data["is_public_site"] = False
         return context_data
 
-
 @method_decorator(login_required, name='dispatch')
-class AccountView(UpdateView):
+class AccountView(SuccessMessageMixin, UpdateView):
     form_class = ProfileForm
     template_name = 'users/account.html'
+    success_message = 'Profile Updated.'
 
     def get_object(self):
         return self.request.user
@@ -109,6 +110,7 @@ class AccountView(UpdateView):
             token_signer = Signer()
             self.request.session['signed_token'] = token_signer.sign(user.email)
             return redirect('{}?{}'.format(base_url, urlencode({'value': signed_value})))
+
         return super(AccountView, self).form_valid(form)
 
     def get_success_url(self,):
