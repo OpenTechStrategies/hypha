@@ -8,6 +8,27 @@
         margin-bottom: 20px;
         border: 1px solid $color--mid-grey;
 
+        &--heading {
+            & > .arrow {
+                width: 0;
+                height: 0;
+                border-left: 9px solid $color--light-blue;
+                border-top: 6px solid transparent;
+                border-bottom: 6px solid transparent;
+                position: relative;
+                display: inline-block;
+                margin-left: 10px;
+                transform: rotate(0);
+                transition: transform 0.25s ease-out;
+                cursor: pointer;
+            }
+        }
+
+        &.is-expanded {
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
         &--light-blue {
             background-color: $color--light-blue-90;
         }
