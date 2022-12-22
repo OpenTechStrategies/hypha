@@ -133,6 +133,10 @@ msgstr "Needs eligibility review (revert)"
 msgid "Screening statuses"
 msgstr "Eligibility"
 
+#: hypha/apply/funds/tables.py:265
+msgid "Terms"
+msgstr "Tags"
+
 #: hypha/apply/categories/models.py:57
 msgid "Archived terms can be viewed but not set on content."
 msgstr "Archived tags can be viewed but not set on content."
