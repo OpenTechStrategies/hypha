@@ -186,13 +186,13 @@ class TestReviewerDashboard(BaseViewTestCase):
     def test_no_submissions_waiting_for_review(self):
         submission = ApplicationSubmissionFactory(status='external_review', workflow_stages=2, reviewers=[])
         response = self.get_page()
-        self.assertNotContains(response, submission.title)
+        self.assertContains(response, 'Find new applications to review')
         self.assertEqual(response.context['in_review_count'], 0)
 
     def test_submission_assigned_but_not_in_external_review_status(self):
         submission = ApplicationSubmissionFactory(status='concept_review_discussion', workflow_stages=2, reviewers=[self.user])
         response = self.get_page()
-        self.assertNotContains(response, submission.title)
+        self.assertContains(response, 'Find new applications to review')
         self.assertEqual(response.context['in_review_count'], 0)
 
 
