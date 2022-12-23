@@ -30,7 +30,7 @@ class MetaTerm extends React.PureComponent {
                             className="button button--primary button--full-width button--bottom-space metaterm-button"
                             onClick={() => this.setState({open: true})}
                         >
-                            Meta Terms
+                            Tags
                         </button>
                         <Modal
                             className={classes.modal}

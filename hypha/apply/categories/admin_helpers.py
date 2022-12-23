@@ -4,7 +4,7 @@ from wagtail.contrib.modeladmin.helpers import ButtonHelper
 
 class MetaTermButtonHelper(ButtonHelper):
     def delete_button(self, pk, *args, **kwargs):
-        """Ensure that the delete button is not shown for root meta term."""
+        """Ensure that the delete button is not shown for root tag."""
         instance = self.model.objects.get(pk=pk)
         if instance.is_root():
             return
@@ -17,7 +17,7 @@ class MetaTermButtonHelper(ButtonHelper):
         return self.finalise_classname(classnames, exclude or [])
 
     def add_child_button(self, pk, child_verbose_name, **kwargs):
-        """Build a add child button, to easily add a child under meta term."""
+        """Build a add child button, to easily add a child under tag."""
         instance = self.model.objects.get(pk=pk)
         if instance.is_archived or instance.get_parent() and instance.get_parent().is_archived:
             return

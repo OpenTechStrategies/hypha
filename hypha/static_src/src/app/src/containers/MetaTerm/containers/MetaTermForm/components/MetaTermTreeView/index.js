@@ -110,11 +110,11 @@ class MetaTermTreeView extends React.PureComponent {
     render() {
         return (
             <div className="react-modal metaTerm-form">
-                <h4 className="react-modal__header-bar">Update Meta Terms</h4>
+                <h4 className="react-modal__header-bar">Update Tags</h4>
                 <div className="react-modal__inner">
                     <button className="react-modal__close" onClick={this.props.closeForm}>&#10005;</button>
-                    <p><strong>Meta Terms</strong></p>
-                    <p>Meta Terms are hierarchical in nature.</p>
+                    <p><strong>Tags</strong></p>
+                    <p>Tags are hierarchical in nature.</p>
                     <div className="treeview">
                         <TreeView
                             className={this.props.classes.root}
