@@ -61,7 +61,7 @@ def render_title(record):
         title = record.title
     except AttributeError:
         title = record.submission.title
-    return textwrap.shorten(title, width=30, placeholder="...")
+    return textwrap.shorten(title, width=55, placeholder="...")
 
 
 def render_reviewer_link(record):
@@ -321,7 +321,7 @@ class SubmissionFilterAndSearch(SubmissionFilter):
         if value.strip().startswith("#") and len(possible_ids) > 0:
             return queryset.filter(id__in=possible_ids)
         return queryset.filter(Q(id__in=possible_ids)|Q(search_data__icontains=value))
-    
+
     def __init__(self, *args, **kwargs):
         limit_statuses ={'draft', 'in_discussion', 'more_info', 'internal_review', 'accepted', 'rejected', 'ext_withdrawn', 'ext_external_review'}
         super().__init__(limit_statuses=limit_statuses, **kwargs)
