@@ -323,8 +323,8 @@ class SubmissionFilterAndSearch(SubmissionFilter):
         return queryset.filter(Q(id__in=possible_ids)|Q(search_data__icontains=value))
 
     def __init__(self, *args, **kwargs):
-        limit_statuses ={'draft', 'in_discussion', 'more_info', 'internal_review', 'accepted', 'rejected', 'ext_withdrawn', 'ext_external_review'}
-        super().__init__(limit_statuses=limit_statuses, **kwargs)
+        kwargs["limit_statuses"] = {'draft', 'in_discussion', 'more_info', 'internal_review', 'accepted', 'rejected', 'ext_withdrawn', 'ext_external_review'}
+        super().__init__(**kwargs)
 
 
 class SubmissionDashboardFilter(filters.FilterSet):
