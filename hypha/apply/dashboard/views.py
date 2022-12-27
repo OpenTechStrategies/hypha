@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
@@ -117,7 +118,7 @@ class AdminDashboardView(MyFlaggedMixin, TemplateView):
         }
 
     def projects_to_approve(self):
-        if not self.request.user.is_approver:
+        if not self.request.user.is_apply_staff:
             return {
                 'count': None,
                 'table': None,
@@ -161,6 +162,8 @@ class FinanceDashboardView(MyFlaggedMixin, TemplateView):
 
         context.update({
             'active_invoices': self.active_invoices(),
+            'invoices_for_approval': self.invoices_for_approval(),
+            'invoices_to_convert': self.invoices_to_convert(),
             'waiting_for_approval': self.waiting_for_approval(),
         })
 
@@ -172,6 +175,29 @@ class FinanceDashboardView(MyFlaggedMixin, TemplateView):
         else:
             invoices = Invoice.objects.for_finance_1()
 
+        return {
+            'count': invoices.count(),
+            'table': InvoiceDashboardTable(invoices),
+        }
+
+    def invoices_for_approval(self):
+        if self.request.user.is_finance_level_2:
+            invoices = Invoice.objects.approved_by_finance_1()
+        else:
+            invoices = Invoice.objects.approved_by_staff()
+
+        return {
+            'count': invoices.count(),
+            'table': InvoiceDashboardTable(invoices)
+        }
+
+    def invoices_to_convert(self):
+        if settings.INVOICE_EXTENDED_WORKFLOW and self.request.user.is_finance_level_1:
+            return {
+                'count': None,
+                'table': None,
+            }
+        invoices = Invoice.objects.waiting_to_convert()
         return {
             'count': invoices.count(),
             'table': InvoiceDashboardTable(invoices),
@@ -294,13 +320,27 @@ class ContractingDashboardView(MyFlaggedMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'waiting_for_approval': self.waiting_for_approval()
+            'paf_waiting_for_approval': self.paf_waiting_for_approval(),
+            'paf_waiting_for_final_approval': self.paf_waiting_for_final_approval()
         })
 
         return context
 
-    def waiting_for_approval(self):
-        if not self.request.user.is_contracting:
+    def paf_waiting_for_final_approval(self):
+        if not self.request.user.is_contracting_approver:
+            return {
+                'count': None,
+                'table': None,
+            }
+        to_paf_approve = Project.objects.waiting_for_approval().for_table()
+        to_paf_final_approval = [paf for paf in to_paf_approve if paf.can_make_final_approval]
+        return {
+            'count': len(to_paf_final_approval),
+            'table': ProjectsDashboardTable(data=to_paf_final_approval),
+        }
+
+    def paf_waiting_for_approval(self):
+        if not self.request.user.is_contracting or self.request.user.is_contracting_approver:
             return {
                 'count': None,
                 'table': None,
