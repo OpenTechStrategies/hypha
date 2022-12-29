@@ -13,11 +13,9 @@ from hypha.apply.projects.models.payment import (
 from hypha.apply.projects.models.project import WAITING_FOR_APPROVAL
 from hypha.apply.projects.tests.factories import InvoiceFactory, ProjectFactory
 from hypha.apply.review.tests.factories import ReviewFactory, ReviewOpinionFactory
-from hypha.apply.users.groups import APPROVER_GROUP_NAME
 from hypha.apply.users.tests.factories import (
     AdminFactory,
     ApplicantFactory,
-    GroupFactory,
     ReviewerFactory,
     StaffFactory,
     StaffWithoutWagtailAdminAccessFactory,
@@ -84,7 +82,7 @@ class TestStaffDashboard(BaseViewTestCase):
     def test_waiting_for_review_with_count(self):
         submission = ApplicationSubmissionFactory(status='external_review', workflow_stages=2, reviewers=[self.user])
         response = self.get_page()
-        self.assertContains(response, 'Waiting for your review')
+        self.assertContains(response, 'Submissions waiting for your review')
         self.assertContains(response, submission.title)
         self.assertEqual(response.context['awaiting_reviews']['count'], 1)
 
@@ -94,7 +92,7 @@ class TestStaffDashboard(BaseViewTestCase):
         review = ReviewFactory(submission=submission, author__reviewer=staff, author__staff=True, recommendation_yes=True)
         ReviewOpinionFactory(review=review, author__reviewer=self.user, opinion_agree=True)
         response = self.get_page()
-        self.assertContains(response, 'Waiting for your review')
+        self.assertContains(response, 'Submissions waiting for your review')
         self.assertContains(response, "Nice! You're all caught up.")
         self.assertEqual(response.context['awaiting_reviews']['count'], 0)
 
@@ -134,18 +132,8 @@ class TestStaffDashboard(BaseViewTestCase):
         response = self.get_page()
         self.assertNotContains(response, "Active Invoices")
 
-    def test_non_project_approver_cannot_see_projects_awaiting_review_stats_or_table(self):
+    def test_staff_can_see_projects_awaiting_review_stats_or_table(self):
         ProjectFactory(is_locked=False, status=WAITING_FOR_APPROVAL)
-
-        response = self.get_page()
-        self.assertNotContains(response, "Projects awaiting approval")
-
-    def test_project_approver_can_see_projects_awaiting_review_stats_or_table(self):
-        ProjectFactory(is_locked=False, status=WAITING_FOR_APPROVAL)
-
-        user = StaffFactory()
-        user.groups.add(GroupFactory(name=APPROVER_GROUP_NAME))
-        self.client.force_login(user)
 
         response = self.get_page()
         self.assertContains(response, "Projects awaiting approval")
@@ -179,7 +167,7 @@ class TestReviewerDashboard(BaseViewTestCase):
     def test_waiting_for_review_with_count(self):
         submission = ApplicationSubmissionFactory(status='external_review', workflow_stages=2, reviewers=[self.user])
         response = self.get_page()
-        self.assertContains(response, 'Waiting for your review')
+        self.assertContains(response, 'Submissions waiting for your review')
         self.assertContains(response, submission.title)
         self.assertEqual(response.context['in_review_count'], 1)
 

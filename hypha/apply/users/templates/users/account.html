@@ -1,7 +1,7 @@
 {% extends 'base-apply.html' %}
 {% load i18n users_tags %}
 
-{% block title %}Account{% endblock %}
+{% block title %}{% trans "Account" %}{% endblock %}
 
 {% block content %}
 <div class="admin-bar" xmlns="http://www.w3.org/1999/html">
@@ -16,7 +16,7 @@
 
 <div class="profile">
     <div class="profile__column">
-        <h3>Profile</h3>
+        <h3>{% trans "Profile" %}</h3>
         <form action="" method="post" class="form">
             {% csrf_token %}
             {% for field in form %}
@@ -37,7 +37,7 @@
             <h4>{% trans "Two-Factor Authentication (2FA)" %}</h4>
             {% if default_device %}
                 <div>
-                    <p><a class="button button--primary" href="{% url 'users:backup_tokens_password' %}">{% trans "Show backup codes" %}</a></p>
+                    <p><a class="button button--primary" href="{% url 'users:backup_tokens_password' %}">{% trans "Backup codes" %}</a></p>
                     <p><a class="button button--primary" href="{% url 'two_factor:disable' %}">{% trans "Disable 2FA" %}</a></p>
                 </div>
             {% else %}

@@ -356,10 +356,6 @@ class Project(BaseStreamForm, AccessFormData, models.Model):
         correct_state = self.status == COMMITTED and not self.is_locked
         return correct_state and self.user_has_updated_details
 
-    @property
-    def requires_approval(self):
-        return not self.approvals.exists()
-
     def get_missing_document_categories(self):
         """
         Get the number of documents required to meet each DocumentCategorys minimum
@@ -479,6 +475,7 @@ class PacketFile(models.Model):
 
     title = models.TextField()
     document = models.FileField(upload_to=document_path, storage=PrivateStorage())
+    created_at = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
         return _('Project file: {title}').format(title=self.title)

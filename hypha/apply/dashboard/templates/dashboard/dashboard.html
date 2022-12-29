@@ -61,7 +61,7 @@
     </div>
 
     <div id="submissions-awaiting-review" class="wrapper wrapper--bottom-space">
-        {% include "dashboard/includes/waiting-for-review.html" with in_review_count=awaiting_reviews.count my_review=awaiting_reviews.table display_more=awaiting_reviews.display_more active_statuses_filter=awaiting_reviews.active_statuses_filter %}
+        {% include "dashboard/includes/submissions-waiting-for-review.html" with in_review_count=awaiting_reviews.count my_review=awaiting_reviews.table display_more=awaiting_reviews.display_more active_statuses_filter=awaiting_reviews.active_statuses_filter %}
     </div>
 
     {% if my_flagged.table.data %}
@@ -72,6 +72,13 @@
 
     {% if rounds.closed or rounds.open %}
         {% include "funds/includes/round-block.html" with closed_rounds=rounds.closed open_rounds=rounds.open title="Your rounds and labs" page_type='dashboard' %}
+    {% endif %}
+
+    {% if projects_to_approve.count %}
+    <div id="projects-awaiting-approval" class="wrapper wrapper--bottom-space">
+        <h4 class="heading heading--normal">{% trans "Projects awaiting approval" %}</h4>
+        {% render_table projects_to_approve.table %}
+    </div>
     {% endif %}
 
     {% if projects.table.data %}
@@ -86,13 +93,6 @@
         </div>
         {% endif %}
 
-    </div>
-    {% endif %}
-
-    {% if projects_to_approve.count %}
-    <div id="projects-awaiting-approval" class="wrapper wrapper--bottom-space">
-        <h4 class="heading heading--normal">{% trans "Projects awaiting approval" %}</h4>
-        {% render_table projects_to_approve.table %}
     </div>
     {% endif %}
 

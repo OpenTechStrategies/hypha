@@ -126,6 +126,7 @@ class FullNameBlock(ApplicationMustIncludeFieldBlock):
                                  default=_("We will use this name when we communicate with you about your proposal."))
 
     class Meta:
+        label = _('Full name')
         icon = 'user'
 
 
