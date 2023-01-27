@@ -1,1 +1,2 @@
-{% extends "messages/email/applicant_base.html" %}{% block content %}{% if determination.clean_outcome == 'Approved' %}{% include "./determinations/approved.html" %}{% endif %}{% if determination.clean_outcome == 'Dismissed' %}{% include "./determinations/dismissed.html" %}{% endif %}{% if determination.clean_outcome == 'More information requested' %}{% include "./determinations/more_info.html" %}{% endif %}{% endblock %}
+{% load activity_tags bleach_tags %}
+{{ determination.message|add_ptag_newlines|bleach|striptags }}
