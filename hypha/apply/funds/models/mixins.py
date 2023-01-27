@@ -267,8 +267,14 @@ class AccessFormData:
             data = self.data(field_id)
         # Some migrated content have empty address.
         if not data:
-            return '-'
+            data = '-'
         return field.render(context={'data': data, 'include_question': include_question})
+
+    def render_named_blocks_answers(self):
+        return [
+            self.render_answer(field_id, include_question=True)
+            for field_id in self.named_blocks
+        ]
 
     def render_answers(self):
         # Returns a list of the rendered answers
@@ -294,6 +300,9 @@ class AccessFormData:
     def output_answers(self):
         # Returns a safe string of the rendered answers
         return mark_safe(''.join(self.render_answers()))
+
+    def output_named_blocks_answers(self):
+        return mark_safe(''.join(self.render_named_blocks_answers()))
 
     def output_text_answers(self):
         return mark_safe(''.join(self.render_text_blocks_answers()))
