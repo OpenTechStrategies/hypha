@@ -16,9 +16,29 @@
         Inputmask('99-9999999').mask($('#ein'));
     });
 
+    $('#draft').click(function () {
+        const form = $('.application-form');
+        form.submit();
+    });
+
+    $('#submitBtn,#confirm,#return').click(function () {
+        $('header').toggleClass('dim');
+        $('footer').toggleClass('dim');
+        $('.application-form').toggleClass('dim');
+        $('#submission-confirmation').toggleClass('hidden');
+    });
+
+    $('#confirm').click(function () {
+        $('#draft').removeAttr('name');
+        $('#draft').removeAttr('value');
+        const form = $('.application-form');
+        form.submit();
+    });
+
+
     $('.application-form').each(function () {
         var $application_form = $(this);
-        var $application_form_button = $application_form.find('button[type="submit"]');
+        var $application_form_button = $application_form.find('#submitBtn');
 
         // set aria-required attribute true for required fields
         $application_form.find('input[required]').each(function (index, input_field) {
