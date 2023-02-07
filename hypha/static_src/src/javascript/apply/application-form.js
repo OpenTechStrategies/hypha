@@ -16,16 +16,59 @@
         Inputmask('99-9999999').mask($('#ein'));
     });
 
+    let draftBtn = false;
+    let submitBtn = false;
     $('#draft').click(function () {
-        const form = $('.application-form');
-        form.submit();
+        draftBtn = true;
+    });
+    $('#submitBtn').click(function () {
+        submitBtn = true;
+    });
+    $('#draft, #submitBtn').click(function () {
+        let check = false;
+        const req_msg = "<div class='tooltip tooltiptext'>*Please fill out this field.</div>";
+        // inputs required error
+        const req = $('input').filter('[required]');
+        req.each(function (index, element) {
+            if (element.value === '') {
+                check = true;
+                $(element.parentElement).append(req_msg);
+            }
+        });
+        const $application_form = $('.application-form');
+        const rte = $application_form.find('.tiny_mce');
+        // rich text field reuiqred
+        if (rte) {
+            let req_rte = rte.find('.form__required');
+            if (req_rte != null && req_rte.length === 1) {
+                let iframe = rte[0].parentElement.querySelector('iframe');
+                let header = rte[0].parentElement.querySelector('.form__item');
+                let text = iframe.contentDocument.querySelector('p').innerText;
+                if (text.length === 0 || text === '\n') {
+                    $(header).append(req_msg);
+                    check = true;
+                }
+            }
+        }
+        if (check) {
+            // scroll to first error
+            const $error_fields = $application_form.find('.tooltip');
+            if ($error_fields.length) {
+                $error_fields[0].scrollIntoView();
+            }
+        }
+        else {
+            if (submitBtn) {
+                togglePopUp();
+            }
+            else if (draftBtn) {
+                $application_form.submit();
+            }
+        }
     });
 
-    $('#submitBtn,#confirm,#return').click(function () {
-        $('header').toggleClass('dim');
-        $('footer').toggleClass('dim');
-        $('.application-form').toggleClass('dim');
-        $('#submission-confirmation').toggleClass('hidden');
+    $('#confirm,#return').click(function () {
+        togglePopUp();
     });
 
     $('#confirm').click(function () {
@@ -35,6 +78,12 @@
         form.submit();
     });
 
+    function togglePopUp() {
+        $('header').toggleClass('dim');
+        $('footer').toggleClass('dim');
+        $('.application-form').toggleClass('dim');
+        $('#submission-confirmation').toggleClass('hidden');
+    }
 
     $('.application-form').each(function () {
         var $application_form = $(this);
