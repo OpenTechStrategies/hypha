@@ -129,7 +129,7 @@
         align-items: start;
         column-gap: 25px;
     }
-    
+
     // Inner spacing
     &--inner-space-small {
         padding: 20px 0;
@@ -190,10 +190,6 @@
 
         @include media-query(tablet-portrait) {
             flex-direction: row;
-
-            > div:last-child {
-                flex-basis: 210px;
-            }
         }
 
         &--inner {
