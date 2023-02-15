@@ -1,0 +1,182 @@
+**1. Application submission flow**
+   - Draft pass:
+     - Fill all the required fields (i.e fields have a * symbol after the label)
+     - Save the form draft
+   - Draft Fail:
+     - Fill only some of required field and try to save the form.
+     - It should raise the required errors
+   - Submission pass:
+     - Fill all the required files.
+     - Submit the form.
+     - Submission successful message.
+     - An email should be send.
+   - Submission Fail:
+     - Fill only some of required field and try to save the form.
+     - It should raise the required errors
+   - Submission file upload:
+     - Fill the required fields.
+     - Submit the form with different file formats (Accepted file types are .doc, .docx, .odp, .ods, .odt, .pdf, .ppt, .pptx, .rtf, .txt, .xls, .xlsx)
+
+**2. Determination form flow**
+   - Determination draft pass:
+     - Select determination type
+     - Save as draft
+     - You should be redirected to submission with determination submitted having status draft.
+   - Determination draft fail:
+     - Don't select any determination type and try to save the form
+     - It should raise the required errors
+   - Determination submit pass:
+     - Select determination type
+     - Submit the determination
+     - Determination should be submitted and you should be redirected to submission.
+   - Determination submit fail:
+     - Don't select any determination type
+     - Submit the determination
+     - It should raise the required errors
+
+**3. Review form flow**
+  - Review draft pass:
+    - Fill all the required fields.
+    - Save as draft
+    - You should be redirected to submission detail view with a review submitted having draft status
+  - Review draft fail:
+    - Fill only some required fields and try to save as draft
+    - It should raise the required error fields error.
+  - Review submit pass:
+    - Fill all the required fields and submit the form
+    - You should be redirected to submission page and able to view to review along with score in review's section
+  - Review submit fail:
+    - Fill only some required fields and try to submit the draft
+    - It should raise the required error fields error.
+
+**4. Moving an application across statuses (Chelsea's workflow)**
+  - Process 1:
+    - On the submission detail page, click the update status button.
+    - Select new status and submit the form
+    - Your application status should be updated.
+  - Process 2:
+    - On the all submissions page, select the application.
+    - From menu above the table, select change status.
+    - Select new status from the form and submit the form
+    - Application status should be updated.
+
+**5. An admin or reviewer user should be able to look at someone else's review.**
+  - On the application detail view, head over to 'Reviews and Assignee's section in the right sidebar.
+  - Expand the section by clicking on arrow next to 'Reviews and Assignee's heading.
+  - You should be able to see all reviews related to this application. 
+  
+**6. Admin workflows:**
+  - **Fund creation**:
+    - Fund draft pass:
+      - Fill all the required fields.
+      - Save as draft.
+      - Fund will be saved as draft but won't be visible to until published.
+    - Fund draft fail:
+      - Fill only some of the required field and try to save the fund as draft.
+      - It should raise the required errors.
+    - Fund publish pass:
+      - Fill all the required fields.
+      - Publish Fund.
+      - Fund created and published message.
+      - Fund should be published and visible. 
+    - Fund publish fail:
+      - Fill only some of the required fields and try to publish the fund.
+      - It should raise the required errors.
+  - **Round creation:**
+    - Round draft pass:
+      - Select a fund.
+      - Fill all the required fields.
+      - Save as draft.
+      - Round will be saved as draft but won't be visible until published.
+    - Round draft fail:
+      - Select a fund.
+      - Fill only some of the required field and try to save the round as draft.
+      - It should raise the required errors.
+    - Round publish pass:
+      - Select a fund.
+      - Fill all the required fields.
+      - Publish round
+      - Round created and published message.
+      - Round should be published and visible
+    - Round publish fail:
+      - Select a fund.
+      - Fill only some of the required fields and try to publish the round.
+      - It should raise required errors.
+  - **Creating users:**
+    - User created pass:
+      - Fill all the required fields.
+      - Select a role for the user.
+      - Add user.
+      - User should be created and you should be redirected to users page.
+    - User created fail: 
+      - Fill only some of the required fields and try to add user.
+      - It should raise the required errors.
+  - **Administering users:**
+    - Edit user pass:
+      - Fill all the required fields.
+      - Save user.
+      - User updated message.
+      - User should be updated.
+    - Edit user fail:
+      - Fill only some of the required fields and try to save user.
+      - It should raise the required errors.
+    - Impersonate user pass:
+      - By clicking Impersonate the selected users profile should open.
+      - By clicking Release you come back to your profile.
+    - Impersonate user fail:
+      - By clicking Impersonate the selected user profile doesn't open.
+      - By clicking  Impersonate the user profile opens but when you click release you don't go back to your profile.
+  - **Application form creation:**
+    - Create Application form pass:
+      - Fill all the required fields.
+      - Add any extra form field as per need.
+      - Save form.
+      - Application form created message.
+      - Application form should be created.
+    - Create Application form fail:
+      - Fill only some of the required fields and try to save the form.
+      - It should raise the required errors.
+  - **Review form creation:**
+    - Create Review form pass:
+      - Fill all the required fields.
+      - Add any extra form field as per need.
+      - Save form.
+      - Review form created message.
+      - Review form should be created.
+    - Create Review form fail:
+      - Fill only some of the required fields and try to save the form.
+      - It should raise the required errors.
+  - **Determination message creation:**
+    - Create determination messages.
+    - Save the messages.
+  - **Determination form creation:**
+    - Create Determination form pass:
+      - Fill all the required fields.
+      - Add any extra form field as per need.
+      - Save form.
+      - Determination form created message.
+      - Determination form should be created.
+    - Create Determination form fail:
+      - Fill only some of the required fields and try to save the form.
+      - It should raise the required errors.
+      
+**7. Eligibility workflow (Chelsea's initial review vs GAC review -- i.e., look at person's role)**
+  - **Assigning reviewers:**
+    - On submissions detail page click on 'Reviewers' button in the right sidebar
+    - Select the reviewers.
+    - Submit the form.
+    - Reviewers should be updated.
+  - **Adding tags:**
+    - On submissions detail page, in the top section of right sidebar, click 'More Actions'
+    - Click add tags and select tags from the form
+    - Submit the form
+    - If there are no tags, go to wagtail admin -> apply -> tags. Add some tags there.
+  - **Responding to applicant:**
+    - Telling them they're ineligible
+    	- This task is acheived through determination form
+    	- Add a new determination with the status 'Dismissed'
+    	- An email will be sent to user informing the in-eligibility
+    - Requesting more information from applicant
+    	- This task is acheived through determination form
+    	- Add a new determination with the status 'Needs more info'
+    	- An email will be sent to user informing that they need to add more information in application
