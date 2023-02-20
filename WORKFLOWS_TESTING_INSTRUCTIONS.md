@@ -1,63 +1,63 @@
 **1. Application submission flow**
    - Draft pass:
-     - Fill all the required fields (i.e fields have a * symbol after the label)
-     - Save the form draft
+     - Fill all the required fields (fields that have a * symbol after the label)
+     - Save the form as a draft.
    - Draft Fail:
-     - Fill only some of required field and try to save the form.
+     - Fill only some of the required fields and try to save the form.
      - It should raise the required errors
    - Submission pass:
-     - Fill all the required files.
+     - Fill all the required fields.
      - Submit the form.
      - Submission successful message.
-     - An email should be send.
+     - An email should be sent.
    - Submission Fail:
-     - Fill only some of required field and try to save the form.
-     - It should raise the required errors
+     - Fill only some of required fields and try to save the form.
+     - It should raise the required errors.
    - Submission file upload:
      - Fill the required fields.
      - Submit the form with different file formats (Accepted file types are .doc, .docx, .odp, .ods, .odt, .pdf, .ppt, .pptx, .rtf, .txt, .xls, .xlsx)
 
 **2. Determination form flow**
    - Determination draft pass:
-     - Select determination type
-     - Save as draft
+     - Select a determination type.
+     - Save as a draft.
      - You should be redirected to submission with determination submitted having status draft.
    - Determination draft fail:
-     - Don't select any determination type and try to save the form
-     - It should raise the required errors
+     - Don't select any determination type and try to save the form.
+     - It should raise the required errors.
    - Determination submit pass:
-     - Select determination type
-     - Submit the determination
-     - Determination should be submitted and you should be redirected to submission.
+     - Select a determination type.
+     - Submit the determination.
+     - Determination should be submitted and you should be redirected to the submission.
    - Determination submit fail:
-     - Don't select any determination type
-     - Submit the determination
-     - It should raise the required errors
+     - Don't select any determination type.
+     - Submit the determination.
+     - It should raise the required error.
 
 **3. Review form flow**
   - Review draft pass:
     - Fill all the required fields.
-    - Save as draft
-    - You should be redirected to submission detail view with a review submitted having draft status
+    - Save as a draft.
+    - You should be redirected to submission detail view with a review submitted having draft status.
   - Review draft fail:
-    - Fill only some required fields and try to save as draft
-    - It should raise the required error fields error.
+    - Fill only some required fields and try to save as a draft.
+    - It should raise the required error.
   - Review submit pass:
-    - Fill all the required fields and submit the form
-    - You should be redirected to submission page and able to view to review along with score in review's section
+    - Fill all the required fields and submit the form.
+    - You should be redirected to submission page and able to view to review along with score in Reviews & assignees section
   - Review submit fail:
-    - Fill only some required fields and try to submit the draft
-    - It should raise the required error fields error.
+    - Fill only some required fields and try to submit the draft.
+    - It should raise the required error.
 
 **4. Moving an application across statuses (Chelsea's workflow)**
   - Process 1:
     - On the submission detail page, click the update status button.
-    - Select new status and submit the form
-    - Your application status should be updated.
+    - Select new status and submit the form.
+    - The application status should be updated.
   - Process 2:
     - On the all submissions page, select the application.
     - From menu above the table, select change status.
-    - Select new status from the form and submit the form
+    - Select new status from the form and submit the form.
     - Application status should be updated.
 
 **5. An admin or reviewer user should be able to look at someone else's review.**
