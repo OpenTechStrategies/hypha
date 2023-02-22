@@ -462,10 +462,6 @@ class DeterminationModelForm(StreamBaseForm, forms.ModelForm, metaclass=MixedMet
             # rendered via streamfield form.
             self.fields[field].disabled = True
 
-        if self.draft_button_name in self.data:
-            for field in self.fields.values():
-                field.required = False
-
         if edit:
             self.fields.pop('outcome')
             self.draft_button_name = None
