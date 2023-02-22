@@ -65,11 +65,17 @@
                 {{ hidden_field }}
             {% endfor %}
 
-            <button class="link link--button-secondary" type="submit" disabled>{% trans "Submit for review" %}</button>
-            <button class="link link--button-tertiary" type="submit" name="draft" value="Save draft" formnovalidate>{% trans "Save draft" %}</button>
+            <input class="link link--button-secondary" id="submitBtn" value="Submit for review" disabled readonly></input>
+            <input class="link link--button-tertiary"  id="draft" name="draft" value="Save draft" readonly></input>
         </form>
         <p class="wrapper--error message-no-js js-hidden">{% trans "You must have Javascript enabled to use this form." %}</p>
-    {% endif %}
+        {% endif %}
+</div>
+<div class="modal hidden" id="submission-confirmation">
+    <h4>{% trans "Submission Confirmation" %}</h4>
+    <p>Are you sure you want to submit the application?</p>
+    <button id="return" class="link link--button-secondary">Return to form</button>
+    <button id="confirm" class="link link--button-secondary">Confirm</button>
 </div>
 {% endblock %}
 
