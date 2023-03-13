@@ -19,7 +19,7 @@
                 display: inline-block;
                 margin-left: 10px;
                 transform: rotate(0);
-                transition: transform 0.25s ease-out;
+                transition: transform .25s ease-out;
                 cursor: pointer;
             }
         }
@@ -29,6 +29,7 @@
                 transform: rotate(90deg);
             }
         }
+
         &--light-blue {
             background-color: $color--light-blue-90;
         }
@@ -108,8 +109,7 @@
 }
 
 .determination-sidebar {
-
     @include media-query(tablet-landscape) {
-        flex:1;
+        flex: 1;
     }
 }

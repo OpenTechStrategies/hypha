@@ -64,18 +64,19 @@
                 }
             }
 
-	    &.submit_time {
+            &.submit_time { // stylelint-disable selector-class-pattern
                 @include media-query($table-breakpoint) {
                     width: 110px;
                 }
             }
 
-	    &.screening_status {
+            &.screening_status {
                 @include media-query($table-breakpoint) {
                     width: 110px;
                 }
             }
-        &.organization_name {
+
+            &.organization_name {
                 @include media-query($table-breakpoint) {
                     width: 110px;
                 }
@@ -133,8 +134,6 @@
                         }
                     }
                 }
-
-
             }
 
             // project status label
@@ -168,7 +167,7 @@
                 }
             }
 
-            &.reviews_stats { // stylelint-disable-line selector-class-pattern
+            &.reviews_stats {
                 display: none;
 
                 @include media-query($table-breakpoint) {
@@ -189,7 +188,7 @@
 
             &.fund,
             &.round,
-            &.screening_status { // stylelint-disable-line selector-class-pattern
+            &.screening_status {
                 -webkit-hyphens: auto; // stylelint-disable-line property-no-vendor-prefix
                 -ms-hyphens: auto; // stylelint-disable-line property-no-vendor-prefix
                 hyphens: auto;
@@ -200,6 +199,7 @@
                     padding-left: 15px;
                 }
             }
+
             // arrow to toggle project info - added via js
             @include media-query($table-breakpoint) {
                 .arrow {
@@ -216,7 +216,7 @@
                 }
             }
 
-            > span.label-width{
+            > span.label-width {
                 width: 90px;
             }
 
