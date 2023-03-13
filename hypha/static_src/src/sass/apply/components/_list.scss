@@ -62,14 +62,17 @@
                 color: $color--green;
             }
         }
-        &--margin{
+
+        &--margin {
             margin-top: 10px;
             margin-bottom: 5px;
         }
-        a{
+
+        a {
             text-decoration: underline;
         }
-        &--avg-score{
+
+        &--avg-score {
             font-weight: $weight--bold;
         }
     }

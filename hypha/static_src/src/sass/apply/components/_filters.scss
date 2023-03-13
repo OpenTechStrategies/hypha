@@ -62,11 +62,8 @@
     }
 }
 
-#show-filters-button {
-
+#show-filters-button { // stylelint-disable-line selector-max-id
     @include media-query(tablet-landscape) {
         display: none;
     }
-
 }
-

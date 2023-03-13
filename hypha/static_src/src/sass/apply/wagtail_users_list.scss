@@ -24,13 +24,15 @@
             margin-top: 20px;
         }
     }
-    &__export{
-        button{
+
+    &__export {
+        button {
             display: block;
             margin-top: 20px;
         }
-        a{
-            color: #ffffff;
+
+        a {
+            color: $color--white;
         }
     }
 }

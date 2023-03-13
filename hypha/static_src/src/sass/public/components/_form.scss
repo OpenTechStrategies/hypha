@@ -1,6 +1,7 @@
 // stylelint-disable selector-max-compound-selectors,
 
 @use 'sass:math';
+@import '../abstracts/variables';
 
 .form {
     &--header-search-desktop {
@@ -556,31 +557,31 @@
 }
 
 .tooltiptext {
-    visibility: visible !important;
-    width: 200px !important;
-    background-color: #555 !important;
-    color: #fff !important;
-    text-align: center !important;
-    border-radius: 6px !important;
-    padding: 5px 0 !important;
-    position: absolute !important;
-    z-index: 1 !important;
-    bottom: 100% !important;
-    left: 30% !important;
-    margin-left: -60px !important;
+    visibility: visible;
+    width: 200px;
+    background-color: $color--dark-grey;
+    color: $color--white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 30%;
+    margin-left: -60px;
     margin-bottom: 5px;
-    opacity: 1 !important;
-    transition: opacity 0.3s !important;
-    height: 30px !important;
+    opacity: 1;
+    transition: opacity .3s;
+    height: 30px;
 }
 
 .tooltiptext::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 100%;
     left: 50%;
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border-color: $color--dark-grey transparent transparent transparent;
 }

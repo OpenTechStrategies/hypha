@@ -1,9 +1,11 @@
+// stylelint-disable selector-max-id
+// stylelint-disable selector-class-pattern
 #roles {
-    input[type="checkbox"]::before {
-        top: 0px;
+    input[type='checkbox']::before {
+        top: 0;
     }
 
-    input[type="checkbox"] {
+    input[type='checkbox'] {
         float: left;
     }
 
