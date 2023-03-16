@@ -50,7 +50,7 @@ class ValueBlock(ApplicationSingleIncludeFieldBlock):
 class EinBlock(ApplicationSingleIncludeFieldBlock):
     name = 'Ein'
     description = '9 digits Ein'
-    widget = forms.TextInput(attrs={'id':'ein'})
+    widget = forms.TextInput(attrs={'id':'ein', 'placeholder':'11-1111111'})
 
     class Meta:
         label = _('EIN')
