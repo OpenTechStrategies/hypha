@@ -1,6 +1,7 @@
 import logging
 
 from .base import *  # noqa
+from .ardc import RECOMMENDATION_CHOICES # noqa
 
 logging.disable(logging.CRITICAL)
 
