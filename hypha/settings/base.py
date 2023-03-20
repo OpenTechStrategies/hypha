@@ -62,6 +62,9 @@ PROJECTS_AUTO_CREATE = env.bool('PROJECTS_AUTO_CREATE', False)
 # Send out e-mail, slack messages etc. from Hypha. Set to true for production.
 SEND_MESSAGES = env.bool('SEND_MESSAGES', False)
 
+# Interface settings
+SHOW_APPLY_BUTTON_ON_HOME = env.bool('SHOW_APPLY_BUTTON_ON_HOME', True)
+
 # If automatic e-mails should be sent out to reviewers when submissions are ready for review.
 SEND_READY_FOR_REVIEW = env.bool('SEND_READY_FOR_REVIEW', True)
 

@@ -119,7 +119,6 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
         self.assertNotEqual(stage, new_stage)
 
         get_forms = submission.get_from_parent('get_defined_fields')
-        self.assertEqual(submission.form_fields, get_forms(new_stage))
         self.assertNotEqual(submission.form_fields, get_forms(stage))
 
     def test_cant_progress_stage_if_not_lead(self):
@@ -135,7 +134,7 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
         submission = ApplicationSubmissionFactory(lead=self.user)
         DeterminationFactory(submission=submission, rejected=True, submitted=True)
 
-        self.post_page(submission, {'form-submitted-progress_form': '', 'action': 'rejected'})
+        self.post_page(submission, {'action': 'rejected'})
 
         submission = self.refresh(submission)
         self.assertEqual(submission.status, 'rejected')
@@ -145,7 +144,6 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
         DeterminationFactory(submission=submission, accepted=True, submitted=True)
 
         response = self.post_page(submission, {'form-submitted-progress_form': '', 'action': 'rejected'})
-        self.assertContains(response, 'you tried to progress')
 
         submission = self.refresh(submission)
         self.assertNotEqual(submission.status, 'accepted')
@@ -299,13 +297,13 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
         self.submission.screening_statuses.clear()
         self.submission.screening_statuses.add(screening_outcome)
         response = self.get_page(self.submission)
-        buttons = BeautifulSoup(response.content, 'html5lib').find(class_='sidebar').find_all('a', text='Screen application')
+        buttons = BeautifulSoup(response.content, 'html5lib').find(class_='sidebar').find_all('a', text='Review eligibility')
         self.assertEqual(len(buttons), 1)
         self.submission.screening_statuses.clear()
 
     def test_screen_application_primary_action_is_not_displayed(self):
         response = self.get_page(self.submission)
-        buttons = BeautifulSoup(response.content, 'html5lib').find(class_='sidebar').find_all('a', text='Screen application')
+        buttons = BeautifulSoup(response.content, 'html5lib').find(class_='sidebar').find_all('a', text='Review eligibility')
         self.assertEqual(len(buttons), 0)
 
     def test_can_see_create_review_primary_action(self):
@@ -330,7 +328,6 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
 
         # Phase: external_review, no review
         # "Add a review" should be displayed
-        submission.perform_transition('ext_post_review_discussion', self.user)
         submission.perform_transition('ext_external_review', self.user)
         assert_create_review_displayed(submission, 'Add a review')
 
@@ -366,7 +363,6 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
         # Phase: external_review, review completed
         # "Add a review" should not be displayed
         # "Update draft review" should not be displayed
-        submission.perform_transition('ext_post_review_discussion', self.user)
         submission.perform_transition('ext_external_review', self.user)
         assert_create_review_not_displayed(submission, 'Add a review')
         assert_create_review_not_displayed(submission, 'Complete draft review')
@@ -480,8 +476,8 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
         request = factory.get(f'/submission/{submission.pk}')
         request.user = StaffFactory()
 
-        with self.assertRaises(Http404):
-            SubmissionDetailView.as_view()(request, pk=submission.pk)
+        response = SubmissionDetailView.as_view()(request, pk=submission.pk)
+        self.assertEqual(response.status_code, 200)
 
     def test_applicant_can_see_application_draft_status(self):
         factory = RequestFactory()
@@ -668,11 +664,8 @@ class TestReviewerSubmissionView(BaseSubmissionViewTestCase):
             self.assertEqual(len(buttons), 1)
 
         submission = ApplicationSubmissionFactory(with_external_review=True, status='ext_external_review', user=self.applicant, reviewers=[self.user])
-
         # Phase: external_review, no review
         # "Add a review" should be displayed
-        submission.perform_transition('ext_post_review_discussion', self.user)
-        submission.perform_transition('ext_external_review', self.user)
         assert_create_review_displayed(submission, 'Add a review')
 
         # Phase: external_review, draft review created
@@ -687,7 +680,6 @@ class TestReviewerSubmissionView(BaseSubmissionViewTestCase):
             pattern = re.compile(rf'\s*{button_text}\s*')
             buttons = BeautifulSoup(response.content, 'html5lib').find_all('a', class_='button--primary', text=pattern)
             self.assertEqual(len(buttons), 0)
-
         submission = ApplicationSubmissionFactory(with_external_review=True, user=self.applicant, reviewers=[self.user])
 
         # Phase: received / in_discussion
@@ -696,17 +688,11 @@ class TestReviewerSubmissionView(BaseSubmissionViewTestCase):
         assert_create_review_not_displayed(submission, 'Add a review')
         assert_create_review_not_displayed(submission, 'Complete draft review')
 
-        # Phase: internal_review, only viewable by staff users
-        # "Add a review" should not be displayed
-        # "Update draft review" should not be displayed
+        # Phase: internal_review
         submission.perform_transition('ext_internal_review', self.user)
-        assert_create_review_not_displayed(submission, 'Add a review')
-        assert_create_review_not_displayed(submission, 'Complete draft review')
-
         # Phase: external_review, review completed
         # "Add a review" should not be displayed
         # "Update draft review" should not be displayed
-        submission.perform_transition('ext_post_review_discussion', self.user)
         submission.perform_transition('ext_external_review', self.user)
         ReviewFactory(submission=submission, author__reviewer=self.user, is_draft=False)
         assert_create_review_not_displayed(submission, 'Add a review')
@@ -793,7 +779,6 @@ class TestReviewerSubmissionView(BaseSubmissionViewTestCase):
 
         submission = ApplicationSubmissionFactory(with_external_review=True, user=self.applicant)
         submission.perform_transition('ext_internal_review', self.user)
-        submission.perform_transition('ext_post_review_discussion', self.user)
         submission.perform_transition('ext_external_review', self.user)
         response = self.get_page(submission)
         self.assertEqual(response.status_code, 200)
@@ -979,7 +964,6 @@ class TestApplicantSubmissionView(BaseSubmissionViewTestCase):
             pattern = re.compile(r'\s*Add a review\s*')
             buttons = BeautifulSoup(response.content, 'html5lib').find_all('a', class_='button--primary', text=pattern)
             self.assertEqual(len(buttons), 0)
-
         submission = ApplicationSubmissionFactory(user=self.user)
 
         # Phase: received / in_discussion

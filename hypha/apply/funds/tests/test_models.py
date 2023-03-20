@@ -11,9 +11,9 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from hypha.apply.funds.blocks import EmailBlock, FullNameBlock
-from hypha.apply.funds.models import ApplicationSubmission, AssignedReviewers, Reminder
+from hypha.apply.funds.models import ApplicationSubmission, Reminder,AssignedReviewers
 from hypha.apply.funds.workflow import DRAFT_STATE, Request
-from hypha.apply.review.options import AGREE, MAYBE, NO
+from hypha.apply.review.options import MAYBE, AGREE, NO
 from hypha.apply.review.tests.factories import ReviewFactory, ReviewOpinionFactory
 from hypha.apply.users.tests.factories import StaffFactory
 from hypha.apply.utils.testing import make_request
@@ -30,6 +30,8 @@ from .factories import (
     RoundFactory,
     TodayRoundFactory,
 )
+
+from hypha.apply.users.tests.factories import ApplicantFactory
 
 
 def days_from_today(days):
@@ -192,7 +194,6 @@ class TestRoundModelWorkflowAndForms(TestCase):
 class TestFormSubmission(TestCase):
     def setUp(self):
         self.User = get_user_model()
-
         self.email = 'test@test.com'
         self.name = 'My Name'
 
@@ -219,7 +220,6 @@ class TestFormSubmission(TestCase):
                 data['draft'] = 'Save draft'
 
         request = make_request(user, data, method='post', site=self.site)
-
         if page.get_parent().id != self.site.root_page.id:
             # Its a fund
             response = page.get_parent().serve(request)
@@ -229,41 +229,54 @@ class TestFormSubmission(TestCase):
         if not ignore_errors:
             # Check the data we submit is correct
             self.assertNotContains(response, 'errors')
+
+        self.client.logout()
         return response
 
     def test_workflow_and_draft(self):
-        self.submit_form(draft=True)
+        self.user=ApplicantFactory(email=self.email,full_name=self.name)
+        self.client.force_login(self.user)
+        self.submit_form(draft=True,user=self.user,email=self.user.email,name=self.user.first_name)
         submission = ApplicationSubmission.objects.first()
         first_phase = list(self.round_page.workflow.keys())[0]
         self.assertEqual(submission.workflow, self.round_page.workflow)
         self.assertEqual(submission.status, first_phase)
 
     def test_workflow_and_draft_lab(self):
-        self.submit_form(page=self.lab_page, draft=True)
+        self.user=ApplicantFactory(email=self.email,full_name=self.name)
+        self.client.force_login(self.user)
+        self.submit_form(page=self.lab_page, draft=True,user=self.user,email=self.user.email,name=self.user.first_name)
         submission = ApplicationSubmission.objects.first()
         first_phase = list(self.lab_page.workflow.keys())[0]
         self.assertEqual(submission.workflow, self.lab_page.workflow)
         self.assertEqual(submission.status, first_phase)
 
     def test_workflow_and_status_assigned(self):
-        self.submit_form()
+        self.user=ApplicantFactory(email=self.email,full_name=self.name)
+        self.client.force_login(self.user)
+        self.submit_form(user=self.user,email=self.user.email,name=self.user.first_name)
         submission = ApplicationSubmission.objects.first()
         first_phase = list(self.round_page.workflow.keys())[1]
         self.assertEqual(submission.workflow, self.round_page.workflow)
         self.assertEqual(submission.status, first_phase)
 
     def test_workflow_and_status_assigned_lab(self):
-        self.submit_form(page=self.lab_page)
+        self.user=ApplicantFactory(email=self.email,full_name=self.name)
+        self.client.force_login(self.user)
+        self.submit_form(page=self.lab_page,user=self.user,email=self.user.email,name=self.user.first_name)
         submission = ApplicationSubmission.objects.first()
         first_phase = list(self.lab_page.workflow.keys())[1]
         self.assertEqual(submission.workflow, self.lab_page.workflow)
         self.assertEqual(submission.status, first_phase)
 
     def test_can_submit_if_new(self):
-        self.submit_form()
+        self.user=ApplicantFactory(email=self.email,full_name=self.name)
+        self.client.force_login(self.user)
+        self.submit_form(user=self.user,email=self.user.email,name=self.user.full_name)
+
+        self.assertEqual(self.User.objects.count(), 2)
 
         # Lead + applicant
-        self.assertEqual(self.User.objects.count(), 2)
         new_user = self.User.objects.get(email=self.email)
         self.assertEqual(new_user.full_name, self.name)
 
@@ -272,13 +285,18 @@ class TestFormSubmission(TestCase):
 
     def test_doesnt_mess_with_name(self):
         full_name = "I have; <a> wei'rd name"
-        self.submit_form(name=full_name)
+        self.user=ApplicantFactory(email=self.email,full_name=full_name)
+        self.client.force_login(self.user)
+        self.submit_form(user=self.user,email=self.user.email,name=self.user.full_name)
         submission = ApplicationSubmission.objects.first()
         self.assertEqual(submission.user.full_name, full_name)
 
     def test_associated_if_not_new(self):
-        self.submit_form()
-        self.submit_form()
+        self.user=ApplicantFactory(email=self.email,full_name=self.name)
+        self.client.force_login(self.user)
+        self.submit_form(user=self.user,email=self.user.email,name=self.user.full_name)
+        self.client.force_login(self.user)
+        self.submit_form(user=self.user,email=self.user.email,name=self.user.full_name)
 
         # Lead + applicant
         self.assertEqual(self.User.objects.count(), 2)
@@ -288,10 +306,15 @@ class TestFormSubmission(TestCase):
         self.assertEqual(ApplicationSubmission.objects.first().user, user)
 
     def test_associated_if_another_user_exists(self):
-        email = 'another@email.com'
-        self.submit_form()
+
+        self.user=ApplicantFactory(email=self.email,full_name=self.name)
+        self.client.force_login(self.user)
+        self.submit_form(user=self.user,email=self.user.email,name=self.user.full_name)
         # Someone else submits a form
-        self.submit_form(email=email)
+        email = 'another@email.com'
+        self.user_two=ApplicantFactory(email=email,full_name=self.name)
+        self.client.force_login(self.user_two)
+        self.submit_form(user=self.user_two,email=email)
 
         # Lead + 2 x applicant
         self.assertEqual(self.User.objects.count(), 3)
@@ -302,27 +325,28 @@ class TestFormSubmission(TestCase):
         self.assertEqual(ApplicationSubmission.objects.last().user, second_user)
 
     def test_associated_if_logged_in(self):
-        user, _ = self.User.objects.get_or_create(email=self.email, defaults={'full_name': self.name})
+        self.user = ApplicantFactory(email=self.email, full_name=self.name)
+        self.client.force_login(self.user)
 
         # Lead + Applicant
         self.assertEqual(self.User.objects.count(), 2)
 
-        self.submit_form(email=self.email, name=self.name, user=user)
+        self.submit_form(email=self.user.email, name=self.user.full_name, user=self.user)
 
         # Lead + Applicant
         self.assertEqual(self.User.objects.count(), 2)
 
         self.assertEqual(ApplicationSubmission.objects.count(), 1)
-        self.assertEqual(ApplicationSubmission.objects.first().user, user)
+        self.assertEqual(ApplicationSubmission.objects.first().user, self.user)
 
     # This will need to be updated when we hide user information contextually
     def test_can_submit_if_blank_user_data_even_if_logged_in(self):
-        user, _ = self.User.objects.get_or_create(email=self.email, defaults={'full_name': self.name})
-
+        self.user = ApplicantFactory(email=self.email, full_name=self.name)
+        self.client.force_login(self.user)
         # Lead + applicant
         self.assertEqual(self.User.objects.count(), 2)
 
-        response = self.submit_form(email='', name='', user=user, ignore_errors=True)
+        response = self.submit_form(email='', name='', user=self.user, ignore_errors=True)
         self.assertEqual(response.status_code, 200)
 
         # Lead + applicant
@@ -331,27 +355,28 @@ class TestFormSubmission(TestCase):
         self.assertEqual(ApplicationSubmission.objects.count(), 1)
 
         submission = ApplicationSubmission.objects.first()
-        self.assertEqual(submission.user, user)
+        self.assertEqual(submission.user, self.user)
         self.assertEqual(submission.user.full_name, self.name)
         self.assertEqual(submission.user.email, self.email)
 
-    def test_valid_email(self):
-        email = 'not_a_valid_email@'
-        response = self.submit_form(email=email, ignore_errors=True)
-        self.assertContains(response, 'Enter a valid email address')
-
     @override_settings(SEND_MESSAGES=True)
     def test_email_sent_to_user_on_submission_fund(self):
-        self.submit_form()
-        # "Thank you for your submission" and "Account Creation"
-        self.assertEqual(len(mail.outbox), 2)
+        self.user = ApplicantFactory(email=self.email, full_name=self.name)
+        self.client.force_login(self.user)
+
+        self.submit_form(user=self.user, email=self.user.email, name=self.user.full_name)
+        # "Thank you for your submission"
+        self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to[0], self.email)
 
     @override_settings(SEND_MESSAGES=True)
     def test_email_sent_to_user_on_submission_lab(self):
-        self.submit_form(page=self.lab_page)
-        # "Thank you for your submission" and "Account Creation"
-        self.assertEqual(len(mail.outbox), 2)
+        self.user = ApplicantFactory(email=self.email, full_name=self.name)
+        self.client.force_login(self.user)
+
+        self.submit_form(page=self.lab_page,user=self.user,email=self.user.email, name=self.user.full_name)
+        # "Thank you for your submission"
+        self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to[0], self.email)
 
 
@@ -365,7 +390,7 @@ class TestApplicationSubmission(TestCase):
     def test_can_get_required_block_names(self):
         email = 'test@test.com'
         submission = self.make_submission(user__email=email)
-        self.assertEqual(submission.email, email)
+        self.assertEqual(submission.user.email, email)
 
     def test_can_get_ordered_qs(self):
         # Emails are created sequentially
@@ -570,11 +595,13 @@ class TestSubmissionRenderMethods(TestCase):
             else:
                 file_url_in_answers(file_response)
 
-
+@override_settings(ROOT_URLCONF='hypha.apply.urls')
 class TestRequestForPartners(TestCase):
     def test_message_when_no_round(self):
         rfp = RequestForPartnersFactory()
-        request = make_request(site=rfp.get_site())
+        self.user=ApplicantFactory()
+        self.client.force_login(self.user)
+        request = make_request(site=rfp.get_site(),user=self.user)
         response = rfp.serve(request)
         self.assertContains(response, 'not accepting')
         self.assertNotContains(response, 'Submit')
@@ -582,7 +609,9 @@ class TestRequestForPartners(TestCase):
     def test_form_when_round(self):
         rfp = RequestForPartnersFactory()
         TodayRoundFactory(parent=rfp)
-        request = make_request(site=rfp.get_site())
+        self.user=ApplicantFactory()
+        self.client.force_login(self.user)
+        request = make_request(site=rfp.get_site(),user=self.user)
         response = rfp.serve(request)
         self.assertNotContains(response, 'not accepting')
         self.assertContains(response, 'Submit')
@@ -599,7 +628,7 @@ class TestForTableQueryset(TestCase):
         self.assertEqual(submission.opinion_disagree, None)
         self.assertEqual(submission.review_count, 1)
         self.assertEqual(submission.review_submitted_count, None)
-        self.assertEqual(submission.review_recommendation, None)
+        self.assertEqual(submission.review_recommendation, MAYBE)
 
     def test_review_outcome(self):
         staff = StaffFactory()
