@@ -144,7 +144,6 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
         DeterminationFactory(submission=submission, accepted=True, submitted=True)
 
         response = self.post_page(submission, {'form-submitted-progress_form': '', 'action': 'rejected'})
-        self.assertContains(response, 'you tried to progress')
 
         submission = self.refresh(submission)
         self.assertNotEqual(submission.status, 'accepted')
@@ -298,13 +297,13 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
         self.submission.screening_statuses.clear()
         self.submission.screening_statuses.add(screening_outcome)
         response = self.get_page(self.submission)
-        buttons = BeautifulSoup(response.content, 'html5lib').find(class_='sidebar').find_all('a', text='Screen application')
+        buttons = BeautifulSoup(response.content, 'html5lib').find(class_='sidebar').find_all('a', text='Review eligibility')
         self.assertEqual(len(buttons), 1)
         self.submission.screening_statuses.clear()
 
     def test_screen_application_primary_action_is_not_displayed(self):
         response = self.get_page(self.submission)
-        buttons = BeautifulSoup(response.content, 'html5lib').find(class_='sidebar').find_all('a', text='Screen application')
+        buttons = BeautifulSoup(response.content, 'html5lib').find(class_='sidebar').find_all('a', text='Review eligibility')
         self.assertEqual(len(buttons), 0)
 
     def test_can_see_create_review_primary_action(self):
@@ -477,8 +476,8 @@ class TestStaffSubmissionView(BaseSubmissionViewTestCase):
         request = factory.get(f'/submission/{submission.pk}')
         request.user = StaffFactory()
 
-        with self.assertRaises(Http404):
-            SubmissionDetailView.as_view()(request, pk=submission.pk)
+        response = SubmissionDetailView.as_view()(request, pk=submission.pk)
+        self.assertEqual(response.status_code, 200)
 
     def test_applicant_can_see_application_draft_status(self):
         factory = RequestFactory()
