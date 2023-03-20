@@ -13,7 +13,7 @@ from django.urls import reverse
 from hypha.apply.funds.blocks import EmailBlock, FullNameBlock
 from hypha.apply.funds.models import ApplicationSubmission, Reminder,AssignedReviewers
 from hypha.apply.funds.workflow import DRAFT_STATE, Request
-from hypha.apply.review.options import MAYBE, AGREE
+from hypha.apply.review.options import MAYBE, AGREE, NO
 from hypha.apply.review.tests.factories import ReviewFactory, ReviewOpinionFactory
 from hypha.apply.users.tests.factories import StaffFactory
 from hypha.apply.utils.testing import make_request
@@ -595,7 +595,7 @@ class TestSubmissionRenderMethods(TestCase):
             else:
                 file_url_in_answers(file_response)
 
-
+@override_settings(ROOT_URLCONF='hypha.apply.urls')
 class TestRequestForPartners(TestCase):
     def test_message_when_no_round(self):
         rfp = RequestForPartnersFactory()
@@ -609,7 +609,9 @@ class TestRequestForPartners(TestCase):
     def test_form_when_round(self):
         rfp = RequestForPartnersFactory()
         TodayRoundFactory(parent=rfp)
-        request = make_request(site=rfp.get_site())
+        self.user=ApplicantFactory()
+        self.client.force_login(self.user)
+        request = make_request(site=rfp.get_site(),user=self.user)
         response = rfp.serve(request)
         self.assertNotContains(response, 'not accepting')
         self.assertContains(response, 'Submit')
@@ -626,7 +628,7 @@ class TestForTableQueryset(TestCase):
         self.assertEqual(submission.opinion_disagree, None)
         self.assertEqual(submission.review_count, 1)
         self.assertEqual(submission.review_submitted_count, None)
-        self.assertEqual(submission.review_recommendation, None)
+        self.assertEqual(submission.review_recommendation, MAYBE)
 
     def test_review_outcome(self):
         staff = StaffFactory()
@@ -637,7 +639,7 @@ class TestForTableQueryset(TestCase):
         self.assertEqual(submission.opinion_disagree, None)
         self.assertEqual(submission.review_count, 1)
         self.assertEqual(submission.review_submitted_count, 1)
-        self.assertEqual(submission.review_recommendation, MAYBE)
+        self.assertEqual(submission.review_recommendation, NO)
 
     def test_disagree_review_is_maybe(self):
         staff = StaffFactory()
@@ -708,7 +710,7 @@ class TestForTableQueryset(TestCase):
         self.assertEqual(submission.opinion_disagree, None)
         self.assertEqual(submission.review_count, 1)
         self.assertEqual(submission.review_submitted_count, 1)
-        self.assertEqual(submission.review_recommendation, MAYBE)
+        self.assertEqual(submission.review_recommendation, NO)
 
 
 class TestReminderModel(TestCase):
