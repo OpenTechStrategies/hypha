@@ -3,6 +3,23 @@
 
     'use strict';
 
+    const ein_input = $('#ein');
+    ein_input.on('input', function () {
+        let formattedValue = ein_input[0].value.replace(/\D/g, '').substring(0, 9);
+        formattedValue = formattedValue.replace(/(\d{2})(\d{0,7})/, '$1-$2');
+        ein_input[0].value = formattedValue;
+    });
+
+    $(ein_input).on('keydown', function (event) {
+        if (event.key === 'Backspace') {
+            let value = $(this).val();
+            if (value.endsWith('-')) {
+                value = value.slice(0, -1);
+                $(this).val(value);
+            }
+        }
+    });
+
     let draftBtn = false;
     let submitBtn = false;
     $('#draft').click(function () {
