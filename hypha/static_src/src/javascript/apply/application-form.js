@@ -50,12 +50,28 @@
     $('#draft, #submitBtn').click(function () {
         let check = false;
         const req_msg = "<div class='tooltip tooltiptext'>*Please fill out this field.</div>";
+        const radio_msg = "<div class='tooltip tooltiptext'>*Please select one of these options</div>";
+        const checkbox_msg = "<div class='tooltip tooltiptext'>*Please check this box.</div>";
         // inputs required error
         const req = $('input').filter('[required]');
         req.each(function (index, element) {
             if (element.value === '') {
                 check = true;
                 $(element.parentElement).append(req_msg);
+            }
+            if (element.type === 'radio') {
+                let ul = $(element).parents().eq(1);
+                let checked = $('input[type=radio]:checked', ul[0]);
+                if (checked.length === 0) {
+                    check = true;
+                    $(element).parents().eq(3).append(radio_msg);
+                }
+            }
+            if (element.type === 'checkbox') {
+                if (!element.checked) {
+                    check = true;
+                    $(element).parent().append(checkbox_msg);
+                }
             }
         });
         const $application_form = $('.application-form');
