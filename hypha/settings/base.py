@@ -25,9 +25,6 @@ CURRENCY_SYMBOL = env.str('CURRENCY_SYMBOL', '$')
 # Default page pagination value.
 DEFAULT_PER_PAGE = 20
 
-# Webpack bundle loader. When set to False, the React app part of Hypha is disabled.
-ENABLE_WEBPACK_BUNDLES = env.bool('ENABLE_WEBPACK_BUNDLES', True)
-
 # IF Hypha should enforce 2FA for all users.
 ENFORCE_TWO_FACTOR = env.bool('ENFORCE_TWO_FACTOR', False)
 
@@ -64,6 +61,9 @@ PROJECTS_AUTO_CREATE = env.bool('PROJECTS_AUTO_CREATE', False)
 
 # Send out e-mail, slack messages etc. from Hypha. Set to true for production.
 SEND_MESSAGES = env.bool('SEND_MESSAGES', False)
+
+# Interface settings
+SHOW_APPLY_BUTTON_ON_HOME = env.bool('SHOW_APPLY_BUTTON_ON_HOME', True)
 
 # If automatic e-mails should be sent out to reviewers when submissions are ready for review.
 SEND_READY_FOR_REVIEW = env.bool('SEND_READY_FOR_REVIEW', True)

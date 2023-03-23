@@ -54,6 +54,7 @@
         font-weight: $weight--semibold;
         width: 100%;
         hyphens: auto;
+
         @include media-query(tablet-landscape) {
             margin-top: auto;
         }

@@ -260,8 +260,9 @@ class StreamFieldUUIDFactory(wagtail_factories.StreamFieldFactory):
         ret_val = list()
         # Convert to JSON so we can add id before create
         for block_name, value in blocks:
-            value = self.struct_to_json(value)
-            ret_val.append({'type': block_name, 'value': value, 'id': str(uuid.uuid4())})
+            if block_name != 'text_markup':
+                value = self.struct_to_json(value)
+                ret_val.append({'type': block_name, 'value': value, 'id': str(uuid.uuid4())})
         return json.dumps(ret_val, cls=DjangoJSONEncoder)
 
     def build_form(self, data):

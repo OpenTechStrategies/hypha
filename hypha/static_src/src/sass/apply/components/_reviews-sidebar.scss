@@ -1,6 +1,5 @@
 // stylelint-disable max-nesting-depth
 
-// also used within the React app in /components/ReviewBlock
 .reviews-sidebar {
     $root: &;
     margin-bottom: 20px;
@@ -109,18 +108,21 @@
     &__split {
         margin-bottom: 20px;
     }
-    &__extend-column{
+
+    &__extend-column {
         grid-column-start: 1;
         grid-column-end: 3;
     }
 }
 
-.accept-text{
+.accept-text {
     color: $color--dark-green;
 }
-.weak-accept-text{
+
+.weak-accept-text {
     color: $color--orange;
 }
-.reject-text{
+
+.reject-text {
     color: $color--red;
 }

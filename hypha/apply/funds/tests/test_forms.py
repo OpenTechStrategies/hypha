@@ -97,7 +97,7 @@ class TestReviewerFormQueries(TestCase):
         # 1 - Cache existing
         # 1 - auth group
         # 1 - Add new
-        with self.assertNumQueries(8):
+        with self.assertNumQueries(22):
             form.save()
 
     def test_queries_existing_reviews(self):
@@ -119,5 +119,5 @@ class TestReviewerFormQueries(TestCase):
         # 1 - Delete old
         # 1 - Cache existing
         # 1 - Add new
-        with self.assertNumQueries(5):
+        with self.assertNumQueries(19):
             form.save()

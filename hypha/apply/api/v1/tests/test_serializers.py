@@ -29,7 +29,7 @@ class TestReviewSummarySerializer(TestCase):
         data = ReviewSummarySerializer(submission).data
         self.assertEqual(data['count'], 1)
         self.assertEqual(data['score'], 0)
-        self.assertEqual(data['recommendation'], {'value': 0, 'display': 'No'})
+        self.assertEqual(data['recommendation'], {'value': 0, 'display': 'Need More Info'})
         self.assertEqual(len(data['assigned']), 1)
         self.assertEqual(len(data['reviews']), 1)
 

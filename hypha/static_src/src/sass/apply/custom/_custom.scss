@@ -1,35 +1,42 @@
+@import '../abstracts/variables';
+
 // stylelint-disable no-empty-source
-.js-sidebar-toggle, .tab__item--right {
+.js-sidebar-toggle,
+.tab__item--right { // stylelint-disable selector-class-pattern
     display: none;
 }
 
-table td.id, table th.id {
+table td.id,
+table th.id {
     text-align: left;
-    @include media-query($table-breakpoint){
+
+    @include media-query($table-breakpoint) {
         text-align: center;
     }
 }
 
 table td.id a {
-    color: #404041;
+    color: $color--dark-grey;
     font-weight: 700;
 }
 
-table td.title, table th.title {
+table td.title,
+table th.title {
     padding-left: 20px;
-    @include media-query($table-breakpoint){
+
+    @include media-query($table-breakpoint) {
         padding-left: 0;
     }
 }
 
 .heading--number {
-    color:rgba(184, 176, 176, 0.5);
+    color: rgba(184 176 176 / 50%);
 }
 
 .link--withdraw-submission {
     margin-right: 1rem;
     padding-right: 1rem;
-    border-right: 2px solid #cfcfcf;
+    border-right: 2px solid $color--mid-grey;
     font-weight: 700;
 }
 
@@ -38,10 +45,10 @@ table td.title, table th.title {
 }
 
 .counts-separator {
-    color: rgb(200, 200, 200);
+    color: rgb(200 200 200);
 }
 
 .list__item--average_score {
-    color: rgb(145, 145, 145);
+    color: rgb(145 145 145);
     font-weight: 400;
 }
