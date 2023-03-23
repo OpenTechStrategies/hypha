@@ -558,12 +558,12 @@
 
 .tooltiptext {
     visibility: visible;
-    width: 200px;
+    width: max-content;
     background-color: $color--dark-grey;
     color: $color--white;
     text-align: center;
     border-radius: 6px;
-    padding: 5px 0;
+    padding: 5px;
     position: absolute;
     z-index: 1;
     bottom: 100%;
