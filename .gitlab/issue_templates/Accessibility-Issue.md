@@ -1,17 +1,22 @@
+When inspecting the page at [link] I get the following error in my A11Y plugin:
+
 ```
-Description / URL:
+## Description-
 
 
-Element location:
+## Element location-
 
 
-To solve this issue:
+## To solve this issue-
 
 
-More info:
+## More info-
 
 
-To reproduce this bug:
-
+## To reproduce this bug-
+    *
+    *
+    *
+    *
 
 ```
