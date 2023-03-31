@@ -64,8 +64,8 @@
                 {{ hidden_field }}
             {% endfor %}
 
-            <input class="link link--button-secondary" id="submitBtn" value="Submit for review" disabled readonly></input>
-            <input class="link link--button-tertiary"  id="draft" name="draft" value="Save draft" readonly></input>
+            <input aria-label="submit" class="link link--button-secondary" id="submitBtn" value="Submit for review" disabled readonly></input>
+            <input aria-label="draft" class="link link--button-tertiary"  id="draft" name="draft" value="Save draft" readonly></input>
         </form>
         <p class="wrapper--error message-no-js js-hidden">{% trans "You must have Javascript enabled to use this form." %}</p>
         {% endif %}
