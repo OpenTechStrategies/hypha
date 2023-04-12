@@ -74,12 +74,12 @@ def model_form_initial(instance, fields=None, exclude=None):
 
 def export_submissions_to_csv(submissions_list):
     csv_stream = StringIO()
-    header_row = ['Application number'] 
+    header_row = ['Application #'] 
     index = 1
     data_list = []
     for submission in submissions_list:
         values = {}
-        values['Application number'] = submission.id
+        values['Application #'] = submission.id
         for field_id in submission.question_text_field_ids:
             question_field = submission.serialize(field_id)
             field_name = question_field['question']
