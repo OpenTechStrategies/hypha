@@ -221,13 +221,13 @@ class BaseAdminSubmissionsTable(SingleTableMixin, FilterView):
             filter_action=self.filter_action,
             **kwargs,
         )
-    
+
     def dispatch(self, request, *args, **kwargs):
         disp = super().dispatch(request,*args, **kwargs)
         if 'export' in request.GET and (self.request.user.is_staff or self.request.user.is_apply_staff):
             csv_data = export_submissions_to_csv(self.object_list)
             response = HttpResponse(csv_data.readlines(), content_type="text/csv")
-            response['Content-Disposition'] = 'inline; filename=' + 'submissions.csv'
+            response['Content-Disposition'] = 'attachment; filename=' + 'submissions.csv'
             return response
         return disp
 
@@ -564,7 +564,7 @@ class ExportSubmissionsByRound(BaseAdminSubmissionsTable):
         self.get_queryset()
         csv_data = export_submissions_to_csv(ApplicationSubmission.objects.filter(round=pk))
         response = HttpResponse(csv_data.readlines(), content_type="text/csv")
-        response['Content-Disposition'] = 'inline; filename=' + str(self.obj) + '.csv'
+        response['Content-Disposition'] = 'attachment; filename=' + str(self.obj) + '.csv'
         return response
 
 @method_decorator(staff_required, name='dispatch')
