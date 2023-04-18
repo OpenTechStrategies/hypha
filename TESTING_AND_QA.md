@@ -48,8 +48,8 @@
   - Review submit fail:
     - Fill only some required fields and try to submit the draft.
     - It should raise the required error.
-  - Review comment pass:
-    - Add a comment to a review.
+  - Review comment with no email pass:
+    - Add a comment to a review, verify that no email is sent.  See [MR #135](https://code.librehq.com/ots/clients/ardc/hypha/-/merge_requests/135) for context.
 
 **4. Moving an application across statuses (Chelsea's workflow)**
   - Process 1:
