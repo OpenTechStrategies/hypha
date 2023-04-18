@@ -48,6 +48,8 @@
   - Review submit fail:
     - Fill only some required fields and try to submit the draft.
     - It should raise the required error.
+  - Review comment pass:
+    - Add a comment to a review.
 
 **4. Moving an application across statuses (Chelsea's workflow)**
   - Process 1:
