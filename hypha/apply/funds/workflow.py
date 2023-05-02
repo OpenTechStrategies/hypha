@@ -169,13 +169,15 @@ default_permissions = make_permissions(edit=[staff_can], review=[staff_can])
 
 hidden_from_applicant_permissions = make_permissions(edit=[staff_can], review=[staff_can], view=[staff_can, reviewer_can])
 
-reviewer_review_permissions = make_permissions(edit=[staff_can, applicant_can, partner_can], review=[staff_can, reviewer_can])
+reviewer_review_permissions = make_permissions(edit=[staff_can, partner_can], review=[staff_can, reviewer_can])
 
 community_review_permissions = make_permissions(edit=[staff_can], review=[staff_can, reviewer_can, community_can])
 
 applicant_edit_permissions = make_permissions(edit=[applicant_can, partner_can], review=[staff_can])
 
 staff_edit_permissions = make_permissions(edit=[staff_can])
+
+staff_and_applicant_edit_perissions = make_permissions(edit=[staff_can, applicant_can])
 
 
 Request = Stage('Request', False)
@@ -345,7 +347,7 @@ SingleStageExternalDefinition = [
             'display': _('Need screening'),
             'public': _('Application Received'),
             'stage': RequestExt,
-            'permissions': applicant_edit_permissions,
+            'permissions': staff_and_applicant_edit_perissions,
         },
         'ext_more_info': {
             'transitions': {
