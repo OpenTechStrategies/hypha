@@ -55,9 +55,6 @@ class EinBlock(ApplicationSingleIncludeFieldBlock):
     class Meta:
         label = _('EIN')
 
-    def prepare_data(self, value, data, serialize):
-        data = data.replace('-','')
-        return str(data)
 
 
 class OrganizationNameBlock(ApplicationSingleIncludeFieldBlock):

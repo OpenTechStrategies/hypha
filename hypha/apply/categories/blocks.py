@@ -83,6 +83,8 @@ class CategoryQuestionBlock(OptionalFormFieldBlock):
             return data
         if isinstance(data, str):
             data = [data]
+        if data[0] == '-':
+            return data
         category = value['category']
         data = category.options.filter(id__in=data).values_list('value', flat=True)
         return data
